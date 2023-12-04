@@ -45,7 +45,7 @@ public class RegularTurnAction {
     }
 
     public void buildDistrict(District district) throws IllegalActionException {
-        if (!this.currentPlayerView.getHand().contains(district))
+        if (!(this.currentPlayerView.getHand().contains(district) || district.equals(this.chosenCard)))
             throw new IllegalActionException("Cannot build a district that is not in hand");
         if (this.currentPlayerView.getGold() < district.getCost())
             throw new IllegalActionException("Cannot build district without enough gold");
