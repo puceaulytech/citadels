@@ -12,6 +12,7 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
     private final List<Player> players = new ArrayList<>();
@@ -39,7 +40,11 @@ public class Game {
                 this.playRegularTurn();
                 this.turn++;
             }
-            System.out.println("Le jeu est terminé!");
+            // At the end of the game, sort players by their score (sum of all their district's cost)
+            this.players.sort(Comparator.comparingInt((Player player) -> player.getCity().getDistricts().stream()
+                    .mapToInt(District::getCost)
+                    .sum()).reversed());
+            this.logger.logWinners(this.players);
         } catch (IllegalActionException e) {
             System.out.println("Something went wrong during play: " + e.getMessage());
         }
@@ -48,7 +53,6 @@ public class Game {
     public boolean isGameOver() {
         for (Player player : players) {
             if (player.getCity().getSize() >= 8) {
-                System.out.println("Un joueur a construit suffisamment de districts.");
                 return true;
             }
         }
