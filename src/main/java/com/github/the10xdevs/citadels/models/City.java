@@ -2,13 +2,16 @@ package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class City {
     private final Set<District> districts = new HashSet<>();
 
     /**
      * Add a new district to the city
+     *
      * @param district The new district
      * @throws DuplicatedDistrictException If the district is already in the city
      */

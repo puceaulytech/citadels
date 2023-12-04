@@ -11,9 +11,9 @@ import java.util.List;
 public class Player {
     private final Behavior behavior;
     private final City city = new City();
+    private final List<District> hand = new ArrayList<>();
     private int gold = 0;
     private Role currentRole;
-    private final List<District> hand = new ArrayList<>();
 
     public Player(Behavior behavior) {
         this.behavior = behavior;

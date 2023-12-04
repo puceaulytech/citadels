@@ -4,18 +4,18 @@ import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
+import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.*;
 
 public class Game {
     private final List<Player> players = new ArrayList<>();
+    private final Deck deck = new Deck(District.all);
     private int firstPlayerIndex = 0;
     private int turn =1;
-    private final Deck deck = new Deck();
 
     public Game(List<Behavior> behaviors) {
         for (Behavior behavior : behaviors) {

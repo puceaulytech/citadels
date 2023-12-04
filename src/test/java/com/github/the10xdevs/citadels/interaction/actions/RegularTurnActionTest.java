@@ -18,7 +18,8 @@ class RegularTurnActionTest {
     void takeGold() throws IllegalActionException {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {}
+            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            }
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
@@ -37,7 +38,8 @@ class RegularTurnActionTest {
     void takeTooMuchGold() throws IllegalActionException {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {}
+            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            }
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {

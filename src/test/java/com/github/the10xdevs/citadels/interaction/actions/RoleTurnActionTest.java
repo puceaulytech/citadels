@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RoleTurnActionTest {
 
@@ -23,7 +23,8 @@ class RoleTurnActionTest {
             }
 
             @Override
-            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {}
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {
+            }
         };
 
         RoleTurnAction action = new RoleTurnAction();

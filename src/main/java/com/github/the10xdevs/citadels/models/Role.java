@@ -25,9 +25,13 @@ public enum Role {
         this.category = category;
     }
 
-    public int getTurnOrder() { return this.turnOrder; }
+    public int getTurnOrder() {
+        return this.turnOrder;
+    }
 
-    public Category getCategory() { return this.category; }
+    public Category getCategory() {
+        return this.category;
+    }
 
     public String getRoleName() {
         return switch (this) {
@@ -48,6 +52,7 @@ public enum Role {
             default -> null;
         };
     }
+
     @Override
     public String toString() {
         return String.format(" %d, %s", this.turnOrder, this.getRoleName());

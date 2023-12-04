@@ -1,13 +1,9 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
-import com.github.the10xdevs.citadels.gamestate.Game;
-import com.github.the10xdevs.citadels.gamestate.Player;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
-import com.github.the10xdevs.citadels.interaction.views.GameView;
-import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
@@ -48,7 +44,7 @@ public class DummyBehavior implements Behavior {
         action.takeGold();
 
         // Always Draw a card until HandSize equals eight
-        if(self.getHandSize()<8){
+        if (self.getHandSize() < 8) {
             action.drawCards();
         }
 
