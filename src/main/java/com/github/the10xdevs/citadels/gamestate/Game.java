@@ -1,9 +1,12 @@
 package com.github.the10xdevs.citadels.gamestate;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
+import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.*;
@@ -47,6 +50,21 @@ public class Game {
             player.setCurrentRole(pickedRole);
             roles.remove(pickedRole);
             roles.remove(discardedRole);
+        }
+    }
+
+    private void playRegularTurn() throws IllegalActionException {
+        // Sort players according to their role
+        this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
+
+        for (Player player : this.players) {
+            RegularTurnAction action = new RegularTurnAction(player.getCurrentRole().getAbilityAction());
+
+            player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(this));
+
+            if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
+                player.incrementGold(2);
+            }
         }
     }
 

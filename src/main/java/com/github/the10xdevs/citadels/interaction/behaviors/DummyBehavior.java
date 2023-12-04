@@ -5,6 +5,7 @@ import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -42,7 +43,7 @@ public class DummyBehavior implements Behavior {
     }
 
     @Override
-    public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) {
+    public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
         // Always take gold
         action.takeGold();
 
