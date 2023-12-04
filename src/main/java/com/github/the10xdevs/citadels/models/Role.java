@@ -55,6 +55,6 @@ public enum Role {
 
     @Override
     public String toString() {
-        return String.format(" %d, %s", this.turnOrder, this.getRoleName());
+        return String.format("%d, %s", this.turnOrder, this.getRoleName());
     }
 }

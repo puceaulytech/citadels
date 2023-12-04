@@ -7,6 +7,7 @@ import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
+import com.github.the10xdevs.citadels.logging.ConsoleLogger;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
@@ -15,6 +16,7 @@ import java.util.*;
 public class Game {
     private final List<Player> players = new ArrayList<>();
     private final Deck deck = new Deck(District.all);
+    private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
 
@@ -32,9 +34,10 @@ public class Game {
         }
         try {
             while (!this.isGameOver()) {
+                this.logger.logTurnStart(this.turn);
                 this.playRoleTurn();
                 this.playRegularTurn();
-                turn++;
+                this.turn++;
             }
             System.out.println("Le jeu est terminé!");
         } catch (IllegalActionException e) {
@@ -62,6 +65,8 @@ public class Game {
             RoleTurnAction roleTurnAction = new RoleTurnAction();
             player.getBehavior().pickRole(roleTurnAction, Collections.unmodifiableSet(roles));
 
+            this.logger.logRoleTurnAction(i, roleTurnAction);
+
             Role pickedRole = roleTurnAction.getPickedRole();
             Role discardedRole = roleTurnAction.getDiscardedRole();
 
@@ -84,6 +89,8 @@ public class Game {
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
             player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
+
+            this.logger.logRegularTurnAction(player, action);
 
             if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
                 player.incrementGold(2);
