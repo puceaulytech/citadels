@@ -23,6 +23,7 @@ public class ConsoleLogger {
 
     /**
      * Log the start of a turn
+     *
      * @param turn The turn number
      */
     public void logTurnStart(int turn) {
@@ -31,7 +32,8 @@ public class ConsoleLogger {
 
     /**
      * Log a role choosing action
-     * @param index The index of the player
+     *
+     * @param index  The index of the player
      * @param action The action made by the player
      */
     public void logRoleTurnAction(int index, RoleTurnAction action) {
@@ -43,6 +45,7 @@ public class ConsoleLogger {
 
     /**
      * Log a regular turn action
+     *
      * @param player The player that made the action
      * @param action The action made by the player
      */
@@ -64,6 +67,7 @@ public class ConsoleLogger {
 
     /**
      * Log winners of the game
+     *
      * @param players All the players
      */
     public void logWinners(List<Player> players) {
@@ -92,6 +96,7 @@ public class ConsoleLogger {
 
     /**
      * Log if an error occurs during the game
+     *
      * @param error
      */
     public void logError(Throwable error) {

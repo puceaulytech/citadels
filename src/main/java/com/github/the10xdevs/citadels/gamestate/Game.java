@@ -12,11 +12,10 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game {
     private final List<Player> players = new ArrayList<>();
-    private final Deck deck = new Deck(District.all);
+    private final Deck deck = new Deck(District.all());
     private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
@@ -28,6 +27,7 @@ public class Game {
     }
 
     public void start() {
+        this.deck.shuffle();
         for (Player player : this.players) {
             for (int i = 0; i < 4; i++) {
                 player.getHand().add(this.deck.drawCard());
@@ -108,6 +108,7 @@ public class Game {
             District builtDistrict = action.getBuiltDistrict();
             if (builtDistrict != null) {
                 player.incrementGold(-builtDistrict.getCost());
+                player.getHand().remove(builtDistrict);
                 try {
                     player.getCity().addDistrict(builtDistrict);
                 } catch (DuplicatedDistrictException e) {
