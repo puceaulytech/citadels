@@ -31,6 +31,10 @@ public class Player {
         this.gold = gold;
     }
 
+    public void incrementGold(int amount) {
+        this.gold += amount;
+    }
+
     public City getCity() {
         return city;
     }
