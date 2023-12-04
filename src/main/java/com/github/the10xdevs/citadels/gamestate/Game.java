@@ -27,6 +27,7 @@ public class Game {
         try {
             while (!this.isGameOver()) {
                 this.playRoleTurn();
+                this.playRegularTurn();
                 turn++;
             }
             System.out.println("Le jeu est terminé!");
@@ -74,12 +75,17 @@ public class Game {
         this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
 
         for (Player player : this.players) {
-            RegularTurnAction action = new RegularTurnAction(player.getCurrentRole().getAbilityAction());
+            RegularTurnAction action = new RegularTurnAction(player.getCurrentRole().getAbilityAction(), this.deck.peekFirstTwo());
 
             player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(this));
 
             if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
                 player.incrementGold(2);
+            } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
+                this.deck.drawCard();
+                this.deck.drawCard();
+                player.getHand().add(action.getChosenCard());
+                this.deck.enqueueCard(action.getDiscardedCard());
             }
         }
     }

@@ -7,6 +7,7 @@ import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
+import com.github.the10xdevs.citadels.utils.Pair;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -45,7 +46,8 @@ public class DummyBehavior implements Behavior {
 
         // Always Draw a card until HandSize equals eight
         if (self.getHandSize() < 8) {
-            action.drawCards();
+            Pair<District, District> cards = action.drawCards();
+            action.chooseCard(cards.first());
         }
 
         // Build the first district we can afford

@@ -20,4 +20,8 @@ public class Pair<A, B> {
     public Pair<B, A> invert() {
         return new Pair<>(this.second, this.first);
     }
+
+    public boolean contains(Object o) {
+        return this.first.equals(o) || this.second.equals(o);
+    }
 }

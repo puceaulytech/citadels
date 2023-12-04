@@ -1,6 +1,5 @@
 package com.github.the10xdevs.citadels;
 
-import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
 

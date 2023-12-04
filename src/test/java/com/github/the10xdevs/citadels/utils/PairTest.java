@@ -2,8 +2,7 @@ package com.github.the10xdevs.citadels.utils;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PairTest {
     @Test
@@ -19,5 +18,14 @@ class PairTest {
         Pair<Boolean, Integer> other = example.invert();
         assertTrue(other.first());
         assertEquals(5, other.second());
+    }
+
+    @Test
+    void contains() {
+        Pair<Integer, Integer> test = new Pair<>(5, 2);
+        assertTrue(test.contains(2));
+        assertTrue(test.contains(5));
+        assertFalse(test.contains(0));
+        assertFalse(test.contains("test"));
     }
 }
