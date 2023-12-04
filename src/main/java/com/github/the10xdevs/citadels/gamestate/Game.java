@@ -15,7 +15,7 @@ public class Game {
     private final List<Player> players = new ArrayList<>();
     private final Deck deck = new Deck(District.all);
     private int firstPlayerIndex = 0;
-    private int turn =1;
+    private int turn = 1;
 
     public Game(List<Behavior> behaviors) {
         for (Behavior behavior : behaviors) {
@@ -23,29 +23,27 @@ public class Game {
         }
     }
 
-
-    public void start() throws IllegalActionException {
+    public void start() {
         try {
-            while (!isGameOver()) {
-                playRoleTurn();
+            while (!this.isGameOver()) {
+                this.playRoleTurn();
                 turn++;
             }
             System.out.println("Le jeu est terminé!");
         } catch (IllegalActionException e) {
-          System.out.println("Something went wrong during play: " + e.getMessage());
+            System.out.println("Something went wrong during play: " + e.getMessage());
         }
     }
-    public boolean isGameOver(){
-        int districtsToBuild = 8;
+
+    public boolean isGameOver() {
         for (Player player : players) {
-            if (player.getCity().getSize() >= districtsToBuild) {
+            if (player.getCity().getSize() >= 8) {
                 System.out.println("Un joueur a construit suffisamment de districts.");
                 return true;
             }
         }
         return false;
     }
-
 
 
     private void playRoleTurn() throws IllegalActionException {
@@ -93,12 +91,12 @@ public class Game {
     public Deck getDeck() {
         return deck;
     }
-    public int getTurn(){
+
+    public int getTurn() {
         return turn;
     }
+
     public void setTurn(int turn) {
         this.turn = turn;
     }
-
-
 }

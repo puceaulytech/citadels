@@ -10,6 +10,7 @@ public class RegularTurnAction {
     private final AbilityAction abilityAction;
 
     private BasicAction basicAction;
+
     public RegularTurnAction(AbilityAction abilityAction) {
         this.abilityAction = abilityAction;
     }
