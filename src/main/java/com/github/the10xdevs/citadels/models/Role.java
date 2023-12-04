@@ -48,9 +48,8 @@ public enum Role {
             default -> null;
         };
     }
-
     @Override
     public String toString() {
-        return String.format("%d, %s", this.turnOrder, this.getRoleName());
+        return String.format(" %d, %s", this.turnOrder, this.getRoleName());
     }
 }

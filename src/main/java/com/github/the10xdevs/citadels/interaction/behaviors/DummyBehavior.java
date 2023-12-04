@@ -1,5 +1,8 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
+import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
@@ -43,17 +46,16 @@ public class DummyBehavior implements Behavior {
         // Always take gold
         action.takeGold();
 
+        // Always Draw a card until HandSize equals eight
+        if(self.getHandSize()<8){
+            action.drawCards();
+        }
+
         // Build the first district we can afford
         Optional<District> toBuild = self.getHand()
                 .stream()
                 .filter(district -> district.getCost() <= self.getGold())
                 .findFirst();
         toBuild.ifPresent(action::buildDistrict);
-
-        // If we are an assassin, kill the King
-        if (self.getCurrentRole() == Role.ASSASSIN) {
-            AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
-            abilityAction.kill(Role.ROI);
-        }
     }
 }
