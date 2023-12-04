@@ -29,7 +29,7 @@ public class Game {
 
     private void playRoleTurn() throws IllegalActionException {
         // Create a set with all available roles
-        Set<Role> roles = new HashSet<>(List.of(Role.values()));
+        Set<Role> roles = EnumSet.allOf(Role.class);
         for (int i = 0; i < this.players.size(); i++) {
             // Get next player to play
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
