@@ -61,4 +61,13 @@ public class ConsoleLogger {
             System.out.printf("-> %s avec %d points\n", player.getBehavior().getClass().getSimpleName(), score);
         }
     }
+
+    /**
+     * Log if an error occurs during the game
+     * @param error
+     */
+    public void logError(Throwable error) {
+        System.out.println("\n------ Error ------");
+        System.out.println("Something went wrong during play: " + error.getMessage());
+    }
 }

@@ -46,7 +46,7 @@ public class Game {
                     .sum()).reversed());
             this.logger.logWinners(this.players);
         } catch (IllegalActionException e) {
-            System.out.println("Something went wrong during play: " + e.getMessage());
+            this.logger.logError(e);
         }
     }
 
