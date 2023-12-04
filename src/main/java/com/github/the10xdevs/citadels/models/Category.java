@@ -1,5 +1,7 @@
 package com.github.the10xdevs.citadels.models;
 
+import com.github.the10xdevs.citadels.logging.ConsoleLogger;
+
 public enum Category {
     NOBLE,
     RELIGIEUX,
@@ -16,5 +18,15 @@ public enum Category {
             case MILITAIRE -> "Militaire";
             case MERVEILLE -> "Merveille";
         };
+    }
+
+    public String colorizeText(String text) {
+        return switch (this) {
+            case NOBLE -> ConsoleLogger.ANSI_YELLOW;
+            case RELIGIEUX -> ConsoleLogger.ANSI_BLUE;
+            case MARCHAND -> ConsoleLogger.ANSI_GREEN;
+            case MILITAIRE -> ConsoleLogger.ANSI_RED;
+            case MERVEILLE -> ConsoleLogger.ANSI_PURPLE;
+        } + text + ConsoleLogger.ANSI_RESET;
     }
 }

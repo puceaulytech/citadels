@@ -61,4 +61,8 @@ public final class District {
     public String toString() {
         return String.format("%s, %s, prix: %d", this.name, this.category, this.cost);
     }
+
+    public String toColorizedString() {
+        return String.format("%s, %s, prix: %d", this.name, this.category.colorizeText(this.category.toString()), this.cost);
+    }
 }

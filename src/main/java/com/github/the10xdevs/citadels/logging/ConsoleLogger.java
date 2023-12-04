@@ -8,6 +8,16 @@ import com.github.the10xdevs.citadels.models.District;
 import java.util.List;
 
 public class ConsoleLogger {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
     /**
      * Log the start of a turn
      * @param turn The turn number
@@ -23,9 +33,9 @@ public class ConsoleLogger {
      */
     public void logRoleTurnAction(int index, RoleTurnAction action) {
         System.out.printf("\n--- Joueur n°%d ---\n", index + 1);
-        System.out.printf("Choisit le rôle %s\n", action.getPickedRole());
+        System.out.printf("Choisit le rôle %s\n", action.getPickedRole().toColorizedString());
         if (action.getDiscardedRole() != null)
-            System.out.printf("Défausse le rôle %s\n", action.getDiscardedRole());
+            System.out.printf("Défausse le rôle %s\n", action.getDiscardedRole().toColorizedString());
     }
 
     /**
@@ -34,18 +44,18 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRegularTurnAction(Player player, RegularTurnAction action) {
-        System.out.printf("\n--- Joueur ayant le rôle %s ---\n", player.getCurrentRole());
+        System.out.printf("\n--- Joueur ayant le rôle %s ---\n", player.getCurrentRole().toColorizedString());
 
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             System.out.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
             System.out.println("Pioche deux cartes");
-            System.out.printf("    garde    %s,\n", action.getChosenCard());
-            System.out.printf("    défausse %s\n", action.getDiscardedCard());
+            System.out.printf("    garde    %s,\n", action.getChosenCard().toColorizedString());
+            System.out.printf("    défausse %s\n", action.getDiscardedCard().toColorizedString());
         }
 
         if (action.getBuiltDistrict() != null) {
-            System.out.printf("Construit le quartier %s\n", action.getBuiltDistrict());
+            System.out.printf("Construit le quartier %s\n", action.getBuiltDistrict().toColorizedString());
         }
     }
 

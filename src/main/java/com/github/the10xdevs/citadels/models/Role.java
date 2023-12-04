@@ -57,4 +57,12 @@ public enum Role {
     public String toString() {
         return String.format("%d, %s", this.turnOrder, this.getRoleName());
     }
+
+    public String toColorizedString() {
+        if (this.category != null) {
+            return String.format("%d, %s", this.turnOrder, this.category.colorizeText(this.getRoleName()));
+        } else {
+            return this.toString();
+        }
+    }
 }
