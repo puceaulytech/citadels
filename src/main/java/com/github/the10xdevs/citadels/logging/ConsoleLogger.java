@@ -77,7 +77,7 @@ public class ConsoleLogger {
      * @param error
      */
     public void logError(Throwable error) {
-        System.out.println("\n------ Error ------");
+        System.out.println("\n------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
         System.out.println("Something went wrong during play: " + error.getMessage());
     }
 }
