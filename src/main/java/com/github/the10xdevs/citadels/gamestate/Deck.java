@@ -2,23 +2,24 @@ package com.github.the10xdevs.citadels.gamestate;
 
 import com.github.the10xdevs.citadels.models.District;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Deck {
-    private final List<District> districts = new ArrayList<>(District.all);
+    private final Deque<District> districts = new ArrayDeque<>(District.all);
 
-    public Deck() {
-        Collections.shuffle(this.districts);
+    public void shuffle() {
+        List<District> elements = new ArrayList<>(this.districts);
+        Collections.shuffle(elements);
+        this.districts.clear();
+        this.districts.addAll(elements);
     }
 
-    /**
-     * Take a card from the deck and remove it
-     * @return The card
-     */
-    public District popCard() {
-        return this.districts.remove(this.districts.size() - 1);
+    public District pollCard() {
+        return this.districts.pollLast();
+    }
+
+    public void enqueueCard(District district) {
+        this.districts.offerFirst(district);
     }
 
     public int getCardsCount() {
