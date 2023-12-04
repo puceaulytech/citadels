@@ -28,26 +28,32 @@ public class Game {
 
     public void start() {
         this.deck.shuffle();
+
+        // Give four cards to each player
         for (Player player : this.players) {
             for (int i = 0; i < 4; i++) {
                 player.getHand().add(this.deck.drawCard());
             }
         }
+
         try {
+            // Main game loop
             while (!this.isGameOver()) {
                 this.logger.logTurnStart(this.turn);
                 this.playRoleTurn();
                 this.playRegularTurn();
+                this.determineNextFirstPlayer();
                 this.turn++;
             }
-            // At the end of the game, sort players by their score (sum of all their district's cost)
-            this.players.sort(Comparator.comparingInt((Player player) -> player.getCity().getDistricts().stream()
-                    .mapToInt(District::getCost)
-                    .sum()).reversed());
-            this.logger.logWinners(this.players);
         } catch (IllegalActionException e) {
             this.logger.logError(e);
         }
+
+        // At the end of the game, sort players by their score (sum of all their district's cost)
+        this.players.sort(Comparator.comparingInt((Player player) -> player.getCity().getDistricts().stream()
+                .mapToInt(District::getCost)
+                .sum()).reversed());
+        this.logger.logWinners(this.players);
     }
 
     public boolean isGameOver() {
@@ -116,6 +122,14 @@ public class Game {
                 }
             }
         }
+    }
+
+    private void determineNextFirstPlayer() {
+        Optional<Player> kingPlayer = this.players.stream()
+                .filter(player -> player.getCurrentRole() == Role.ROI)
+                .findFirst();
+
+        kingPlayer.ifPresent(player -> this.firstPlayerIndex = this.players.indexOf(player));
     }
 
     public List<Player> getPlayers() {
