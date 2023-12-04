@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.gamestate;
 
+import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -24,6 +25,11 @@ public class Game {
     }
 
     public void start() {
+        for (Player player : this.players) {
+            for (int i = 0; i < 4; i++) {
+                player.getHand().add(this.deck.drawCard());
+            }
+        }
         try {
             while (!this.isGameOver()) {
                 this.playRoleTurn();
@@ -45,7 +51,6 @@ public class Game {
         }
         return false;
     }
-
 
     private void playRoleTurn() throws IllegalActionException {
         // Create a set with all available roles
@@ -75,9 +80,10 @@ public class Game {
         this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
 
         for (Player player : this.players) {
-            RegularTurnAction action = new RegularTurnAction(player.getCurrentRole().getAbilityAction(), this.deck.peekFirstTwo());
+            SelfPlayerView currentPlayerView = new SelfPlayerView(player);
+            RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
-            player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(this));
+            player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
 
             if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
                 player.incrementGold(2);
@@ -86,6 +92,16 @@ public class Game {
                 this.deck.drawCard();
                 player.getHand().add(action.getChosenCard());
                 this.deck.enqueueCard(action.getDiscardedCard());
+            }
+
+            District builtDistrict = action.getBuiltDistrict();
+            if (builtDistrict != null) {
+                player.incrementGold(-builtDistrict.getCost());
+                try {
+                    player.getCity().addDistrict(builtDistrict);
+                } catch (DuplicatedDistrictException e) {
+                    throw new IllegalActionException("Cannot build the same district twice", e);
+                }
             }
         }
     }
@@ -101,6 +117,4 @@ public class Game {
     public int getTurn() {
         return turn;
     }
-
-   
 }

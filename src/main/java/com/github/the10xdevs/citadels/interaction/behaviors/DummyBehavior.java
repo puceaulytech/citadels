@@ -55,6 +55,7 @@ public class DummyBehavior implements Behavior {
                 .stream()
                 .filter(district -> district.getCost() <= self.getGold())
                 .findFirst();
-        toBuild.ifPresent(action::buildDistrict);
+        if (toBuild.isPresent())
+            action.buildDistrict(toBuild.get());
     }
 }

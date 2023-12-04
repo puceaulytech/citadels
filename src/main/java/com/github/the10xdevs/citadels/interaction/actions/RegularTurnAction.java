@@ -2,18 +2,22 @@ package com.github.the10xdevs.citadels.interaction.actions;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
+import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.utils.Pair;
 
 public class RegularTurnAction {
-    private final AbilityAction abilityAction;
+    private final SelfPlayerView currentPlayerView;
     private final Pair<District, District> cardsToDraw;
+    private final AbilityAction abilityAction;
 
     private BasicAction basicAction;
     private District chosenCard;
+    private District builtDistrict;
 
-    public RegularTurnAction(AbilityAction abilityAction, Pair<District, District> cards) {
-        this.abilityAction = abilityAction;
+    public RegularTurnAction(SelfPlayerView playerView, Pair<District, District> cards) {
+        this.currentPlayerView = playerView;
+        this.abilityAction = playerView.getCurrentRole().getAbilityAction();
         this.cardsToDraw = cards;
     }
 
@@ -40,8 +44,14 @@ public class RegularTurnAction {
         this.chosenCard = district;
     }
 
-    public void buildDistrict(District district) {
-        // TODO: do something
+    public void buildDistrict(District district) throws IllegalActionException {
+        if (!this.currentPlayerView.getHand().contains(district))
+            throw new IllegalActionException("Cannot build a district that is not in hand");
+        if (this.currentPlayerView.getGold() < district.getCost())
+            throw new IllegalActionException("Cannot build district without enough gold");
+        if (this.builtDistrict != null)
+            throw new IllegalActionException("Cannot build multiple districts in one turn");
+        this.builtDistrict = district;
     }
 
     public AbilityAction getAbilityAction() {
@@ -58,6 +68,10 @@ public class RegularTurnAction {
 
     public District getDiscardedCard() {
         return this.chosenCard.equals(this.cardsToDraw.first()) ? cardsToDraw.second() : cardsToDraw.first();
+    }
+
+    public District getBuiltDistrict() {
+        return this.builtDistrict;
     }
 
     public enum BasicAction {

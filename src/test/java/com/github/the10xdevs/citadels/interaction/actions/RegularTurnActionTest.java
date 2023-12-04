@@ -1,6 +1,7 @@
 package com.github.the10xdevs.citadels.interaction.actions;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -19,6 +20,20 @@ class RegularTurnActionTest {
     District a = new District("Testing", Category.MARCHAND, 1);
     District b = new District("Another testing", Category.MARCHAND, 1);
 
+    private Player createFakePlayer(Behavior behavior) {
+        Player fake = new Player(behavior);
+        fake.setCurrentRole(Role.ASSASSIN);
+        return fake;
+    }
+
+    private Player createRichPlayer(Behavior behavior) {
+        Player fake = createFakePlayer(behavior);
+        fake.setGold(20);
+        fake.getHand().add(a);
+        fake.getHand().add(b);
+        return fake;
+    }
+
     @Test
     void takeGold() throws IllegalActionException {
         Behavior goldPickerBehavior = new Behavior() {
@@ -32,9 +47,11 @@ class RegularTurnActionTest {
             }
         };
 
-        RegularTurnAction action = new RegularTurnAction(null, null);
+        Player goldPicker = createFakePlayer(goldPickerBehavior);
+        SelfPlayerView view = new SelfPlayerView(goldPicker);
+        RegularTurnAction action = new RegularTurnAction(view, null);
 
-        goldPickerBehavior.playTurn(action, null, null);
+        goldPickerBehavior.playTurn(action, view, null);
 
         assertEquals(RegularTurnAction.BasicAction.GOLD, action.getBasicAction());
     }
@@ -53,7 +70,9 @@ class RegularTurnActionTest {
             }
         };
 
-        RegularTurnAction action = new RegularTurnAction(null, null);
+        Player goldPicker = createFakePlayer(goldPickerBehavior);
+        SelfPlayerView view = new SelfPlayerView(goldPicker);
+        RegularTurnAction action = new RegularTurnAction(view, null);
 
         assertThrows(IllegalActionException.class, () -> goldPickerBehavior.playTurn(action, null, null));
     }
@@ -71,8 +90,11 @@ class RegularTurnActionTest {
                 action.chooseCard(cards.first());
             }
         };
-        RegularTurnAction action = new RegularTurnAction(null, new Pair<>(a, b));
-        cardDrawerBehavior.playTurn(action, null, null);
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        cardDrawerBehavior.playTurn(action, view, null);
         assertEquals(a, action.getChosenCard());
         assertEquals(b, action.getDiscardedCard());
     }
@@ -91,8 +113,11 @@ class RegularTurnActionTest {
                 action.chooseCard(cards.first());
             }
         };
-        RegularTurnAction action = new RegularTurnAction(null, new Pair<>(a, b));
-        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, null, null));
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 
     @Test
@@ -109,8 +134,11 @@ class RegularTurnActionTest {
                 action.chooseCard(cards.second());
             }
         };
-        RegularTurnAction action = new RegularTurnAction(null, new Pair<>(a, b));
-        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, null, null));
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 
     @Test
@@ -126,7 +154,89 @@ class RegularTurnActionTest {
                 action.chooseCard(new District("Amphi forum", Category.MERVEILLE, 9));
             }
         };
-        RegularTurnAction action = new RegularTurnAction(null, new Pair<>(a, b));
-        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, null, null));
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
+    }
+
+    @Test
+    void buildDistrict() throws IllegalActionException {
+        Behavior districtBuilderBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.buildDistrict(a);
+            }
+        };
+
+        Player districtBuilder = createRichPlayer(districtBuilderBehavior);
+        SelfPlayerView view = new SelfPlayerView(districtBuilder);
+        RegularTurnAction action = new RegularTurnAction(view, null);
+        districtBuilderBehavior.playTurn(action, view, null);
+        assertEquals(a, action.getBuiltDistrict());
+    }
+
+    @Test
+    void buildTwoDistricts() throws IllegalActionException {
+        Behavior districtBuilderBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.buildDistrict(a);
+                action.buildDistrict(b);
+            }
+        };
+
+        Player districtBuilder = createRichPlayer(districtBuilderBehavior);
+        SelfPlayerView view = new SelfPlayerView(districtBuilder);
+        RegularTurnAction action = new RegularTurnAction(view, null);
+        assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, view, null));
+    }
+
+    @Test
+    void buildInvalidDistrict() throws IllegalActionException {
+        Behavior districtBuilderBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.buildDistrict(new District("Gold generator", Category.MERVEILLE, 10));
+            }
+        };
+
+        Player districtBuilder = createRichPlayer(districtBuilderBehavior);
+        SelfPlayerView view = new SelfPlayerView(districtBuilder);
+        RegularTurnAction action = new RegularTurnAction(view, null);
+        assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, view, null));
+    }
+
+    @Test
+    void buildDistrictWithoutEnoughGold() throws IllegalActionException {
+        Behavior districtBuilderBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.buildDistrict(a);
+            }
+        };
+
+        Player districtBuilder = createRichPlayer(districtBuilderBehavior);
+        districtBuilder.setGold(0);
+        SelfPlayerView view = new SelfPlayerView(districtBuilder);
+        RegularTurnAction action = new RegularTurnAction(view, null);
+        assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, view, null));
     }
 }
