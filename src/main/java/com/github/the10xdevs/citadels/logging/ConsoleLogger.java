@@ -17,6 +17,9 @@ public class ConsoleLogger {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_GOLD = "\u001B[38;2;201;176;55m";
+    public static final String ANSI_SILVER = "\u001B[38;2;180;180;180m";
+    public static final String ANSI_BRONZE = "\u001B[38;2;106;56;5m";
 
     /**
      * Log the start of a turn
@@ -65,10 +68,25 @@ public class ConsoleLogger {
      */
     public void logWinners(List<Player> players) {
         System.out.println("\n------ Podium ------");
+        int rank = 1;
         for (Player player : players) {
             int score = player.getCity().getDistricts().stream().mapToInt(District::getCost).sum();
 
+            if (rank == 1) {
+                System.out.print(ANSI_GOLD);
+            } else if (rank == 2) {
+                System.out.print(ANSI_SILVER);
+            } else if (rank == 3) {
+                System.out.print(ANSI_BRONZE);
+            }
+
             System.out.printf("-> %s avec %d points\n", player.getBehavior().getClass().getSimpleName(), score);
+
+            if (rank <= 3) {
+                System.out.print(ANSI_RESET);
+            }
+
+            rank++;
         }
     }
 
