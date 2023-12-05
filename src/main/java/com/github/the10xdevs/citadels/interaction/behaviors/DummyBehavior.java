@@ -43,10 +43,12 @@ public class DummyBehavior implements Behavior {
     public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
         // Choose a random role and discard a random one
         action.pick(DummyBehavior.chooseRandom(availableRoles));
-        action.discard(DummyBehavior.chooseRandom(availableRoles));
-        if (action.getPickedRole() == action.getDiscardedRole()) {
-            throw new IllegalActionException("Discarded and choosen cards are the same");
+
+        Role discardedRole = DummyBehavior.chooseRandom(availableRoles);
+        while (discardedRole == action.getPickedRole()) {
+            discardedRole = DummyBehavior.chooseRandom(availableRoles);
         }
+        action.discard(discardedRole);
     }
 
     @Override
@@ -64,6 +66,7 @@ public class DummyBehavior implements Behavior {
         // Build the first district we can afford
         Optional<District> toBuild = self.getHand()
                 .stream()
+                .filter(district -> !self.getCity().getDistricts().contains(district))
                 .filter(district -> district.getCost() <= self.getGold())
                 .findFirst();
         if (toBuild.isPresent())
