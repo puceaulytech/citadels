@@ -2,6 +2,7 @@ package com.github.the10xdevs.citadels.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A district in the game
@@ -95,5 +96,10 @@ public final class District {
         if (o instanceof District d)
             return this.name.equals(d.name) && this.cost == d.cost && this.category.equals(d.category);
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, category, cost);
     }
 }
