@@ -27,7 +27,7 @@ public class ConsoleLogger {
      * @param turn The turn number
      */
     public void logTurnStart(int turn) {
-        System.out.printf("\n------ Tour n°%d ------\n", turn);
+        System.out.printf("%n------ Tour n°%d ------%n", turn);
     }
 
     /**
@@ -37,10 +37,10 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRoleTurnAction(int index, RoleTurnAction action) {
-        System.out.printf("\n--- Joueur n°%d ---\n", index + 1);
-        System.out.printf("Choisit le rôle %s\n", action.getPickedRole().toColorizedString());
+        System.out.printf("%n--- Joueur n°%d ---%n", index + 1);
+        System.out.printf("Choisit le rôle %s%n", action.getPickedRole().toColorizedString());
         if (action.getDiscardedRole() != null)
-            System.out.printf("Défausse le rôle %s\n", action.getDiscardedRole().toColorizedString());
+            System.out.printf("Défausse le rôle %s%n", action.getDiscardedRole().toColorizedString());
     }
 
     /**
@@ -50,18 +50,18 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRegularTurnAction(Player player, RegularTurnAction action) {
-        System.out.printf("\n--- Joueur ayant le rôle %s ---\n", player.getCurrentRole().toColorizedString());
+        System.out.printf("%n--- Joueur ayant le rôle %s ---%n", player.getCurrentRole().toColorizedString());
 
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             System.out.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
             System.out.println("Pioche deux cartes");
-            System.out.printf("    garde    %s,\n", action.getChosenCard().toColorizedString());
-            System.out.printf("    défausse %s\n", action.getDiscardedCard().toColorizedString());
+            System.out.printf("    garde    %s,%n", action.getChosenCard().toColorizedString());
+            System.out.printf("    défausse %s%n", action.getDiscardedCard().toColorizedString());
         }
 
         if (action.getBuiltDistrict() != null) {
-            System.out.printf("Construit le quartier %s\n", action.getBuiltDistrict().toColorizedString());
+            System.out.printf("Construit le quartier %s%n", action.getBuiltDistrict().toColorizedString());
         }
     }
 
@@ -84,7 +84,7 @@ public class ConsoleLogger {
                 System.out.print(ANSI_BRONZE);
             }
 
-            System.out.printf("-> %s avec %d points\n", player.getBehavior().getClass().getSimpleName(), score);
+            System.out.printf("-> %s avec %d points%n", player.getBehavior().getClass().getSimpleName(), score);
 
             if (rank <= 3) {
                 System.out.print(ANSI_RESET);
@@ -97,10 +97,11 @@ public class ConsoleLogger {
     /**
      * Log if an error occurs during the game
      *
-     * @param error
+     * @param error Caught error to be logged
      */
     public void logError(Throwable error) {
-        System.out.println("\n------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
+        System.out.println();
+        System.out.println("------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
         System.out.println("Something went wrong during play: " + error.getMessage());
     }
 }
