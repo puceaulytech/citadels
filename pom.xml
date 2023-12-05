@@ -7,13 +7,54 @@
     <version>0.1</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8
-        </project.build.sourceEncoding> <!-- CHANGE ME IF NEEDED, other : ISO-8859-1 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <native.maven.plugin.version>0.9.28</native.maven.plugin.version>
         <junit.bom.version>5.10.1</junit.bom.version>
+        <mainClass>com.github.the10xdevs.citadels.Main</mainClass>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                            <execution>
+                                <id>test-native</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <fallback>false</fallback>
+                            <configuration>
+                                <agent>
+                                    <enabled>true</enabled>
+                                </agent>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencyManagement> <!-- helps maven to resolve conflicting transitive dependencies -->
         <dependencies>
@@ -60,19 +101,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.github.the10xdevs.citadels.Main</mainClass>
-                    <!--          <arguments>
-                                <argument>argument1</argument>
-                              </arguments>
-                              <systemProperties>
-                                <systemProperty>
-                                  <key>myproperty</key>
-                                  <value>myvalue</value>
-                                </systemProperty>
-                              </systemProperties>
-                    -->
+                    <mainClass>${mainClass}</mainClass>
                 </configuration>
             </plugin>
+
             <!-- Executable jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -81,13 +113,11 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.the10xdevs.citadels.Main</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>
