@@ -126,10 +126,16 @@ public class ConsoleLogger {
                 this.print(ANSI_RESET);
             }
 
+            for (District district : player.getCity()) {
+                this.print("  - ");
+                this.printColorized(district);
+                this.println();
+            }
+            this.println();
+            this.flush();
+
             rank++;
         }
-
-        this.flush();
     }
 
     /**
