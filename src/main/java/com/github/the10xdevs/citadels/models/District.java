@@ -73,14 +73,6 @@ public final class District {
         return String.format("%s, %s, prix: %d", this.name, this.category, this.cost);
     }
 
-    /**
-     * Get a colorized string of the district
-     * @return The colorized string
-     */
-    public String toColorizedString() {
-        return String.format("%s, %s, prix: %d", this.name, this.category.colorizeText(this.category.toString()), this.cost);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o instanceof District d)

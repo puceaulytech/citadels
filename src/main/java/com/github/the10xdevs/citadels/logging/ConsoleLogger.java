@@ -3,7 +3,9 @@ package com.github.the10xdevs.citadels.logging;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
+import com.github.the10xdevs.citadels.models.Role;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -31,7 +33,10 @@ public class ConsoleLogger {
      * @param turn The turn number
      */
     public void logTurnStart(int turn) {
-        this.printf("%n------ Tour n°%d ------%n", turn);
+        this.println();
+        this.print("------ Tour n°");
+        this.printInt(turn);
+        this.println(" ------");
 
         this.flush();
     }
@@ -43,10 +48,18 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRoleTurnAction(int index, RoleTurnAction action) {
-        this.printf("%n--- Joueur n°%d ---%n", index + 1);
-        this.printf("Choisit le rôle %s%n", action.getPickedRole().toColorizedString());
-        if (action.getDiscardedRole() != null)
-            this.printf("Défausse le rôle %s%n", action.getDiscardedRole().toColorizedString());
+        this.println();
+        this.print("--- Joueur n°");
+        this.printInt(index + 1);
+        this.println(" ---");
+        this.print("Choisit le rôle ");
+        this.printColorized(action.getPickedRole());
+        this.println();
+        if (action.getDiscardedRole() != null) {
+            this.print("Défausse le rôle ");
+            this.printColorized(action.getDiscardedRole());
+            this.println();
+        }
 
         this.flush();
     }
@@ -58,18 +71,27 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRegularTurnAction(Player player, RegularTurnAction action) {
-        this.printf("%n--- Joueur ayant le rôle %s ---%n", player.getCurrentRole().toColorizedString());
+        this.println();
+        this.print("--- Joueur ayant le rôle ");
+        this.printColorized(player.getCurrentRole());
+        this.println(" ---");
 
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             this.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
             this.println("Pioche deux cartes");
-            this.printf("    garde    %s,%n", action.getChosenCard().toColorizedString());
-            this.printf("    défausse %s%n", action.getDiscardedCard().toColorizedString());
+            this.print("    garde    ");
+            this.printColorized(action.getChosenCard());
+            this.println();
+            this.print("    défausse ");
+            this.printColorized(action.getDiscardedCard());
+            this.println();
         }
 
         if (action.getBuiltDistrict() != null) {
-            this.printf("Construit le quartier %s%n", action.getBuiltDistrict().toColorizedString());
+            this.print("Construit le quartier ");
+            this.printColorized(action.getBuiltDistrict());
+            this.println();
         }
 
         this.flush();
@@ -94,7 +116,11 @@ public class ConsoleLogger {
                 this.print(ANSI_BRONZE);
             }
 
-            this.printf("-> %s avec %d points%n", player.getBehavior().getClass().getSimpleName(), score);
+            this.print("-> ");
+            this.print(player.getBehavior().getClass().getSimpleName());
+            this.print(" avec ");
+            this.printInt(score);
+            this.println(" points");
 
             if (rank <= 3) {
                 this.print(ANSI_RESET);
@@ -119,18 +145,9 @@ public class ConsoleLogger {
         this.flush();
     }
 
-    private void printf(String format, Object... args) {
-        String res = String.format(format, args);
-        try {
-            outputStream.write(res.getBytes());
-        } catch (IOException e) {
-            this.unexpectedExit(e);
-        }
-    }
-
     private void println() {
         try {
-            outputStream.write('\n');
+            outputStream.write(System.lineSeparator().getBytes());
         } catch (IOException e) {
             this.unexpectedExit(e);
         }
@@ -139,7 +156,15 @@ public class ConsoleLogger {
     private void println(String text) {
         try {
             outputStream.write(text.getBytes());
-            outputStream.write('\n');
+            outputStream.write(System.lineSeparator().getBytes());
+        } catch (IOException e) {
+            this.unexpectedExit(e);
+        }
+    }
+
+    private void printInt(int value) {
+        try {
+            outputStream.write(String.valueOf(value).getBytes());
         } catch (IOException e) {
             this.unexpectedExit(e);
         }
@@ -159,6 +184,27 @@ public class ConsoleLogger {
         } catch (IOException e) {
             this.unexpectedExit(e);
         }
+    }
+
+    private void printColorized(Role role) {
+        Category category = role.getCategory();
+        if (category != null)
+            this.print(role.getCategory().getANSIColorCode());
+
+        this.print(role.toString());
+
+        if (category != null)
+            this.print(ANSI_RESET);
+    }
+
+    private void printColorized(District district) {
+        this.print(district.getName());
+        this.print(", ");
+        this.print(district.getCategory().getANSIColorCode());
+        this.print(district.getCategory().toString());
+        this.print(ANSI_RESET);
+        this.print(", prix: ");
+        this.printInt(district.getCost());
     }
 
     private void unexpectedExit(Throwable e) {

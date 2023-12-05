@@ -24,17 +24,16 @@ public enum Category {
     }
 
     /**
-     * Colorize some text according to the role's color
-     * @param text The initial text
-     * @return The colorized text
+     * Get the corresponding ANSI color code
+     * @return The color code
      */
-    public String colorizeText(String text) {
+    public String getANSIColorCode() {
         return switch (this) {
             case NOBLE -> ConsoleLogger.ANSI_YELLOW;
             case RELIGIEUX -> ConsoleLogger.ANSI_BLUE;
             case MARCHAND -> ConsoleLogger.ANSI_GREEN;
             case MILITAIRE -> ConsoleLogger.ANSI_RED;
             case MERVEILLE -> ConsoleLogger.ANSI_PURPLE;
-        } + text + ConsoleLogger.ANSI_RESET;
+        };
     }
 }

@@ -45,20 +45,7 @@ public enum Role {
         return this.category;
     }
 
-    public String getRoleName() {
-        return switch (this) {
-            case ASSASSIN -> "Assassin";
-            case VOLEUR -> "Voleur";
-            case MAGICIEN -> "Magicien";
-            case ROI -> "Roi";
-            case EVEQUE -> "Eveque";
-            case MARCHAND -> "Marchand";
-            case ARCHITECTE -> "Architecte";
-            case CONDOTTIERE -> "Condottiere";
-        };
-    }
-
-    /**
+     /**
      * Create a new AbilityAction corresponding to the role
      * @return The ability action
      */
@@ -71,18 +58,15 @@ public enum Role {
 
     @Override
     public String toString() {
-        return String.format("%d, %s", this.turnOrder, this.getRoleName());
-    }
-
-    /**
-     * Get a colorized string of the role
-     * @return The colorized string
-     */
-    public String toColorizedString() {
-        if (this.category != null) {
-            return String.format("%d, %s", this.turnOrder, this.category.colorizeText(this.getRoleName()));
-        } else {
-            return this.toString();
-        }
+        return switch (this) {
+            case ASSASSIN -> "Assassin";
+            case VOLEUR -> "Voleur";
+            case MAGICIEN -> "Magicien";
+            case ROI -> "Roi";
+            case EVEQUE -> "Eveque";
+            case MARCHAND -> "Marchand";
+            case ARCHITECTE -> "Architecte";
+            case CONDOTTIERE -> "Condottiere";
+        };
     }
 }
