@@ -4,12 +4,14 @@ import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.DoubleStream;
 
 /**
  * A city of districts
  */
-public class City {
+public class City implements Iterable<District> {
     private final Set<District> districts = new HashSet<>();
 
     /**
@@ -29,5 +31,10 @@ public class City {
 
     public int getSize() {
         return this.districts.size();
+    }
+
+    @Override
+    public Iterator<District> iterator() {
+        return this.districts.iterator();
     }
 }
