@@ -22,9 +22,10 @@ public class DummyBehavior implements Behavior {
 
     /**
      * Get a random element in a Collection
+     *
      * @param collection The collection
-     * @return The random element
      * @param <T> The generic element type
+     * @return The random element
      */
     private static <T> T chooseRandom(Collection<T> collection) {
         int pos = randomGenerator.nextInt(collection.size());
@@ -39,21 +40,25 @@ public class DummyBehavior implements Behavior {
     }
 
     @Override
-    public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+    public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
         // Choose a random role and discard a random one
         action.pick(DummyBehavior.chooseRandom(availableRoles));
         action.discard(DummyBehavior.chooseRandom(availableRoles));
+        if (action.getPickedRole() == action.getDiscardedRole()) {
+            throw new IllegalActionException("Discarded and choosen cards are the same");
+        }
     }
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
-        // Always take gold
-        action.takeGold();
 
         // Always Draw a card until HandSize equals eight
         if (self.getHandSize() < 8) {
             Pair<District, District> cards = action.drawCards();
             action.chooseCard(cards.first());
+        } else {
+            // Always take gold after reaching eight card in hand
+            action.takeGold();
         }
 
         // Build the first district we can afford

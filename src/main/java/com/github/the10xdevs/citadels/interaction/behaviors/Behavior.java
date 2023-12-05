@@ -23,6 +23,7 @@ public interface Behavior {
      */
     void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException;
 
+
     /**
      * Play a regular turn
      * <br>
