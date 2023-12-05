@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A city of districts
+ */
 public class City {
     private final Set<District> districts = new HashSet<>();
 

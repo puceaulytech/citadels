@@ -3,6 +3,9 @@ package com.github.the10xdevs.citadels.models;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 
+/**
+ * A role in the game
+ */
 public enum Role {
     ASSASSIN(1),
     VOLEUR(2),
@@ -16,10 +19,19 @@ public enum Role {
     private final int turnOrder;
     private final Category category;
 
+    /**
+     * Create a new role without a category
+     * @param turnOrder The order in which this role play
+     */
     Role(int turnOrder) {
         this(turnOrder, null);
     }
 
+    /**
+     * Create a new role with a category
+     * @param turnOrder The order in which this role play
+     * @param category The category of the role
+     */
     Role(int turnOrder, Category category) {
         this.turnOrder = turnOrder;
         this.category = category;
@@ -46,6 +58,10 @@ public enum Role {
         };
     }
 
+    /**
+     * Create a new AbilityAction corresponding to the role
+     * @return The ability action
+     */
     public AbilityAction getAbilityAction() {
         return switch (this) {
             case ASSASSIN -> new AssassinAbilityAction();
@@ -58,6 +74,10 @@ public enum Role {
         return String.format("%d, %s", this.turnOrder, this.getRoleName());
     }
 
+    /**
+     * Get a colorized string of the role
+     * @return The colorized string
+     */
     public String toColorizedString() {
         if (this.category != null) {
             return String.format("%d, %s", this.turnOrder, this.category.colorizeText(this.getRoleName()));

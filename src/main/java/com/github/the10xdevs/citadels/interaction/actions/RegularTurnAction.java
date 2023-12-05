@@ -21,12 +21,21 @@ public class RegularTurnAction {
         this.cardsToDraw = cards;
     }
 
+    /**
+     * Take gold on this turn
+     * @throws IllegalActionException If the action is invalid
+     */
     public void takeGold() throws IllegalActionException {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot take gold because an action has already been performed");
         this.basicAction = BasicAction.GOLD;
     }
 
+    /**
+     * Draw two cards on this turn
+     * @return The two cards
+     * @throws IllegalActionException If the action was invalid
+     */
     public Pair<District, District> drawCards() throws IllegalActionException {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot draw cards because an action has already been performed");
@@ -34,6 +43,11 @@ public class RegularTurnAction {
         return this.cardsToDraw;
     }
 
+    /**
+     * Choose a card that was drawn
+     * @param district The card to choose
+     * @throws IllegalActionException If the action was invalid
+     */
     public void chooseCard(District district) throws IllegalActionException {
         if (this.basicAction != BasicAction.CARDS)
             throw new IllegalActionException("Cannot choose card because no cards were drawn");
@@ -44,6 +58,11 @@ public class RegularTurnAction {
         this.chosenCard = district;
     }
 
+    /**
+     * Build a district on this turn
+     * @param district The district to build
+     * @throws IllegalActionException If the action was invalid
+     */
     public void buildDistrict(District district) throws IllegalActionException {
         if (!(this.currentPlayerView.getHand().contains(district) || district.equals(this.chosenCard)))
             throw new IllegalActionException("Cannot build a district that is not in hand");
@@ -74,6 +93,9 @@ public class RegularTurnAction {
         return this.builtDistrict;
     }
 
+    /**
+     * An enum representing what was done during the turn
+     */
     public enum BasicAction {
         GOLD,
         CARDS,

@@ -2,6 +2,9 @@ package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.logging.ConsoleLogger;
 
+/**
+ * A category in the game
+ */
 public enum Category {
     NOBLE,
     RELIGIEUX,
@@ -20,6 +23,11 @@ public enum Category {
         };
     }
 
+    /**
+     * Colorize some text according to the role's color
+     * @param text The initial text
+     * @return The colorized text
+     */
     public String colorizeText(String text) {
         return switch (this) {
             case NOBLE -> ConsoleLogger.ANSI_YELLOW;

@@ -3,10 +3,14 @@ package com.github.the10xdevs.citadels.models;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A district in the game
+ */
 public final class District {
     private final String name;
     private final Category category;
     private final int cost;
+
     public District(String name, Category category, int cost) {
         this.name = name;
         this.category = category;
@@ -14,7 +18,8 @@ public final class District {
     }
 
     /**
-     * List of all the districts in the game
+     * Get a list of all districts in the game
+     * @return All the districts
      */
     public static List<District> all() {
         List<District> allDistricts = new ArrayList<>();
@@ -48,6 +53,12 @@ public final class District {
         return allDistricts;
     }
 
+    /**
+     * Add a district multiple times into a list of districts
+     * @param dest The list
+     * @param district The district
+     * @param amount The amount of time to add
+     */
     private static void addAmount(List<District> dest, District district, int amount) {
         for (int i = 0; i < amount; i++) {
             dest.add(district);
@@ -71,6 +82,10 @@ public final class District {
         return String.format("%s, %s, prix: %d", this.name, this.category, this.cost);
     }
 
+    /**
+     * Get a colorized string of the district
+     * @return The colorized string
+     */
     public String toColorizedString() {
         return String.format("%s, %s, prix: %d", this.name, this.category.colorizeText(this.category.toString()), this.cost);
     }

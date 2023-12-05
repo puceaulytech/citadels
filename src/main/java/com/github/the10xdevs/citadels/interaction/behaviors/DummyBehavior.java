@@ -20,6 +20,12 @@ import java.util.Set;
 public class DummyBehavior implements Behavior {
     private static final Random randomGenerator = new Random();
 
+    /**
+     * Get a random element in a Collection
+     * @param collection The collection
+     * @return The random element
+     * @param <T> The generic element type
+     */
     private static <T> T chooseRandom(Collection<T> collection) {
         int pos = randomGenerator.nextInt(collection.size());
 
