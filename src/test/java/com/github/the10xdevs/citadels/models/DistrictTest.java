@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class DistrictTest {
+    @SuppressWarnings({"EqualsWithItself", "AssertBetweenInconvertibleTypes"})
     @Test
     void equals() {
         District romain = new District("Baraque de Romain", Category.MERVEILLE, 10);
@@ -17,6 +18,6 @@ class DistrictTest {
         assertEquals(romain, otherRomain);
         assertNotEquals(romain, logan);
         assertNotEquals(vahan, logan);
-        assertNotEquals(vahan, 4);
+        assertNotEquals(4, vahan);
     }
 }
