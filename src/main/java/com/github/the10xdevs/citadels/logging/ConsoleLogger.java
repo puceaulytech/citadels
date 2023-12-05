@@ -5,6 +5,8 @@ import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.models.District;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class ConsoleLogger {
@@ -21,13 +23,17 @@ public class ConsoleLogger {
     public static final String ANSI_SILVER = "\u001B[38;2;180;180;180m";
     public static final String ANSI_BRONZE = "\u001B[38;2;106;56;5m";
 
+    private final BufferedOutputStream outputStream = new BufferedOutputStream(System.out);
+
     /**
      * Log the start of a turn
      *
      * @param turn The turn number
      */
     public void logTurnStart(int turn) {
-        System.out.printf("%n------ Tour n°%d ------%n", turn);
+        this.printf("%n------ Tour n°%d ------%n", turn);
+
+        this.flush();
     }
 
     /**
@@ -37,10 +43,12 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRoleTurnAction(int index, RoleTurnAction action) {
-        System.out.printf("%n--- Joueur n°%d ---%n", index + 1);
-        System.out.printf("Choisit le rôle %s%n", action.getPickedRole().toColorizedString());
+        this.printf("%n--- Joueur n°%d ---%n", index + 1);
+        this.printf("Choisit le rôle %s%n", action.getPickedRole().toColorizedString());
         if (action.getDiscardedRole() != null)
-            System.out.printf("Défausse le rôle %s%n", action.getDiscardedRole().toColorizedString());
+            this.printf("Défausse le rôle %s%n", action.getDiscardedRole().toColorizedString());
+
+        this.flush();
     }
 
     /**
@@ -50,19 +58,21 @@ public class ConsoleLogger {
      * @param action The action made by the player
      */
     public void logRegularTurnAction(Player player, RegularTurnAction action) {
-        System.out.printf("%n--- Joueur ayant le rôle %s ---%n", player.getCurrentRole().toColorizedString());
+        this.printf("%n--- Joueur ayant le rôle %s ---%n", player.getCurrentRole().toColorizedString());
 
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
-            System.out.println("Prend deux pièces d'or");
+            this.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
-            System.out.println("Pioche deux cartes");
-            System.out.printf("    garde    %s,%n", action.getChosenCard().toColorizedString());
-            System.out.printf("    défausse %s%n", action.getDiscardedCard().toColorizedString());
+            this.println("Pioche deux cartes");
+            this.printf("    garde    %s,%n", action.getChosenCard().toColorizedString());
+            this.printf("    défausse %s%n", action.getDiscardedCard().toColorizedString());
         }
 
         if (action.getBuiltDistrict() != null) {
-            System.out.printf("Construit le quartier %s%n", action.getBuiltDistrict().toColorizedString());
+            this.printf("Construit le quartier %s%n", action.getBuiltDistrict().toColorizedString());
         }
+
+        this.flush();
     }
 
     /**
@@ -71,27 +81,29 @@ public class ConsoleLogger {
      * @param players All the players
      */
     public void logWinners(List<Player> players) {
-        System.out.println("\n------ Podium ------");
+        this.println("\n------ Podium ------");
         int rank = 1;
         for (Player player : players) {
             int score = player.getCity().getDistricts().stream().mapToInt(District::getCost).sum();
 
             if (rank == 1) {
-                System.out.print(ANSI_GOLD);
+                this.print(ANSI_GOLD);
             } else if (rank == 2) {
-                System.out.print(ANSI_SILVER);
+                this.print(ANSI_SILVER);
             } else if (rank == 3) {
-                System.out.print(ANSI_BRONZE);
+                this.print(ANSI_BRONZE);
             }
 
-            System.out.printf("-> %s avec %d points%n", player.getBehavior().getClass().getSimpleName(), score);
+            this.printf("-> %s avec %d points%n", player.getBehavior().getClass().getSimpleName(), score);
 
             if (rank <= 3) {
-                System.out.print(ANSI_RESET);
+                this.print(ANSI_RESET);
             }
 
             rank++;
         }
+
+        this.flush();
     }
 
     /**
@@ -100,8 +112,57 @@ public class ConsoleLogger {
      * @param error Caught error to be logged
      */
     public void logError(Throwable error) {
-        System.out.println();
-        System.out.println("------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
-        System.out.println("Something went wrong during play: " + error.getMessage());
+        this.println();
+        this.println("------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
+        this.println("Something went wrong during play: " + error.getMessage());
+
+        this.flush();
+    }
+
+    private void printf(String format, Object... args) {
+        String res = String.format(format, args);
+        try {
+            outputStream.write(res.getBytes());
+        } catch (IOException e) {
+            this.unexpectedExit(e);
+        }
+    }
+
+    private void println() {
+        try {
+            outputStream.write('\n');
+        } catch (IOException e) {
+            this.unexpectedExit(e);
+        }
+    }
+
+    private void println(String text) {
+        try {
+            outputStream.write(text.getBytes());
+            outputStream.write('\n');
+        } catch (IOException e) {
+            this.unexpectedExit(e);
+        }
+    }
+
+    private void print(String text) {
+        try {
+            outputStream.write(text.getBytes());
+        } catch (IOException e) {
+            this.unexpectedExit(e);
+        }
+    }
+
+    private void flush() {
+        try {
+            outputStream.flush();
+        } catch (IOException e) {
+            this.unexpectedExit(e);
+        }
+    }
+
+    private void unexpectedExit(Throwable e) {
+        System.out.println("Error on stdout: " + e);
+        System.exit(1);
     }
 }
