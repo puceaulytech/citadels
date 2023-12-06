@@ -26,6 +26,11 @@ public class ConsoleLogger {
     public static final String ANSI_BRONZE = "\u001B[38;2;106;56;5m";
 
     private final BufferedOutputStream outputStream = new BufferedOutputStream(System.out);
+    private final boolean supportsColor;
+
+    public ConsoleLogger() {
+        this.supportsColor = !System.getProperty("os.name").toLowerCase().contains("win");
+    }
 
     /**
      * Log the start of a turn
@@ -108,12 +113,14 @@ public class ConsoleLogger {
         for (Player player : players) {
             int score = player.getCity().getDistricts().stream().mapToInt(District::getCost).sum();
 
-            if (rank == 1) {
-                this.print(ANSI_GOLD);
-            } else if (rank == 2) {
-                this.print(ANSI_SILVER);
-            } else if (rank == 3) {
-                this.print(ANSI_BRONZE);
+            if (this.supportsColor) {
+                if (rank == 1) {
+                    this.print(ANSI_GOLD);
+                } else if (rank == 2) {
+                    this.print(ANSI_SILVER);
+                } else if (rank == 3) {
+                    this.print(ANSI_BRONZE);
+                }
             }
 
             this.print("-> ");
@@ -122,7 +129,7 @@ public class ConsoleLogger {
             this.printInt(score);
             this.println(" points");
 
-            if (rank <= 3) {
+            if (rank <= 3 && this.supportsColor) {
                 this.print(ANSI_RESET);
             }
 
@@ -194,21 +201,27 @@ public class ConsoleLogger {
 
     private void printColorized(Role role) {
         Category category = role.getCategory();
-        if (category != null)
+        if (category != null && this.supportsColor)
             this.print(role.getCategory().getANSIColorCode());
 
         this.print(role.toString());
 
-        if (category != null)
+        if (category != null && this.supportsColor)
             this.print(ANSI_RESET);
     }
 
     private void printColorized(District district) {
         this.print(district.getName());
         this.print(", ");
-        this.print(district.getCategory().getANSIColorCode());
+
+        if (this.supportsColor)
+            this.print(district.getCategory().getANSIColorCode());
+
         this.print(district.getCategory().toString());
-        this.print(ANSI_RESET);
+
+        if (this.supportsColor)
+            this.print(ANSI_RESET);
+
         this.print(", prix: ");
         this.printInt(district.getCost());
     }
