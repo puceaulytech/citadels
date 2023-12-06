@@ -72,21 +72,14 @@ public class Game {
             // Get next player to play
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
 
-            RoleTurnAction roleTurnAction = new RoleTurnAction();
+            RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
             player.getBehavior().pickRole(roleTurnAction, Collections.unmodifiableSet(roles));
 
             this.logger.logRoleTurnAction(i, roleTurnAction);
 
-            Role pickedRole = roleTurnAction.getPickedRole();
-            Role discardedRole = roleTurnAction.getDiscardedRole();
-
-            if (!roles.contains(pickedRole) || !roles.contains(discardedRole) || pickedRole == discardedRole) {
-                throw new IllegalActionException("Picked role and discarded role are the same");
-            }
-
-            player.setCurrentRole(pickedRole);
-            roles.remove(pickedRole);
-            roles.remove(discardedRole);
+            player.setCurrentRole(roleTurnAction.getPickedRole());
+            roles.remove(roleTurnAction.getPickedRole());
+            roles.remove(roleTurnAction.getDiscardedRole());
         }
     }
 

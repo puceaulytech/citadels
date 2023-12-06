@@ -5,6 +5,7 @@ import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ class DummyBehaviorTest {
         availableRoles.add(Role.MARCHAND);
 
         // Create a RoleTurnAction
-        RoleTurnAction roleTurnAction = new RoleTurnAction();
+        RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
         assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, availableRoles));
