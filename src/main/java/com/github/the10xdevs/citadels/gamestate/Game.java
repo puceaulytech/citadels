@@ -50,9 +50,7 @@ public class Game {
         }
 
         // At the end of the game, sort players by their score (sum of all their district's cost)
-        this.players.sort(Comparator.comparingInt((Player player) -> player.getCity().getDistricts().stream()
-                .mapToInt(District::getCost)
-                .sum()).reversed());
+        this.players.sort(Comparator.comparingInt(Player::getScore).reversed());
         this.logger.logWinners(this.players);
     }
 

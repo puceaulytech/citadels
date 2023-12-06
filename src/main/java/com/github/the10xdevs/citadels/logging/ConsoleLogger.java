@@ -111,8 +111,6 @@ public class ConsoleLogger {
         this.println("\n------ Podium ------");
         int rank = 1;
         for (Player player : players) {
-            int score = player.getCity().getDistricts().stream().mapToInt(District::getCost).sum();
-
             if (this.supportsColor) {
                 if (rank == 1) {
                     this.print(ANSI_GOLD);
@@ -126,7 +124,7 @@ public class ConsoleLogger {
             this.print("-> ");
             this.print(player.getBehavior().getClass().getSimpleName());
             this.print(" avec ");
-            this.printInt(score);
+            this.printInt(player.getScore());
             this.println(" points");
 
             if (rank <= 3 && this.supportsColor) {

@@ -39,6 +39,10 @@ public class Player {
         return city;
     }
 
+    public int getScore() {
+        return this.getCity().getDistricts().stream().mapToInt(District::getCost).sum();
+    }
+
     public Role getCurrentRole() {
         return currentRole;
     }
