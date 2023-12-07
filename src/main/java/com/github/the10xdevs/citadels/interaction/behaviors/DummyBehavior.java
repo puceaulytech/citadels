@@ -9,46 +9,39 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A dummy bot
  */
 public class DummyBehavior implements Behavior {
-    private static final Random randomGenerator = new Random();
+    private static final List<Role> rolesImportance = List.of(
+            Role.ROI,
+            Role.CONDOTTIERE,
+            Role.MARCHAND,
+            Role.EVEQUE,
+            Role.ASSASSIN,
+            Role.VOLEUR,
+            Role.MAGICIEN,
+            Role.ARCHITECTE
+    );
 
-    /**
-     * Get a random element in a Collection
-     *
-     * @param collection The collection
-     * @param <T> The generic element type
-     * @return The random element
-     */
-    private static <T> T chooseRandom(Collection<T> collection) {
-        int pos = randomGenerator.nextInt(collection.size());
-
-        int index = 0;
-        for (T element : collection) {
-            if (index == pos) return element;
-            index++;
-        }
-
-        throw new IllegalStateException("Random position not in bound");
+    private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
+        return DummyBehavior.rolesImportance.stream()
+                .filter(availableRoles::contains)
+                .findFirst();
     }
 
     @Override
-    public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
-        // Choose a random role and discard a random one
-        action.pick(DummyBehavior.chooseRandom(availableRoles));
+    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
+        Set<Role> roles = EnumSet.copyOf(availableRoles);
 
-        Role discardedRole = DummyBehavior.chooseRandom(availableRoles);
-        while (discardedRole == action.getPickedRole()) {
-            discardedRole = DummyBehavior.chooseRandom(availableRoles);
-        }
-        action.discard(discardedRole);
+        Role roleToPick = DummyBehavior.getMostImportantRole(roles).orElseThrow();
+        action.pick(roleToPick);
+        roles.remove(roleToPick);
+
+        Role roleToDiscard = DummyBehavior.getMostImportantRole(roles).orElseThrow();
+        action.discard(roleToDiscard);
     }
 
     @Override

@@ -17,7 +17,7 @@ class RoleTurnActionTest {
     void use() throws IllegalActionException {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) throws IllegalActionException {
                 action.pick(Role.ARCHITECTE);
                 action.discard(Role.MAGICIEN);
             }
@@ -31,7 +31,7 @@ class RoleTurnActionTest {
 
         RoleTurnAction action = new RoleTurnAction(availableRoles);
 
-        testBehavior.pickRole(action, availableRoles);
+        testBehavior.pickRole(action, null, null, availableRoles);
 
         assertEquals(Role.ARCHITECTE, action.getPickedRole());
         assertEquals(Role.MAGICIEN, action.getDiscardedRole());
@@ -41,7 +41,7 @@ class RoleTurnActionTest {
     void pickAndDiscardSame() {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) throws IllegalActionException {
                 action.pick(Role.MAGICIEN);
                 action.discard(Role.MAGICIEN);
             }
@@ -54,14 +54,14 @@ class RoleTurnActionTest {
         Set<Role> availableRoles = Set.of(Role.MAGICIEN, Role.CONDOTTIERE, Role.EVEQUE);
         RoleTurnAction action = new RoleTurnAction(availableRoles);
 
-        assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, availableRoles));
+        assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, null, null, availableRoles));
     }
 
     @Test
     void pickNotOfferedRole() {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) throws IllegalActionException {
                 action.pick(Role.ROI);
                 action.discard(Role.MAGICIEN);
             }
@@ -74,14 +74,14 @@ class RoleTurnActionTest {
         Set<Role> availableRoles = Set.of(Role.MAGICIEN, Role.CONDOTTIERE, Role.EVEQUE);
         RoleTurnAction action = new RoleTurnAction(availableRoles);
 
-        assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, availableRoles));
+        assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, null, null, availableRoles));
     }
 
     @Test
     void discardNotOfferedRole() {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) throws IllegalActionException {
                 action.pick(Role.MAGICIEN);
                 action.discard(Role.ROI);
             }
@@ -94,6 +94,6 @@ class RoleTurnActionTest {
         Set<Role> availableRoles = Set.of(Role.MAGICIEN, Role.CONDOTTIERE, Role.EVEQUE);
         RoleTurnAction action = new RoleTurnAction(availableRoles);
 
-        assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, availableRoles));
+        assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, null, null, availableRoles));
     }
 }

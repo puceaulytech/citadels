@@ -38,7 +38,7 @@ class RegularTurnActionTest {
     void takeGold() throws IllegalActionException {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -60,7 +60,7 @@ class RegularTurnActionTest {
     void takeTooMuchGold() throws IllegalActionException {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -81,7 +81,7 @@ class RegularTurnActionTest {
     void drawCards() throws IllegalActionException {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -103,7 +103,7 @@ class RegularTurnActionTest {
     void drawCardsAfterGold() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -124,7 +124,7 @@ class RegularTurnActionTest {
     void chooseTwice() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -145,7 +145,7 @@ class RegularTurnActionTest {
     void chooseInvalid() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -165,7 +165,7 @@ class RegularTurnActionTest {
     void buildDistrict() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -185,7 +185,7 @@ class RegularTurnActionTest {
     void buildTwoDistricts() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -205,7 +205,7 @@ class RegularTurnActionTest {
     void buildInvalidDistrict() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override
@@ -224,7 +224,7 @@ class RegularTurnActionTest {
     void buildDistrictWithoutEnoughGold() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
             }
 
             @Override

@@ -46,7 +46,7 @@ class DummyBehaviorTest {
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, availableRoles));
+        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, null, availableRoles));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));

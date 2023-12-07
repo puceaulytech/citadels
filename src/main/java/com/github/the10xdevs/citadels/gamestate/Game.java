@@ -71,7 +71,7 @@ public class Game {
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
 
             RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
-            player.getBehavior().pickRole(roleTurnAction, Collections.unmodifiableSet(roles));
+            player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
 
             this.logger.logRoleTurnAction(i, roleTurnAction);
 

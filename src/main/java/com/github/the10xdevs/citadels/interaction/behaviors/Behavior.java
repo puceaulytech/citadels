@@ -21,7 +21,7 @@ public interface Behavior {
      * @param action         The action
      * @param availableRoles Available roles
      */
-    void pickRole(RoleTurnAction action, Set<Role> availableRoles) throws IllegalActionException;
+    void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException;
 
 
     /**
