@@ -49,7 +49,7 @@ public class DummyBehavior implements Behavior {
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
 
         // Always Draw a card until HandSize equals eight
-        if (self.getHandSize() < 8) {
+        if (action.canDraw() && self.getHandSize() < 8) {
             Pair<District, District> cards = action.drawCards();
             action.chooseCard(cards.first());
         } else {

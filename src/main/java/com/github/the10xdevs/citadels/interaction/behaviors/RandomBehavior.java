@@ -29,7 +29,7 @@ public class RandomBehavior implements Behavior {
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-        if (this.randomGenerator.nextBoolean()) {
+        if (!action.canDraw() || this.randomGenerator.nextBoolean()) {
             action.takeGold();
         } else {
             Pair<District, District> cards = action.drawCards();

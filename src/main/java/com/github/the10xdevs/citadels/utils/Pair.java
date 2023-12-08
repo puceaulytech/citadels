@@ -51,4 +51,8 @@ public class Pair<A, B> {
     public boolean contains(Object o) {
         return this.first.equals(o) || this.second.equals(o);
     }
+
+    public boolean isEmpty() {
+        return this.first == null && this.second == null;
+    }
 }

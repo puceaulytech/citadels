@@ -141,6 +141,7 @@ public class Game {
         }
     }
 
+
     private void applyRegularTurnAction(Player player, RegularTurnAction action) throws IllegalActionException {
         // Apply abilities
         if (player.getCurrentRole() == Role.ASSASSIN) {
@@ -158,10 +159,14 @@ public class Game {
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             player.incrementGold(2);
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
-            this.deck.drawCard();
+            // To arrive here there is necessarily at least one card in the deck,
+            // so we can safely draw one card
             this.deck.drawCard();
             player.getHand().add(action.getChosenCard());
-            this.deck.enqueueCard(action.getDiscardedCard());
+            if (!deck.isEmpty()) {
+                this.deck.drawCard();
+                this.deck.enqueueCard(action.getDiscardedCard());
+            }
         }
 
         // Apply district building
