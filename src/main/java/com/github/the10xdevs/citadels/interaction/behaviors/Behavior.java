@@ -35,4 +35,12 @@ public interface Behavior {
      * @param gameState A view of the entire game state
      */
     void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException;
+
+    /**
+     * Get the name of the behavior
+     * @return The name of the behavior
+     */
+    default String getName() {
+        return this.getClass().getSimpleName();
+    }
 }

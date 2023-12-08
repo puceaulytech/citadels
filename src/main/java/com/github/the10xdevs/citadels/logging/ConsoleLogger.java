@@ -50,13 +50,16 @@ public class ConsoleLogger {
      * Log a role choosing action
      *
      * @param index  The index of the player
+     * @param player The player
      * @param action The action made by the player
      */
-    public void logRoleTurnAction(int index, RoleTurnAction action) {
+    public void logRoleTurnAction(int index, Player player, RoleTurnAction action) {
         this.println();
         this.print("--- Joueur n°");
         this.printInt(index + 1);
-        this.println(" ---");
+        this.print(" (");
+        this.print(player.getBehavior().getName());
+        this.println(") ---");
         this.print("Choisit le rôle ");
         this.printColorized(action.getPickedRole());
         this.println();
@@ -79,7 +82,9 @@ public class ConsoleLogger {
         this.println();
         this.print("--- Joueur ayant le rôle ");
         this.printColorized(player.getCurrentRole());
-        this.println(" ---");
+        this.print(" (");
+        this.print(player.getBehavior().getName());
+        this.println(") ---");
 
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             this.println("Prend deux pièces d'or");
@@ -122,7 +127,7 @@ public class ConsoleLogger {
             }
 
             this.print("-> ");
-            this.print(player.getBehavior().getClass().getSimpleName());
+            this.print(player.getBehavior().getName());
             this.print(" avec ");
             this.printInt(player.getScore());
             this.println(" points");
