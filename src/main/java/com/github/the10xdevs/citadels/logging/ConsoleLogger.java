@@ -5,6 +5,7 @@ import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
@@ -81,6 +82,13 @@ public class ConsoleLogger {
             if (assassinAction.getKilledRole() != null) {
                 this.print("Assassine le rôle ");
                 this.printColorized(assassinAction.getKilledRole());
+                this.println();
+            }
+        } else if (player.getCurrentRole() == Role.VOLEUR) {
+            VoleurAbilityAction voleurAction = (VoleurAbilityAction) action;
+            if (voleurAction.getStolenRole() != null) {
+                this.print("Vole le rôle ");
+                this.printColorized(voleurAction.getStolenRole());
                 this.println();
             }
         }

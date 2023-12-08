@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
@@ -18,10 +19,10 @@ public class DummyBehavior implements Behavior {
     private static final List<Role> rolesImportance = List.of(
             Role.ROI,
             Role.CONDOTTIERE,
+            Role.VOLEUR,
             Role.MARCHAND,
             Role.EVEQUE,
             Role.ASSASSIN,
-            Role.VOLEUR,
             Role.MAGICIEN,
             Role.ARCHITECTE
     );
