@@ -9,6 +9,7 @@ import com.github.the10xdevs.citadels.models.Role;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class ConsoleLogger {
@@ -156,8 +157,8 @@ public class ConsoleLogger {
     public void logError(Throwable error) {
         this.println();
         this.println("------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
-        this.println("Something went wrong during play: " + error.getMessage());
-
+        this.println("Something went wrong during play: ");
+        error.printStackTrace(new PrintWriter(this.outputStream, true));
         this.flush();
     }
 

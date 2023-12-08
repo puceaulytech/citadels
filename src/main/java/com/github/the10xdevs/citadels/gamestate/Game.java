@@ -71,7 +71,12 @@ public class Game {
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
 
             RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
-            player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
+
+            try {
+                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
+            } catch (Exception e) {
+                throw new IllegalActionException("Player failed to pick role", e);
+            }
 
             this.logger.logRoleTurnAction(i, player, roleTurnAction);
 
@@ -89,7 +94,11 @@ public class Game {
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
-            player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
+            try {
+                player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
+            } catch (Exception e) {
+                throw new IllegalActionException("Player failed to play turn", e);
+            }
 
             this.logger.logRegularTurnAction(player, action);
 
