@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class RandomUtils {
-    private static Random randomGenerator = new Random();
+    public static <T> T chooseFrom(Random randomGenerator, Collection<T> collection) {
+        if (collection.isEmpty()) return null;
 
-    public static <T> T chooseFrom(Collection<T> collection) {
-        int pos = RandomUtils.randomGenerator.nextInt(collection.size());
+        int pos = randomGenerator.nextInt(collection.size());
 
         Iterator<T> iterator = collection.iterator();
         int i = 0;
