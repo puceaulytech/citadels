@@ -3,6 +3,8 @@ package com.github.the10xdevs.citadels.logging;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
@@ -73,6 +75,17 @@ public class ConsoleLogger {
         this.flush();
     }
 
+    private void logAbilityAction(Player player, AbilityAction action) {
+        if (player.getCurrentRole() == Role.ASSASSIN) {
+            AssassinAbilityAction assassinAction = (AssassinAbilityAction) action;
+            if (assassinAction.getKilledRole() != null) {
+                this.print("Assassine le rôle ");
+                this.printColorized(assassinAction.getKilledRole());
+                this.println();
+            }
+        }
+    }
+
     /**
      * Log a regular turn action
      *
@@ -86,6 +99,8 @@ public class ConsoleLogger {
         this.print(" (");
         this.print(player.getBehavior().getName());
         this.println(") ---");
+
+        this.logAbilityAction(player, action.getAbilityAction());
 
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             this.println("Prend deux pièces d'or");

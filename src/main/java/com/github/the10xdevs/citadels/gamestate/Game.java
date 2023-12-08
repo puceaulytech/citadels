@@ -4,6 +4,7 @@ import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -19,6 +20,7 @@ public class Game {
     private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
+    private Role killedRole;
 
     public Game(List<Behavior> behaviors) {
         for (Behavior behavior : behaviors) {
@@ -90,7 +92,12 @@ public class Game {
         // Sort players according to their role
         this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
 
+        this.killedRole = null;
+
         for (Player player : this.players) {
+            if (player.getCurrentRole() == this.killedRole)
+                continue;
+
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
@@ -101,6 +108,11 @@ public class Game {
             }
 
             this.logger.logRegularTurnAction(player, action);
+
+            if (player.getCurrentRole() == Role.ASSASSIN) {
+                AssassinAbilityAction assassinAction = (AssassinAbilityAction) action.getAbilityAction();
+                this.killedRole = assassinAction.getKilledRole();
+            }
 
             if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
                 player.incrementGold(2);
