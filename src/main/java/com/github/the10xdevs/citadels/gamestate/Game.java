@@ -98,6 +98,9 @@ public class Game {
             if (player.getCurrentRole() == this.killedRole)
                 continue;
 
+            if (player.getCurrentRole() == Role.MARCHAND)
+                player.incrementGold(1);
+
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
