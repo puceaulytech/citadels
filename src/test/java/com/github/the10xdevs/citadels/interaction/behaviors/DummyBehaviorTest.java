@@ -1,22 +1,21 @@
-package com.github.the10xdevs.citadels.behaviors;
+package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.RandomBehavior;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RandomBehaviorTest {
+class DummyBehaviorTest {
+
     @ParameterizedTest
     @MethodSource("com.github.the10xdevs.citadels.behaviors.BehaviorTestUtils#generateRoles")
     void pickRoleTest(Set<Role> availableRoles) {
-        RandomBehavior dummyBehavior = new RandomBehavior();
+        DummyBehavior dummyBehavior = new DummyBehavior();
 
         // Create a RoleTurnAction
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
