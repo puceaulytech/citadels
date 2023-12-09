@@ -113,13 +113,21 @@ public class ConsoleLogger {
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             this.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
-            this.println("Pioche deux cartes");
-            this.print("    garde    ");
-            this.printColorized(action.getChosenCard());
-            this.println();
-            this.print("    défausse ");
-            this.printColorized(action.getDiscardedCard());
-            this.println();
+            District discarded = action.getDiscardedCard();
+            if (discarded != null) {
+                this.println("Pioche deux cartes");
+                this.print("    garde    ");
+                this.printColorized(action.getChosenCard());
+                this.println();
+                this.print("    défausse ");
+                this.printColorized(discarded);
+                this.println();
+            } else {
+                this.println("Pioche une carte");
+                this.print("    garde    ");
+                this.printColorized(action.getChosenCard());
+                this.println();
+            }
         }
 
         if (action.getBuiltDistrict() != null) {
