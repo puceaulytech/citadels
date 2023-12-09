@@ -34,7 +34,7 @@ public class RandomBehavior implements Behavior {
         } else {
             Pair<District, District> cards = action.drawCards();
 
-            action.chooseCard(this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
+            action.chooseCard(cards.second() == null || this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
         }
 
         if (this.randomGenerator.nextBoolean()) {
