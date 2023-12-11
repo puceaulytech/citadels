@@ -121,6 +121,26 @@ class RegularTurnActionTest {
     }
 
     @Test
+    void drawCardsInEmptyDeck() {
+        Behavior cardDrawerBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.drawCards();
+            }
+        };
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        // deck::peekFirstTwo returns a Pair with values (null, null) when deck is empty
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(null, null));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
+    }
+
+    @Test
     void chooseTwice() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
@@ -158,6 +178,26 @@ class RegularTurnActionTest {
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
         SelfPlayerView view = new SelfPlayerView(cardDrawer);
         RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
+    }
+
+    @Test
+    void chooseNull() {
+        Behavior cardDrawerBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                Pair<District, District> cards = action.drawCards();
+                action.chooseCard(null);
+            }
+        };
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, null));
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 
