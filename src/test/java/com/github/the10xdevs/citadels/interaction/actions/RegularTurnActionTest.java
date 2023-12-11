@@ -182,7 +182,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildTwoDistricts() throws IllegalActionException {
+    void buildTwoDistricts() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
@@ -202,7 +202,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildInvalidDistrict() throws IllegalActionException {
+    void buildInvalidDistrict() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
@@ -221,7 +221,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildDistrictWithoutEnoughGold() throws IllegalActionException {
+    void buildDistrictWithoutEnoughGold() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
