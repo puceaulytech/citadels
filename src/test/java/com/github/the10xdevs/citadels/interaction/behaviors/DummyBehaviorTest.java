@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DummyBehaviorTest {
 
     @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.behaviors.BehaviorTestUtils#generateRoles")
+    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
     void pickRoleTest(Set<Role> availableRoles) {
         DummyBehavior dummyBehavior = new DummyBehavior();
 

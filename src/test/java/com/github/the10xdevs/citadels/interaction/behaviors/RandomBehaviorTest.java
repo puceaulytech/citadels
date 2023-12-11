@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RandomBehaviorTest {
     @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.behaviors.BehaviorTestUtils#generateRoles")
+    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
     void pickRoleTest(Set<Role> availableRoles) {
         RandomBehavior dummyBehavior = new RandomBehavior();
 
