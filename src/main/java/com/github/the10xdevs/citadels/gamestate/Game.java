@@ -87,10 +87,13 @@ public class Game {
     }
 
     private void playRegularTurn() throws IllegalActionException {
-        // Sort players according to their role
-        this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
 
-        for (Player player : this.players) {
+        // Sort players according to their role
+        List<Player> sortedPlayers=new ArrayList<>(this.players);
+        sortedPlayers.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
+
+        for (Player player : sortedPlayers) {
+            //if this player was killed skip his turn
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
@@ -129,7 +132,15 @@ public class Game {
                 .filter(player -> player.getCurrentRole() == Role.ROI)
                 .findFirst();
 
-        kingPlayer.ifPresent(player -> this.firstPlayerIndex = this.players.indexOf(player));
+        if (kingPlayer.isPresent()) {
+
+            this.firstPlayerIndex = this.players.indexOf(kingPlayer.get());
+        } else {
+
+            int roiIndex = this.players.indexOf(kingPlayer.orElse(null));
+            int nextPlayerIndex = (roiIndex + 1) % this.players.size();
+            this.firstPlayerIndex = nextPlayerIndex;
+        }
     }
 
     public List<Player> getPlayers() {
