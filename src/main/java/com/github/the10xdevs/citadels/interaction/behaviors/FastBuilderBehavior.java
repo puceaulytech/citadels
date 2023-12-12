@@ -12,7 +12,7 @@ import com.github.the10xdevs.citadels.utils.Pair;
 import java.util.*;
 
 /**
- * A dummy bot
+ * A bot that tries to build as fast as possible
  */
 public class FastBuilderBehavior implements Behavior {
     private static final List<Role> rolesImportance = List.of(
