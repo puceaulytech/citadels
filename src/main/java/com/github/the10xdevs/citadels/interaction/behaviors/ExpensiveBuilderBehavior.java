@@ -69,11 +69,13 @@ public class ExpensiveBuilderBehavior implements Behavior {
                 // Mark this district and try to build it the next turn
                 this.markedDistrict = bestDistrictInHand.get();
                 action.takeGold();
-            } else {
+            } else if (action.canDraw()) {
                 // Draw cards and choose the best district
                 Pair<District, District> cards = action.drawCards();
 
-                District bestDistrict = cards.first().getCost() > cards.second().getCost() ? cards.first() : cards.second();
+                District bestDistrict = cards.second() == null || cards.first().getCost() > cards.second().getCost()
+                        ? cards.first()
+                        : cards.second();
                 action.chooseCard(bestDistrict);
             }
         }
