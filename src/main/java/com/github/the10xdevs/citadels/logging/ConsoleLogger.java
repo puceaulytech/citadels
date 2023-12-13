@@ -144,7 +144,7 @@ public class ConsoleLogger {
      *
      * @param players All the players
      */
-    public void logWinners(List<Player> players) {
+    public void logWinners(List<Player> players, Player firstPlayerToFinish) {
         this.println("\n------ Podium ------");
         int rank = 1;
         for (Player player : players) {
@@ -161,7 +161,7 @@ public class ConsoleLogger {
             this.print("-> ");
             this.print(player.getBehavior().getName());
             this.print(" avec ");
-            this.printInt(player.getScore());
+            this.printInt(player.getScore(player == firstPlayerToFinish));
             this.println(" points");
 
             if (rank <= 3 && this.supportsColor) {
