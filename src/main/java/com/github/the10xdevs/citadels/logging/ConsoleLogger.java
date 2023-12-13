@@ -259,6 +259,11 @@ public class ConsoleLogger {
 
         this.print(", prix: ");
         this.printInt(district.getCost());
+
+        if (district.getCost() != district.getScore()) {
+            this.print(", score: ");
+            this.printInt(district.getScore());
+        }
     }
 
     private void unexpectedExit(Throwable e) {

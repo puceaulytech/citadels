@@ -40,7 +40,7 @@ public class Player {
     }
 
     public int getScore() {
-        return this.getCity().getDistricts().stream().mapToInt(District::getCost).sum();
+        return this.getCity().getDistricts().stream().mapToInt(District::getScore).sum();
     }
 
     public Role getCurrentRole() {
