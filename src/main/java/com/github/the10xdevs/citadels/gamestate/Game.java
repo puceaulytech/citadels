@@ -70,6 +70,11 @@ public class Game {
             // Get next player to play
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
 
+            // give a gold reward to the player
+            int goldReward = checkMatchingDistricts(player);
+            player.setGold(player.getGold() + goldReward);
+
+
             RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
             player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
 
@@ -79,6 +84,22 @@ public class Game {
             roles.remove(roleTurnAction.getPickedRole());
             roles.remove(roleTurnAction.getDiscardedRole());
         }
+    }
+
+    private int checkMatchingDistricts(Player player) {
+        int goldReward = 0;
+        Role playerRole = player.getCurrentRole();
+
+        // Iterate through player's city districts
+        for (District district : player.getCity().getDistricts()) {
+            // Check if the district's category matches the player's role
+            if (district.getCategory() == playerRole.getCategory()) {
+                // Reward the player with gold (you can adjust the amount as needed)
+                goldReward += 2; // For example, reward 2 gold for each matching district
+            }
+        }
+
+        return goldReward;
     }
 
     private void playRegularTurn() throws IllegalActionException {
