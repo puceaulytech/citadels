@@ -121,6 +121,26 @@ class RegularTurnActionTest {
     }
 
     @Test
+    void drawCardsInEmptyDeck() {
+        Behavior cardDrawerBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.drawCards();
+            }
+        };
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        // deck::peekFirstTwo returns a Pair with values (null, null) when deck is empty
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(null, null));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
+    }
+
+    @Test
     void chooseTwice() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
@@ -162,6 +182,26 @@ class RegularTurnActionTest {
     }
 
     @Test
+    void chooseNull() {
+        Behavior cardDrawerBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                Pair<District, District> cards = action.drawCards();
+                action.chooseCard(null);
+            }
+        };
+
+        Player cardDrawer = createFakePlayer(cardDrawerBehavior);
+        SelfPlayerView view = new SelfPlayerView(cardDrawer);
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, null));
+        assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
+    }
+
+    @Test
     void buildDistrict() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
@@ -182,7 +222,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildTwoDistricts() throws IllegalActionException {
+    void buildTwoDistricts() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
@@ -202,7 +242,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildInvalidDistrict() throws IllegalActionException {
+    void buildInvalidDistrict() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
@@ -221,7 +261,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildDistrictWithoutEnoughGold() throws IllegalActionException {
+    void buildDistrictWithoutEnoughGold() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
@@ -235,6 +275,25 @@ class RegularTurnActionTest {
 
         Player districtBuilder = createRichPlayer(districtBuilderBehavior);
         districtBuilder.setGold(0);
+        SelfPlayerView view = new SelfPlayerView(districtBuilder);
+        RegularTurnAction action = new RegularTurnAction(view, null);
+        assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, view, null));
+    }
+
+    @Test
+    void buildNullDistrict() {
+        Behavior districtBuilderBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.buildDistrict(null);
+            }
+        };
+
+        Player districtBuilder = createRichPlayer(districtBuilderBehavior);
         SelfPlayerView view = new SelfPlayerView(districtBuilder);
         RegularTurnAction action = new RegularTurnAction(view, null);
         assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, view, null));

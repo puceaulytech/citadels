@@ -58,13 +58,14 @@ public class Deck {
 
     /**
      * Retrieve the first two elements of the deck
-     * @return A pair containing the first two elements
+     * @return A pair containing the first two elements or some null if the deck has 1 or 0 cards
      */
     public Pair<District, District> peekFirstTwo() {
-        if (this.districts.size() < 2)
-            throw new IllegalStateException("Deck size is less that two");
-
         Iterator<District> iterator = this.districts.iterator();
-        return new Pair<>(iterator.next(), iterator.next());
+        return new Pair<>(iterator.hasNext() ? iterator.next() : null, iterator.hasNext() ? iterator.next() : null);
+    }
+
+    public boolean isEmpty() {
+        return this.districts.isEmpty();
     }
 }

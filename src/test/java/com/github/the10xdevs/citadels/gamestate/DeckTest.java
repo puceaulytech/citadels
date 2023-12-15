@@ -57,6 +57,8 @@ class DeckTest {
     @Test
     void pickTwoWhenAlmostEmpty() {
         Deck deck = new Deck(List.of(new District("Baraque", Category.MERVEILLE, 10)));
-        assertThrows(IllegalStateException.class, deck::peekFirstTwo);
+        Pair<District, District> pair = deck.peekFirstTwo();
+        assertNotNull(pair.first());
+        assertNull(pair.second());
     }
 }

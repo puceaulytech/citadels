@@ -16,6 +16,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * A bot that does random things
+ */
 public class RandomBehavior implements Behavior {
     private final Random randomGenerator = new Random();
 
@@ -29,12 +32,12 @@ public class RandomBehavior implements Behavior {
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-        if (this.randomGenerator.nextBoolean()) {
+        if (!action.canDraw() || this.randomGenerator.nextBoolean()) {
             action.takeGold();
         } else {
             Pair<District, District> cards = action.drawCards();
 
-            action.chooseCard(this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
+            action.chooseCard(cards.second() == null || this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
         }
 
         if (this.randomGenerator.nextBoolean()) {

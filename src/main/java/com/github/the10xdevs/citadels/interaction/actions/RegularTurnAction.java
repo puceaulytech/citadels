@@ -39,6 +39,8 @@ public class RegularTurnAction {
     public Pair<District, District> drawCards() throws IllegalActionException {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot draw cards because an action has already been performed");
+        if (this.cardsToDraw.isEmpty())
+            throw new IllegalActionException("Cannot draw cards because the deck is empty");
         this.basicAction = BasicAction.CARDS;
         return this.cardsToDraw;
     }
@@ -53,6 +55,8 @@ public class RegularTurnAction {
             throw new IllegalActionException("Cannot choose card because no cards were drawn");
         if (this.chosenCard != null)
             throw new IllegalActionException("Cannot choose card because a card was already chosen");
+        if (district == null)
+            throw new IllegalActionException("Chosen district is null");
         if (!this.cardsToDraw.contains(district))
             throw new IllegalActionException("Cannot choose a card that is not at the top of deck");
         this.chosenCard = district;
@@ -64,6 +68,8 @@ public class RegularTurnAction {
      * @throws IllegalActionException If the action was invalid
      */
     public void buildDistrict(District district) throws IllegalActionException {
+        if (district == null)
+            throw new IllegalActionException("Cannot build a district that is null");
         if (!(this.currentPlayerView.getHand().contains(district) || district.equals(this.chosenCard)))
             throw new IllegalActionException("Cannot build a district that is not in hand");
         if ((this.currentPlayerView.getGold() + (this.basicAction == BasicAction.GOLD ? 2 : 0)) < district.getCost())
@@ -71,6 +77,10 @@ public class RegularTurnAction {
         if (this.builtDistrict != null)
             throw new IllegalActionException("Cannot build multiple districts in one turn");
         this.builtDistrict = district;
+    }
+
+    public boolean canDraw() {
+        return !this.cardsToDraw.isEmpty();
     }
 
     public AbilityAction getAbilityAction() {
