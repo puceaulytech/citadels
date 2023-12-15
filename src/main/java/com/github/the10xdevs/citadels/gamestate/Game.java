@@ -55,9 +55,15 @@ public class Game {
             this.logger.logError(e);
         }
 
+        Player firstPlayerToFinish = this.players.stream()
+                .sorted(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()))
+                .filter(player -> player.getCity().getSize() == 8)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Game is finished but no player has eight built districts"));
+
         // At the end of the game, sort players by their score (sum of all their district's cost)
-        this.players.sort(Comparator.comparingInt(Player::getScore).reversed());
-        this.logger.logWinners(this.players);
+        this.players.sort(Comparator.comparingInt((Player player) -> player.getScore(player == firstPlayerToFinish)).reversed());
+        this.logger.logWinners(this.players, firstPlayerToFinish);
     }
 
     public boolean isGameOver() {
