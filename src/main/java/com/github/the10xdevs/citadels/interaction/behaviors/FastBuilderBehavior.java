@@ -3,7 +3,6 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
@@ -13,9 +12,9 @@ import com.github.the10xdevs.citadels.utils.Pair;
 import java.util.*;
 
 /**
- * A dummy bot
+ * A bot that tries to build as fast as possible
  */
-public class DummyBehavior implements Behavior {
+public class FastBuilderBehavior implements Behavior {
     private static final List<Role> rolesImportance = List.of(
             Role.ROI,
             Role.CONDOTTIERE,
@@ -28,7 +27,7 @@ public class DummyBehavior implements Behavior {
     );
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
-        return DummyBehavior.rolesImportance.stream()
+        return FastBuilderBehavior.rolesImportance.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
@@ -37,11 +36,11 @@ public class DummyBehavior implements Behavior {
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
         Set<Role> roles = EnumSet.copyOf(availableRoles);
 
-        Role roleToPick = DummyBehavior.getMostImportantRole(roles).orElseThrow();
+        Role roleToPick = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.pick(roleToPick);
         roles.remove(roleToPick);
 
-        Role roleToDiscard = DummyBehavior.getMostImportantRole(roles).orElseThrow();
+        Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.discard(roleToDiscard);
     }
 

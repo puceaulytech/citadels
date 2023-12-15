@@ -1,8 +1,6 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
-import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.RandomBehavior;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

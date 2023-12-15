@@ -16,6 +16,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * A bot that does random things
+ */
 public class RandomBehavior implements Behavior {
     private final Random randomGenerator = new Random();
 

@@ -53,6 +53,7 @@ public class Game {
             }
         } catch (IllegalActionException e) {
             this.logger.logError(e);
+            System.exit(1);
         }
 
         Player firstPlayerToFinish = this.players.stream()
