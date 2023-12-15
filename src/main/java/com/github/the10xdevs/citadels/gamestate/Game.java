@@ -132,15 +132,7 @@ public class Game {
                 .filter(player -> player.getCurrentRole() == Role.ROI)
                 .findFirst();
 
-        if (kingPlayer.isPresent()) {
-
-            this.firstPlayerIndex = this.players.indexOf(kingPlayer.get());
-        } else {
-
-            int roiIndex = this.players.indexOf(kingPlayer.orElse(null));
-            int nextPlayerIndex = (roiIndex + 1) % this.players.size();
-            this.firstPlayerIndex = nextPlayerIndex;
-        }
+        kingPlayer.ifPresent(player -> this.firstPlayerIndex = this.players.indexOf(player));
     }
 
     public List<Player> getPlayers() {
