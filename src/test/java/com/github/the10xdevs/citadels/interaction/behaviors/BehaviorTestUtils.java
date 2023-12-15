@@ -1,4 +1,4 @@
-package com.github.the10xdevs.citadels.behaviors;
+package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.models.Role;
 

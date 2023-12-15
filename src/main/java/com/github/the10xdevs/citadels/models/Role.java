@@ -2,6 +2,7 @@ package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 
 /**
  * A role in the game
@@ -52,6 +53,7 @@ public enum Role {
     public AbilityAction getAbilityAction() {
         return switch (this) {
             case ASSASSIN -> new AssassinAbilityAction();
+            case VOLEUR -> new VoleurAbilityAction();
             default -> null;
         };
     }

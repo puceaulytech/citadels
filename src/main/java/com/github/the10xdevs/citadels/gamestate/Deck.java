@@ -34,6 +34,9 @@ public class Deck {
      * @return The drawn card
      */
     public District drawCard() {
+        if (this.districts.isEmpty())
+            throw new IllegalStateException("Deck is empty");
+
         return this.districts.poll();
     }
 
@@ -55,10 +58,14 @@ public class Deck {
 
     /**
      * Retrieve the first two elements of the deck
-     * @return A pair containing the first two elements
+     * @return A pair containing the first two elements or some null if the deck has 1 or 0 cards
      */
     public Pair<District, District> peekFirstTwo() {
         Iterator<District> iterator = this.districts.iterator();
-        return new Pair<>(iterator.next(), iterator.next());
+        return new Pair<>(iterator.hasNext() ? iterator.next() : null, iterator.hasNext() ? iterator.next() : null);
+    }
+
+    public boolean isEmpty() {
+        return this.districts.isEmpty();
     }
 }

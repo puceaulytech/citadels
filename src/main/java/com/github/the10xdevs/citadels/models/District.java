@@ -15,13 +15,26 @@ public final class District {
     private final int cost;
     private final int score;
 
+    /**
+     * Create a new district
+     * @param name The name of the district
+     * @param category The category of the district
+     * @param cost The cost of the district
+     * @param score The score of the district
+     */
     public District(String name, Category category, int cost, int score) {
         this.name = name;
         this.category = category;
         this.cost = cost;
-        this.score = cost;
+        this.score = score;
     }
 
+    /**
+     * Create a new district, where its score is equal to its cost
+     * @param name The name of the district
+     * @param category The category of the district
+     * @param cost The cost of the district
+     */
     public District(String name, Category category, int cost) {
         this(name, category, cost, cost);
     }
@@ -42,7 +55,7 @@ public final class District {
         ArrayUtils.addAmount(allDistricts, new District("Comptoir", Category.MARCHAND, 3), 3);
         ArrayUtils.addAmount(allDistricts, new District("Cour des miracles", Category.MERVEILLE, 2), 1);
         ArrayUtils.addAmount(allDistricts, new District("Donjon", Category.MERVEILLE, 3), 2);
-        ArrayUtils.addAmount(allDistricts, new District("Dracoport", Category.MERVEILLE, 8), 1);
+        ArrayUtils.addAmount(allDistricts, new District("Dracoport", Category.MERVEILLE, 6, 8), 1);
         ArrayUtils.addAmount(allDistricts, new District("Echoppe", Category.MARCHAND, 2), 3);
         ArrayUtils.addAmount(allDistricts, new District("Ecole de magie", Category.MERVEILLE, 6), 1);
         ArrayUtils.addAmount(allDistricts, new District("Eglise", Category.RELIGIEUX, 2), 4);
@@ -60,7 +73,7 @@ public final class District {
         ArrayUtils.addAmount(allDistricts, new District("Taverne", Category.MARCHAND, 1), 5);
         ArrayUtils.addAmount(allDistricts, new District("Temple", Category.RELIGIEUX, 1), 3);
         ArrayUtils.addAmount(allDistricts, new District("Tour de guet", Category.MILITAIRE, 1), 3);
-        ArrayUtils.addAmount(allDistricts, new District("Université", Category.MERVEILLE, 6), 1);
+        ArrayUtils.addAmount(allDistricts, new District("Université", Category.MERVEILLE, 6, 8), 1);
         return allDistricts;
     }
 
@@ -68,8 +81,22 @@ public final class District {
         return this.category;
     }
 
+    /**
+     * Get the cost of the district i.e. the amount of gold
+     * to pay when building it
+     * @return The cost
+     */
     public int getCost() {
         return this.cost;
+    }
+
+    /**
+     * Get the score of the district i.e. the amount of point
+     * that the district earns at the end of the game
+     * @return The score
+     */
+    public int getScore() {
+        return this.score;
     }
 
     public String getName() {
@@ -91,9 +118,5 @@ public final class District {
     @Override
     public int hashCode() {
         return Objects.hash(name, category, cost, score);
-    }
-
-    public int getScore() {
-        return score;
     }
 }

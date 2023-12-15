@@ -12,22 +12,22 @@ import com.github.the10xdevs.citadels.utils.Pair;
 import java.util.*;
 
 /**
- * A dummy bot
+ * A bot that tries to build as fast as possible
  */
-public class DummyBehavior implements Behavior {
+public class FastBuilderBehavior implements Behavior {
     private static final List<Role> rolesImportance = List.of(
             Role.ROI,
             Role.CONDOTTIERE,
+            Role.VOLEUR,
             Role.MARCHAND,
             Role.EVEQUE,
             Role.ASSASSIN,
-            Role.VOLEUR,
             Role.MAGICIEN,
             Role.ARCHITECTE
     );
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
-        return DummyBehavior.rolesImportance.stream()
+        return FastBuilderBehavior.rolesImportance.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
@@ -36,11 +36,11 @@ public class DummyBehavior implements Behavior {
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
         Set<Role> roles = EnumSet.copyOf(availableRoles);
 
-        Role roleToPick = DummyBehavior.getMostImportantRole(roles).orElseThrow();
+        Role roleToPick = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.pick(roleToPick);
         roles.remove(roleToPick);
 
-        Role roleToDiscard = DummyBehavior.getMostImportantRole(roles).orElseThrow();
+        Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.discard(roleToDiscard);
     }
 
@@ -48,7 +48,7 @@ public class DummyBehavior implements Behavior {
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
 
         // Always Draw a card until HandSize equals eight
-        if (self.getHandSize() < 8) {
+        if (action.canDraw() && self.getHandSize() < 8) {
             Pair<District, District> cards = action.drawCards();
             action.chooseCard(cards.first());
         } else {

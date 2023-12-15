@@ -4,6 +4,8 @@ import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -19,6 +21,9 @@ public class Game {
     private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
+
+    private Role killedRole;
+    private Role stolenRole;
 
     public Game(List<Behavior> behaviors) {
         for (Behavior behavior : behaviors) {
@@ -39,6 +44,7 @@ public class Game {
         try {
             // Main game loop
             while (!this.isGameOver()) {
+                this.initTurn();
                 this.logger.logTurnStart(this.turn);
                 this.playRoleTurn();
                 this.playRegularTurn();
@@ -47,11 +53,18 @@ public class Game {
             }
         } catch (IllegalActionException e) {
             this.logger.logError(e);
+            System.exit(1);
         }
 
+        Player firstPlayerToFinish = this.players.stream()
+                .sorted(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()))
+                .filter(player -> player.getCity().getSize() == 8)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Game is finished but no player has eight built districts"));
+
         // At the end of the game, sort players by their score (sum of all their district's cost)
-        this.players.sort(Comparator.comparingInt(Player::getScore).reversed());
-        this.logger.logWinners(this.players);
+        this.players.sort(Comparator.comparingInt((Player player) -> player.getScore(player == firstPlayerToFinish)).reversed());
+        this.logger.logWinners(this.players, firstPlayerToFinish);
     }
 
     public boolean isGameOver() {
@@ -63,6 +76,11 @@ public class Game {
         return false;
     }
 
+    private void initTurn() {
+        this.killedRole = null;
+        this.stolenRole = null;
+    }
+
     private void playRoleTurn() throws IllegalActionException {
         // Create a set with all available roles
         Set<Role> roles = EnumSet.allOf(Role.class);
@@ -72,7 +90,12 @@ public class Game {
 
 
             RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
-            player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
+
+            try {
+                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
+            } catch (Exception e) {
+                throw new IllegalActionException("Player failed to pick role", e);
+            }
 
             this.logger.logRoleTurnAction(i, player, roleTurnAction);
 
@@ -105,36 +128,86 @@ public class Game {
 
 
         for (Player player : this.players) {
-            // give a gold reward to the player
-            int goldReward = checkMatchingDistricts(player);
-            player.incrementGold(goldReward);
+            // If this payer was killed, skip his turn
+            if (player.getCurrentRole() == this.killedRole)
+                continue;
 
+            // If this player was stolen, give his gold to the thief
+            if (player.getCurrentRole() == this.stolenRole) {
+                // Find the thief
+                Optional<Player> thief = this.players.stream()
+                                .filter(p -> p.getCurrentRole() == Role.VOLEUR)
+                                .findFirst();
+
+                if (thief.isPresent()) {
+                    // Give the stolen player's gold to the thief
+                    thief.get().incrementGold(player.getGold());
+                    player.setGold(0);
+                } else {
+                    throw new IllegalStateException("A player was stolen but there is no thief");
+                }
+            }
+
+            if (player.getCurrentRole() == Role.MARCHAND) {
+                player.incrementGold(1);
+            }
+          
+            // Give a gold reward to the player
+            int goldReward = this.checkMatchingDistricts(player);
+            player.incrementGold(goldReward);
 
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
-            player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
+            try {
+                player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
+            } catch (Exception e) {
+                throw new IllegalActionException("Player failed to play turn", e);
+            }
 
             this.logger.logRegularTurnAction(player, action);
 
-            if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
-                player.incrementGold(2);
-            } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
+            this.applyRegularTurnAction(player, action);
+        }
+    }
+
+
+    private void applyRegularTurnAction(Player player, RegularTurnAction action) throws IllegalActionException {
+        // Apply abilities
+        if (player.getCurrentRole() == Role.ASSASSIN) {
+            AssassinAbilityAction assassinAction = (AssassinAbilityAction) action.getAbilityAction();
+            this.killedRole = assassinAction.getKilledRole();
+        } else if (player.getCurrentRole() == Role.VOLEUR) {
+            VoleurAbilityAction voleurAction = (VoleurAbilityAction) action.getAbilityAction();
+
+            if (voleurAction.getStolenRole() != this.killedRole) {
+                this.stolenRole = voleurAction.getStolenRole();
+            }
+        }
+
+        // Apply gold or deck drawing
+        if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
+            player.incrementGold(2);
+        } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
+            // To arrive here there is necessarily at least one card in the deck,
+            // so we can safely draw one card
+            this.deck.drawCard();
+            player.getHand().add(action.getChosenCard());
+            if (!deck.isEmpty()) {
                 this.deck.drawCard();
-                this.deck.drawCard();
-                player.getHand().add(action.getChosenCard());
                 this.deck.enqueueCard(action.getDiscardedCard());
             }
+        }
 
-            District builtDistrict = action.getBuiltDistrict();
-            if (builtDistrict != null) {
-                player.incrementGold(-builtDistrict.getCost());
-                player.getHand().remove(builtDistrict);
-                try {
-                    player.getCity().addDistrict(builtDistrict);
-                } catch (DuplicatedDistrictException e) {
-                    throw new IllegalActionException("Cannot build the same district twice", e);
-                }
+        // Apply district building
+        District builtDistrict = action.getBuiltDistrict();
+        if (builtDistrict != null) {
+            player.incrementGold(-builtDistrict.getCost());
+            player.getHand().remove(builtDistrict);
+            try {
+                player.getCity().addDistrict(builtDistrict);
+            } catch (DuplicatedDistrictException e) {
+                throw new IllegalActionException("Cannot build the same district twice", e);
             }
         }
     }

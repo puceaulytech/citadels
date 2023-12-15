@@ -3,12 +3,16 @@ package com.github.the10xdevs.citadels.logging;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class ConsoleLogger {
@@ -72,6 +76,24 @@ public class ConsoleLogger {
         this.flush();
     }
 
+    private void logAbilityAction(Player player, AbilityAction action) {
+        if (player.getCurrentRole() == Role.ASSASSIN) {
+            AssassinAbilityAction assassinAction = (AssassinAbilityAction) action;
+            if (assassinAction.getKilledRole() != null) {
+                this.print("Assassine le rôle ");
+                this.printColorized(assassinAction.getKilledRole());
+                this.println();
+            }
+        } else if (player.getCurrentRole() == Role.VOLEUR) {
+            VoleurAbilityAction voleurAction = (VoleurAbilityAction) action;
+            if (voleurAction.getStolenRole() != null) {
+                this.print("Vole le rôle ");
+                this.printColorized(voleurAction.getStolenRole());
+                this.println();
+            }
+        }
+    }
+
     /**
      * Log a regular turn action
      *
@@ -86,16 +108,26 @@ public class ConsoleLogger {
         this.print(player.getBehavior().getName());
         this.println(") ---");
 
+        this.logAbilityAction(player, action.getAbilityAction());
+
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             this.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
-            this.println("Pioche deux cartes");
-            this.print("    garde    ");
-            this.printColorized(action.getChosenCard());
-            this.println();
-            this.print("    défausse ");
-            this.printColorized(action.getDiscardedCard());
-            this.println();
+            District discarded = action.getDiscardedCard();
+            if (discarded != null) {
+                this.println("Pioche deux cartes");
+                this.print("    garde    ");
+                this.printColorized(action.getChosenCard());
+                this.println();
+                this.print("    défausse ");
+                this.printColorized(discarded);
+                this.println();
+            } else {
+                this.println("Pioche une carte");
+                this.print("    garde    ");
+                this.printColorized(action.getChosenCard());
+                this.println();
+            }
         }
 
         if (action.getBuiltDistrict() != null) {
@@ -112,7 +144,7 @@ public class ConsoleLogger {
      *
      * @param players All the players
      */
-    public void logWinners(List<Player> players) {
+    public void logWinners(List<Player> players, Player firstPlayerToFinish) {
         this.println("\n------ Podium ------");
         int rank = 1;
         for (Player player : players) {
@@ -129,7 +161,7 @@ public class ConsoleLogger {
             this.print("-> ");
             this.print(player.getBehavior().getName());
             this.print(" avec ");
-            this.printInt(player.getScore());
+            this.printInt(player.getScore(player == firstPlayerToFinish));
             this.println(" points");
 
             if (rank <= 3 && this.supportsColor) {
@@ -156,8 +188,8 @@ public class ConsoleLogger {
     public void logError(Throwable error) {
         this.println();
         this.println("------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");
-        this.println("Something went wrong during play: " + error.getMessage());
-
+        this.println("Something went wrong during play: ");
+        error.printStackTrace(new PrintWriter(this.outputStream, true));
         this.flush();
     }
 
@@ -227,6 +259,11 @@ public class ConsoleLogger {
 
         this.print(", prix: ");
         this.printInt(district.getCost());
+
+        if (district.getCost() != district.getScore()) {
+            this.print(", score: ");
+            this.printInt(district.getScore());
+        }
     }
 
     private void unexpectedExit(Throwable e) {

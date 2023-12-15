@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DeckTest {
     District romain = new District("Baraque de Romain", Category.MERVEILLE, 10);
@@ -46,5 +46,19 @@ class DeckTest {
         Pair<District, District> pair = deck.peekFirstTwo();
         assertEquals(romain, pair.first());
         assertEquals(logan, pair.second());
+    }
+
+    @Test
+    void drawWhenEmpty() {
+        Deck deck = new Deck(List.of());
+        assertThrows(IllegalStateException.class, deck::drawCard);
+    }
+
+    @Test
+    void pickTwoWhenAlmostEmpty() {
+        Deck deck = new Deck(List.of(new District("Baraque", Category.MERVEILLE, 10)));
+        Pair<District, District> pair = deck.peekFirstTwo();
+        assertNotNull(pair.first());
+        assertNull(pair.second());
     }
 }
