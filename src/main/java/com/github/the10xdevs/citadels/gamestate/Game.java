@@ -70,10 +70,6 @@ public class Game {
             // Get next player to play
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
 
-            // give a gold reward to the player
-            int goldReward = checkMatchingDistricts(player);
-            player.setGold(player.getGold() + goldReward);
-
 
             RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
             player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
@@ -103,10 +99,17 @@ public class Game {
     }
 
     private void playRegularTurn() throws IllegalActionException {
+
         // Sort players according to their role
         this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
 
+
         for (Player player : this.players) {
+            // give a gold reward to the player
+            int goldReward = checkMatchingDistricts(player);
+            player.incrementGold(goldReward);
+
+
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
 
