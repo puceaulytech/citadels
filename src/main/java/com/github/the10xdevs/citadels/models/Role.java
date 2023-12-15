@@ -38,10 +38,18 @@ public enum Role {
         this.category = category;
     }
 
+    /**
+     * Returns the turn order of this role
+     * @return The turn order of this role
+     */
     public int getTurnOrder() {
         return this.turnOrder;
     }
 
+    /**
+     * Returns the category of this role
+     * @return The category of this role
+     */
     public Category getCategory() {
         return this.category;
     }

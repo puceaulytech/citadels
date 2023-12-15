@@ -52,6 +52,10 @@ public class Pair<A, B> {
         return this.first.equals(o) || this.second.equals(o);
     }
 
+    /**
+     * Returns true if the pair contains no elements
+     * @return true if the pair contains no elements
+     */
     public boolean isEmpty() {
         return this.first == null && this.second == null;
     }

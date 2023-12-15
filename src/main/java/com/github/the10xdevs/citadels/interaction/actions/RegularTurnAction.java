@@ -6,6 +6,10 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.utils.Pair;
 
+/**
+ * A class used by Behaviors to store the actions they want to perform
+ * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
+ */
 public class RegularTurnAction {
     private final SelfPlayerView currentPlayerView;
     private final Pair<District, District> cardsToDraw;
@@ -15,6 +19,13 @@ public class RegularTurnAction {
     private District chosenCard;
     private District builtDistrict;
 
+    /**
+     * Constructs a RegularTurnAction with a view of the player wanting to play
+     * and the first two cards of the deck
+     * @param playerView A view of the current player
+     * @param cards The first two cards of the deck
+     * @see SelfPlayerView
+     */
     public RegularTurnAction(SelfPlayerView playerView, Pair<District, District> cards) {
         this.currentPlayerView = playerView;
         this.abilityAction = playerView.getCurrentRole().getAbilityAction();
@@ -79,26 +90,51 @@ public class RegularTurnAction {
         this.builtDistrict = district;
     }
 
+    /**
+     * Returns true if there is at least one card in the deck
+     * @return true if there is at least one card in the deck
+     */
     public boolean canDraw() {
         return !this.cardsToDraw.isEmpty();
     }
 
+    /**
+     * Returns the Ability Action of the current player
+     * @return The Ability Action of the current player
+     * @see AbilityAction
+     */
     public AbilityAction getAbilityAction() {
         return this.abilityAction;
     }
 
+    /**
+     * Returns the basic action done by the player (either drawing or picking gold)
+     * @return The basic action done by the player
+     */
     public BasicAction getBasicAction() {
         return this.basicAction;
     }
 
+    /**
+     * Returns the card chosen by the player between the two cards of the deck
+     * @return The card chosen by the player between the two cards of the deck
+     */
     public District getChosenCard() {
         return this.chosenCard;
     }
 
+    /**
+     * Returns the card discarded by the player between the two cards of the deck
+     * @return The card discarded by the player between the two cards of the deck
+     */
     public District getDiscardedCard() {
         return this.chosenCard.equals(this.cardsToDraw.first()) ? cardsToDraw.second() : cardsToDraw.first();
     }
 
+    /**
+     * Returns the district built by the current player
+     * @return The district built by the current player
+     */
     public District getBuiltDistrict() {
         return this.builtDistrict;
     }

@@ -4,6 +4,7 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 
 /**
  * An immutable view of a Player
+ * @see Player
  */
 public class PlayerView {
     protected final Player player;

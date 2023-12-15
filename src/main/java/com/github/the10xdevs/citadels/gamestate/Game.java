@@ -15,6 +15,9 @@ import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.*;
 
+/**
+ * The main class
+ */
 public class Game {
     private final List<Player> players = new ArrayList<>();
     private final Deck deck = new Deck(District.all());
@@ -25,12 +28,19 @@ public class Game {
     private Role killedRole;
     private Role stolenRole;
 
+    /**
+     * Constructs a Game with a list of Behaviors that will battle against each other
+     * @param behaviors The list of Behaviors
+     */
     public Game(List<Behavior> behaviors) {
         for (Behavior behavior : behaviors) {
             players.add(new Player(behavior));
         }
     }
 
+    /**
+     * Starts the game
+     */
     public void start() {
         this.deck.shuffle();
 
@@ -67,6 +77,10 @@ public class Game {
         this.logger.logWinners(this.players, firstPlayerToFinish);
     }
 
+    /**
+     * Checks if the game has ended
+     * @return true if the game is over, false otherwise
+     */
     public boolean isGameOver() {
         for (Player player : players) {
             if (player.getCity().getSize() >= 8) {
@@ -76,11 +90,18 @@ public class Game {
         return false;
     }
 
+    /**
+     * Initializes a new turn
+     */
     private void initTurn() {
         this.killedRole = null;
         this.stolenRole = null;
     }
 
+    /**
+     * Makes all the players choose their role
+     * @throws IllegalActionException if a player has performed an action that is not permitted
+     */
     private void playRoleTurn() throws IllegalActionException {
         // Create a set with all available roles
         Set<Role> roles = EnumSet.allOf(Role.class);
@@ -105,6 +126,12 @@ public class Game {
         }
     }
 
+    /**
+     * Computes the amount of gold gained by a player according to the number of districts in his city
+     * matching his current role
+     * @param player The player
+     * @return The amount of gold the player is suppose to gain
+     */
     private int checkMatchingDistricts(Player player) {
         int goldReward = 0;
         Role playerRole = player.getCurrentRole();
@@ -121,6 +148,10 @@ public class Game {
         return goldReward;
     }
 
+    /**
+     * Makes all the players play their turn
+     * @throws IllegalActionException if a player has performed an action that is not permitted
+     */
     private void playRegularTurn() throws IllegalActionException {
         // Sort players according to their role
         List<Player> sortedPlayers = new ArrayList<>(this.players);
@@ -170,7 +201,12 @@ public class Game {
         }
     }
 
-
+    /**
+     * Applies the actions a player has chosen to do during his turn
+     * @param player The player that performed the actions
+     * @param action The actions the player performed
+     * @throws IllegalActionException if the player has performed an action that is not permitted
+     */
     private void applyRegularTurnAction(Player player, RegularTurnAction action) throws IllegalActionException {
         // Apply abilities
         if (player.getCurrentRole() == Role.ASSASSIN) {
@@ -211,6 +247,9 @@ public class Game {
         }
     }
 
+    /**
+     * Determines who is the next player to play first
+     */
     private void determineNextFirstPlayer() {
         Optional<Player> kingPlayer = this.players.stream()
                 .filter(player -> player.getCurrentRole() == Role.ROI)
@@ -219,14 +258,26 @@ public class Game {
         kingPlayer.ifPresent(player -> this.firstPlayerIndex = this.players.indexOf(player));
     }
 
+    /**
+     * Returns the list of players
+     * @return The list of players
+     */
     public List<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * Returns the deck
+     * @return The deck
+     */
     public Deck getDeck() {
         return deck;
     }
 
+    /**
+     * Returns which turn is currently being played
+     * @return The turn currently being played
+     */
     public int getTurn() {
         return turn;
     }

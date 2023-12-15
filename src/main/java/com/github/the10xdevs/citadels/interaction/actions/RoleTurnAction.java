@@ -5,11 +5,19 @@ import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.Set;
 
+/**
+ * A class used by Behaviors to store their choices regarding roles
+ * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
+ */
 public class RoleTurnAction {
     private Role pickedRole;
     private Role discardedRole;
     private final Set<Role> availableRoles;
 
+    /**
+     * Constructs a RoleTurnAction with a set of available roles to choose from
+     * @param availableRoles Set of available roles to choose from
+     */
     public RoleTurnAction(Set<Role> availableRoles) {
         this.availableRoles = availableRoles;
     }
@@ -38,10 +46,18 @@ public class RoleTurnAction {
         this.discardedRole = role;
     }
 
+    /**
+     * Returns the role chosen by the player among the available roles
+     * @return The role chosen by the player among the available roles
+     */
     public Role getPickedRole() {
         return pickedRole;
     }
 
+    /**
+     * Returns the role discarded by the player among the available roles
+     * @return The role discarded by the player among the available roles
+     */
     public Role getDiscardedRole() {
         return discardedRole;
     }

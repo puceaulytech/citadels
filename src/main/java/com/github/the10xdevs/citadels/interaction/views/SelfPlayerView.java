@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * An immutable view of a Player, with extra information that can only be accessed by the targeted player
+ * @see Player
  */
 public final class SelfPlayerView extends PlayerView {
     public SelfPlayerView(Player player) {

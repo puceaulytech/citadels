@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.stream.DoubleStream;
 
 /**
  * A city of districts
+ * @see District
  */
 public class City implements Iterable<District> {
     private final Set<District> districts = new HashSet<>();
@@ -25,10 +25,18 @@ public class City implements Iterable<District> {
             throw new DuplicatedDistrictException(district);
     }
 
+    /**
+     * Returns an immutable collection of all the districts in this City
+     * @return An immutable collection of all the districts in this City
+     */
     public Set<District> getDistricts() {
         return Collections.unmodifiableSet(this.districts);
     }
 
+    /**
+     * Returns how many districts have been built in this city
+     * @return How many districts have been built in this city
+     */
     public int getSize() {
         return this.districts.size();
     }

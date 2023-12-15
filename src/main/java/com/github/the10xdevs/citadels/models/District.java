@@ -16,7 +16,7 @@ public final class District {
     private final int score;
 
     /**
-     * Create a new district
+     * Constructs a District with a name, a {@link Category category}, a cost and a score
      * @param name The name of the district
      * @param category The category of the district
      * @param cost The cost of the district
@@ -77,6 +77,10 @@ public final class District {
         return allDistricts;
     }
 
+    /**
+     * Returns the category of this district
+     * @return The category of this district
+     */
     public Category getCategory() {
         return this.category;
     }
@@ -99,6 +103,10 @@ public final class District {
         return this.score;
     }
 
+    /**
+     * Returns the name of this district
+     * @return The name of this district
+     */
     public String getName() {
         return this.name;
     }

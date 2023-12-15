@@ -58,13 +58,17 @@ public class Deck {
 
     /**
      * Retrieve the first two elements of the deck
-     * @return A pair containing the first two elements or some null if the deck has 1 or 0 cards
+     * @return A pair containing the first two elements or some null if the deck has one or no cards
      */
     public Pair<District, District> peekFirstTwo() {
         Iterator<District> iterator = this.districts.iterator();
         return new Pair<>(iterator.hasNext() ? iterator.next() : null, iterator.hasNext() ? iterator.next() : null);
     }
 
+    /**
+     * Returns true if the deck contains no district cards
+     * @return true if the deck contains no district cards
+     */
     public boolean isEmpty() {
         return this.districts.isEmpty();
     }
