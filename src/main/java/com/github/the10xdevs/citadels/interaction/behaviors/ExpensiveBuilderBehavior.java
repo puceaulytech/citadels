@@ -60,9 +60,9 @@ public class ExpensiveBuilderBehavior implements Behavior {
         } else {
             Optional<District> bestDistrictInHand = self.getHand()
                     .stream()
-                    .filter(district -> district.getCost() >= GOOD_DISTRICT_THRESHOLD)
+                    .filter(district -> district.getScore() >= GOOD_DISTRICT_THRESHOLD)
                     .filter(district -> !self.getCity().getDistricts().contains(district))
-                    .max(Comparator.comparingInt(District::getCost));
+                    .max(Comparator.comparingInt(District::getScore));
 
             // Get the best good district in our hand
             if (bestDistrictInHand.isPresent()) {
@@ -73,7 +73,7 @@ public class ExpensiveBuilderBehavior implements Behavior {
                 // Draw cards and choose the best district
                 Pair<District, District> cards = action.drawCards();
 
-                District bestDistrict = cards.second() == null || cards.first().getCost() > cards.second().getCost()
+                District bestDistrict = cards.second() == null || cards.first().getScore() > cards.second().getScore()
                         ? cards.first()
                         : cards.second();
                 action.chooseCard(bestDistrict);
