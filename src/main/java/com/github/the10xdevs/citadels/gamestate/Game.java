@@ -122,12 +122,11 @@ public class Game {
     }
 
     private void playRegularTurn() throws IllegalActionException {
-
         // Sort players according to their role
-        this.players.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
+        List<Player> sortedPlayers = new ArrayList<>(this.players);
+        sortedPlayers.sort(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()));
 
-
-        for (Player player : this.players) {
+        for (Player player : sortedPlayers) {
             // If this payer was killed, skip his turn
             if (player.getCurrentRole() == this.killedRole)
                 continue;
