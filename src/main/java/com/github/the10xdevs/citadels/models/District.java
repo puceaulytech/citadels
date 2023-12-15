@@ -39,8 +39,10 @@ public final class District {
         this(name, category, cost, cost);
     }
 
+
     /**
      * Get a list of all districts in the game
+     *
      * @return All the districts
      */
     public static List<District> all() {
@@ -103,18 +105,18 @@ public final class District {
 
     @Override
     public String toString() {
-        return String.format("%s, %s, prix: %d", this.name, this.category, this.cost);
+        return String.format("%s, %s, prix: %d, score : %d", this.name, this.category, this.cost, this.score);
     }
 
     @Override
     public boolean equals(Object o) {
         if (o instanceof District d)
-            return this.name.equals(d.name) && this.cost == d.cost && this.category.equals(d.category);
+            return this.name.equals(d.name) && this.cost == d.cost && this.category.equals(d.category) && this.score == d.score;
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, category, cost);
+        return Objects.hash(name, category, cost, score);
     }
 }
