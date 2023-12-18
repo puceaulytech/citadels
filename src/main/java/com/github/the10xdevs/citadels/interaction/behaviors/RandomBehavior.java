@@ -25,8 +25,10 @@ public class RandomBehavior implements Behavior {
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
         Set<Role> roles = EnumSet.copyOf(availableRoles);
+        // pick a random role
         action.pick(RandomUtils.chooseFrom(this.randomGenerator, roles));
         roles.remove(action.getPickedRole());
+        // discard a random role
         action.discard(RandomUtils.chooseFrom(this.randomGenerator, roles));
     }
 
@@ -37,9 +39,11 @@ public class RandomBehavior implements Behavior {
         } else {
             Pair<District, District> cards = action.drawCards();
 
+            // pick a random card between the two options
             action.chooseCard(cards.second() == null || this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
         }
 
+        // randomly choose to build a random affordable district
         if (this.randomGenerator.nextBoolean()) {
             List<District> availableDistricts = self.getHand().stream()
                     .filter(district -> self.getGold() >= district.getCost())
