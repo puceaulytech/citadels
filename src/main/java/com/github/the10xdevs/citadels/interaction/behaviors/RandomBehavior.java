@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
@@ -10,11 +11,7 @@ import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 import com.github.the10xdevs.citadels.utils.RandomUtils;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.*;
 
 /**
  * A bot that does random things
@@ -34,6 +31,13 @@ public class RandomBehavior implements Behavior {
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+        // randomly choose to kill a random role other than himself
+        if (self.getCurrentRole() == Role.ASSASSIN && this.randomGenerator.nextBoolean()) {
+            AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
+            ability.kill(RandomUtils.chooseFrom(this.randomGenerator, Arrays.stream(Role.values()).filter((role -> role != Role.ASSASSIN)).toList()));
+        }
+
+        // randomly choose between taking gold and drawing cards
         if (!action.canDraw() || this.randomGenerator.nextBoolean()) {
             action.takeGold();
         } else {
