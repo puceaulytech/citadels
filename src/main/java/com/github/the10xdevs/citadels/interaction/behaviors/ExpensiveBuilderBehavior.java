@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
@@ -16,14 +17,14 @@ import java.util.*;
  */
 public class ExpensiveBuilderBehavior implements Behavior {
     private static final List<Role> rolesImportance = List.of(
+            Role.VOLEUR,
+            Role.ARCHITECTE,
             Role.ROI,
             Role.CONDOTTIERE,
-            Role.VOLEUR,
             Role.MARCHAND,
             Role.EVEQUE,
             Role.ASSASSIN,
-            Role.MAGICIEN,
-            Role.ARCHITECTE
+            Role.MAGICIEN
     );
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
@@ -78,6 +79,12 @@ public class ExpensiveBuilderBehavior implements Behavior {
                         : cards.second();
                 action.chooseCard(bestDistrict);
             }
+        }
+
+        // If it has role thief, steals from role king
+        if (self.getCurrentRole() == Role.VOLEUR) {
+            VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
+            ability.stealFrom(Role.ROI);
         }
     }
 }
