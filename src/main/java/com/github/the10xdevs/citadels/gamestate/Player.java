@@ -129,4 +129,8 @@ public class Player {
     public List<District> getHand() {
         return this.hand;
     }
+
+    public String getName() {
+        return this.behavior.getName();
+    }
 }

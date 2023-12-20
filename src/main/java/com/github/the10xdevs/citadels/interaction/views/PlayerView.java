@@ -28,4 +28,8 @@ public class PlayerView {
     public boolean represents(Player targetPlayer) {
         return this.player.equals(targetPlayer);
     }
+
+    public String getName() {
+        return this.player.getName();
+    }
 }
