@@ -1,6 +1,10 @@
 package com.github.the10xdevs.citadels.interaction.actions;
 
+import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Deck;
+import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
@@ -11,7 +15,8 @@ import com.github.the10xdevs.citadels.utils.Pair;
  * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
  */
 public class RegularTurnAction {
-    private final SelfPlayerView currentPlayerView;
+    private final Player currentPlayer;
+    private final Deck deck;
     private final Pair<District, District> cardsToDraw;
     private final AbilityAction abilityAction;
 
@@ -20,16 +25,17 @@ public class RegularTurnAction {
     private District builtDistrict;
 
     /**
-     * Constructs a RegularTurnAction with a view of the player wanting to play
+     * Constructs a RegularTurnAction with the player wanting to play
      * and the first two cards of the deck
-     * @param playerView A view of the current player
-     * @param cards The first two cards of the deck
-     * @see SelfPlayerView
+     * @param game The current game
+     * @param currentPlayer The current player
+     * @param deck The deck of the game
      */
-    public RegularTurnAction(SelfPlayerView playerView, Pair<District, District> cards) {
-        this.currentPlayerView = playerView;
-        this.abilityAction = playerView.getCurrentRole().getAbilityAction();
-        this.cardsToDraw = cards;
+    public RegularTurnAction(Game game, Player currentPlayer, Deck deck) {
+        this.currentPlayer = currentPlayer;
+        this.deck = deck;
+        this.abilityAction = currentPlayer.getCurrentRole().getAbilityAction(currentPlayer, game);
+        this.cardsToDraw = deck.peekFirstTwo();
     }
 
     /**
@@ -40,6 +46,8 @@ public class RegularTurnAction {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot take gold because an action has already been performed");
         this.basicAction = BasicAction.GOLD;
+
+        currentPlayer.incrementGold(2);
     }
 
     /**
@@ -71,6 +79,15 @@ public class RegularTurnAction {
         if (!this.cardsToDraw.contains(district))
             throw new IllegalActionException("Cannot choose a card that is not at the top of deck");
         this.chosenCard = district;
+
+        // To arrive here there is necessarily at least one card in the deck,
+        // so we can safely draw one card
+        this.deck.drawCard();
+        currentPlayer.getHand().add(this.getChosenCard());
+        if (!deck.isEmpty()) {
+            this.deck.drawCard();
+            this.deck.enqueueCard(this.getDiscardedCard());
+        }
     }
 
     /**
@@ -81,13 +98,21 @@ public class RegularTurnAction {
     public void buildDistrict(District district) throws IllegalActionException {
         if (district == null)
             throw new IllegalActionException("Cannot build a district that is null");
-        if (!(this.currentPlayerView.getHand().contains(district) || district.equals(this.chosenCard)))
+        if (!currentPlayer.getHand().contains(district))
             throw new IllegalActionException("Cannot build a district that is not in hand");
-        if ((this.currentPlayerView.getGold() + (this.basicAction == BasicAction.GOLD ? 2 : 0)) < district.getCost())
+        if (currentPlayer.getGold() < district.getCost())
             throw new IllegalActionException("Cannot build district without enough gold");
         if (this.builtDistrict != null)
             throw new IllegalActionException("Cannot build multiple districts in one turn");
         this.builtDistrict = district;
+
+        currentPlayer.incrementGold(-builtDistrict.getCost());
+        currentPlayer.getHand().remove(builtDistrict);
+        try {
+            currentPlayer.getCity().addDistrict(builtDistrict);
+        } catch (DuplicatedDistrictException e) {
+            throw new IllegalActionException("Cannot build the same district twice", e);
+        }
     }
 
     /**

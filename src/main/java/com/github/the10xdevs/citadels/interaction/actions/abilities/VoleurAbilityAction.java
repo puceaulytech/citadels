@@ -1,10 +1,15 @@
 package com.github.the10xdevs.citadels.interaction.actions.abilities;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.models.Role;
 
 public class VoleurAbilityAction extends AbilityAction {
     private Role stolenRole;
+
+    public VoleurAbilityAction(Game game) {
+        super(game);
+    }
 
     /**
      * Stores the role that the thief wants to steal from
@@ -12,10 +17,15 @@ public class VoleurAbilityAction extends AbilityAction {
      * @throws IllegalActionException If the thief tried to steal from the assassin
      */
     public void stealFrom(Role role) throws IllegalActionException {
+        if (role == null)
+            throw new IllegalActionException("No role provided");
         if (role == Role.ASSASSIN)
             throw new IllegalActionException("Cannot steal from the assassin");
+        if (role == this.game.getKilledRole())
+            throw new IllegalActionException("Cannot steal the killed role");
 
         this.stolenRole = role;
+        this.game.setStolenRole(role);
     }
 
     /**

@@ -24,4 +24,8 @@ public class PlayerView {
     public int getHandSize() {
         return this.player.getHand().size();
     }
+
+    public boolean represents(Player targetPlayer) {
+        return this.player.equals(targetPlayer);
+    }
 }

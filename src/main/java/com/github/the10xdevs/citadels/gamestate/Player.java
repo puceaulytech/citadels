@@ -31,6 +31,17 @@ public class Player {
         this.behavior = behavior;
     }
 
+    public void swapHandWith(Player other) {
+        List<District> thisHand = new ArrayList<>(this.hand);
+        List<District> otherHand = new ArrayList<>(other.hand);
+
+        this.hand.clear();
+        other.hand.clear();
+
+        this.hand.addAll(otherHand);
+        other.hand.addAll(thisHand);
+    }
+
     /**
      * Returns the player behavior
      * @return The player behavior
