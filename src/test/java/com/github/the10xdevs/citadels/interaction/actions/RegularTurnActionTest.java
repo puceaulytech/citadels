@@ -11,6 +11,7 @@ import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,17 +87,17 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
                 action.chooseCard(cards.first());
             }
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
         SelfPlayerView view = new SelfPlayerView(cardDrawer);
-        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, Optional.of(b)));
         cardDrawerBehavior.playTurn(action, view, null);
         assertEquals(a, action.getChosenCard());
-        assertEquals(b, action.getDiscardedCard());
+        assertEquals(b, action.getDiscardedCard().orElseThrow());
     }
 
     @Test
@@ -109,14 +110,14 @@ class RegularTurnActionTest {
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
                 action.takeGold();
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
                 action.chooseCard(cards.first());
             }
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
         SelfPlayerView view = new SelfPlayerView(cardDrawer);
-        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, Optional.of(b)));
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 
@@ -149,15 +150,15 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
                 action.chooseCard(cards.first());
-                action.chooseCard(cards.second());
+                action.chooseCard(cards.second().orElseThrow());
             }
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
         SelfPlayerView view = new SelfPlayerView(cardDrawer);
-        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, Optional.of(b)));
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 
@@ -170,14 +171,14 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                action.drawCards();
                 action.chooseCard(new District("Amphi forum", Category.MERVEILLE, 9));
             }
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
         SelfPlayerView view = new SelfPlayerView(cardDrawer);
-        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, b));
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, Optional.of(b)));
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 
@@ -190,14 +191,14 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                action.drawCards();
                 action.chooseCard(null);
             }
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
         SelfPlayerView view = new SelfPlayerView(cardDrawer);
-        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, null));
+        RegularTurnAction action = new RegularTurnAction(view, new Pair<>(a, Optional.empty()));
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, view, null));
     }
 

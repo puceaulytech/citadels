@@ -6,13 +6,15 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.utils.Pair;
 
+import java.util.Optional;
+
 /**
  * A class used by Behaviors to store the actions they want to perform
  * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
  */
 public class RegularTurnAction {
     private final SelfPlayerView currentPlayerView;
-    private final Pair<District, District> cardsToDraw;
+    private final Pair<District, Optional<District>> cardsToDraw;
     private final AbilityAction abilityAction;
 
     private BasicAction basicAction;
@@ -26,7 +28,7 @@ public class RegularTurnAction {
      * @param cards The first two cards of the deck
      * @see SelfPlayerView
      */
-    public RegularTurnAction(SelfPlayerView playerView, Pair<District, District> cards) {
+    public RegularTurnAction(SelfPlayerView playerView, Pair<District, Optional<District>> cards) {
         this.currentPlayerView = playerView;
         this.abilityAction = playerView.getCurrentRole().getAbilityAction();
         this.cardsToDraw = cards;
@@ -47,7 +49,7 @@ public class RegularTurnAction {
      * @return The two cards
      * @throws IllegalActionException If the action was invalid
      */
-    public Pair<District, District> drawCards() throws IllegalActionException {
+    public Pair<District, Optional<District>> drawCards() throws IllegalActionException {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot draw cards because an action has already been performed");
         if (this.cardsToDraw.isEmpty())
@@ -68,7 +70,7 @@ public class RegularTurnAction {
             throw new IllegalActionException("Cannot choose card because a card was already chosen");
         if (district == null)
             throw new IllegalActionException("Chosen district is null");
-        if (!this.cardsToDraw.contains(district))
+        if (!this.cardsToDraw.first().equals(district) && !this.cardsToDraw.second().equals(Optional.of(district)))
             throw new IllegalActionException("Cannot choose a card that is not at the top of deck");
         this.chosenCard = district;
     }
@@ -127,8 +129,8 @@ public class RegularTurnAction {
      * Returns the card discarded by the player between the two cards of the deck
      * @return The card discarded by the player between the two cards of the deck
      */
-    public District getDiscardedCard() {
-        return this.chosenCard.equals(this.cardsToDraw.first()) ? cardsToDraw.second() : cardsToDraw.first();
+    public Optional<District> getDiscardedCard() {
+        return this.chosenCard.equals(this.cardsToDraw.first()) ? cardsToDraw.second() : Optional.of(cardsToDraw.first());
     }
 
     /**

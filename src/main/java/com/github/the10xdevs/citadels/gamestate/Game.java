@@ -228,9 +228,11 @@ public class Game {
             // so we can safely draw one card
             this.deck.drawCard();
             player.getHand().add(action.getChosenCard());
-            if (!deck.isEmpty()) {
+
+            Optional<District> discardedCard = action.getDiscardedCard();
+            if (discardedCard.isPresent()) {
                 this.deck.drawCard();
-                this.deck.enqueueCard(action.getDiscardedCard());
+                this.deck.enqueueCard(discardedCard.get());
             }
         }
 
