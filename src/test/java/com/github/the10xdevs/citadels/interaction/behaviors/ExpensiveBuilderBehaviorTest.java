@@ -13,6 +13,10 @@ import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExpensiveBuilderBehaviorTest {
     ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-    Set<Role> availableRoles = EnumSet.allOf(Role.class);
     GameView game = new GameView(new Game(List.of()));
 
     Player testPlayer;
@@ -33,13 +36,19 @@ class ExpensiveBuilderBehaviorTest {
         testPlayer.setCurrentRole(Role.ARCHITECTE);
     }
 
-    @Test
-    void testPickRole() {
-        RoleTurnAction action = new RoleTurnAction(availableRoles);
-        assertDoesNotThrow(() -> behavior.pickRole(action, selfTestPlayer, game, availableRoles));
-        // maybe check for preferred role being picked
-        assertNotNull(action.getPickedRole());
-        assertNotNull(action.getDiscardedRole());
+    @ParameterizedTest
+    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    void pickRoleTest(Set<Role> availableRoles) {
+        // Create a RoleTurnAction
+        RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
+
+        // Call pickRole method
+        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, null, availableRoles));
+
+        // Check if the picked and discarded roles are valid
+        assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
+        assertTrue(availableRoles.contains(roleTurnAction.getDiscardedRole()));
+        assertNotEquals(roleTurnAction.getPickedRole(), roleTurnAction.getDiscardedRole());
     }
 
     @Test
