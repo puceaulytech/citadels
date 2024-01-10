@@ -44,8 +44,9 @@ public class Game {
     public void start() {
         this.deck.shuffle();
 
-        // Give four cards to each player
+        // Give four cards and two gold to each player
         for (Player player : this.players) {
+            player.incrementGold(2);
             for (int i = 0; i < 4; i++) {
                 player.getHand().add(this.deck.drawCard());
             }
