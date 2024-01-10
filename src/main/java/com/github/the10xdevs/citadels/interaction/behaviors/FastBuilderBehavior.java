@@ -9,7 +9,10 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * A bot that tries to build as fast as possible

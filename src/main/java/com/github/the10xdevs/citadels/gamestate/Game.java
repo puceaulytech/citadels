@@ -1,11 +1,8 @@
 package com.github.the10xdevs.citadels.gamestate;
 
-import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -30,6 +27,7 @@ public class Game {
 
     /**
      * Constructs a Game with a list of Behaviors that will battle against each other
+     *
      * @param behaviors The list of Behaviors
      */
     public Game(List<Behavior> behaviors) {
@@ -80,6 +78,7 @@ public class Game {
 
     /**
      * Checks if the game has ended
+     *
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
@@ -101,6 +100,7 @@ public class Game {
 
     /**
      * Makes all the players choose their role
+     *
      * @throws IllegalActionException if a player has performed an action that is not permitted
      */
     private void playRoleTurn() throws IllegalActionException {
@@ -130,6 +130,7 @@ public class Game {
     /**
      * Computes the amount of gold gained by a player according to the number of districts in his city
      * matching his current role
+     *
      * @param player The player
      * @return The amount of gold the player is suppose to gain
      */
@@ -151,6 +152,7 @@ public class Game {
 
     /**
      * Makes all the players play their turn
+     *
      * @throws IllegalActionException if a player has performed an action that is not permitted
      */
     private void playRegularTurn() throws IllegalActionException {
@@ -167,8 +169,8 @@ public class Game {
             if (player.getCurrentRole() == this.stolenRole) {
                 // Find the thief
                 Optional<Player> thief = this.players.stream()
-                                .filter(p -> p.getCurrentRole() == Role.VOLEUR)
-                                .findFirst();
+                        .filter(p -> p.getCurrentRole() == Role.VOLEUR)
+                        .findFirst();
 
                 if (thief.isPresent()) {
                     // Give the stolen player's gold to the thief
@@ -182,7 +184,7 @@ public class Game {
             if (player.getCurrentRole() == Role.MARCHAND) {
                 player.incrementGold(1);
             }
-          
+
             // Give a gold reward to the player
             int goldReward = this.checkMatchingDistricts(player);
             player.incrementGold(goldReward);
@@ -213,6 +215,7 @@ public class Game {
 
     /**
      * Returns the list of players
+     *
      * @return The list of players
      */
     public List<Player> getPlayers() {
@@ -221,6 +224,7 @@ public class Game {
 
     /**
      * Returns the deck
+     *
      * @return The deck
      */
     public Deck getDeck() {
@@ -229,6 +233,7 @@ public class Game {
 
     /**
      * Returns which turn is currently being played
+     *
      * @return The turn currently being played
      */
     public int getTurn() {

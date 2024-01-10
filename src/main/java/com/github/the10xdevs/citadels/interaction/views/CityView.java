@@ -8,6 +8,7 @@ import java.util.Set;
 
 /**
  * An immutable view of a City
+ *
  * @see City
  */
 public final class CityView {

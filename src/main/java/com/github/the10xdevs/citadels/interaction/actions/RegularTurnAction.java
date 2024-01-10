@@ -6,12 +6,12 @@ import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
-import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.utils.Pair;
 
 /**
  * A class used by Behaviors to store the actions they want to perform
+ *
  * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
  */
 public class RegularTurnAction {
@@ -27,9 +27,10 @@ public class RegularTurnAction {
     /**
      * Constructs a RegularTurnAction with the player wanting to play
      * and the first two cards of the deck
-     * @param game The current game
+     *
+     * @param game          The current game
      * @param currentPlayer The current player
-     * @param deck The deck of the game
+     * @param deck          The deck of the game
      */
     public RegularTurnAction(Game game, Player currentPlayer, Deck deck) {
         this.currentPlayer = currentPlayer;
@@ -40,6 +41,7 @@ public class RegularTurnAction {
 
     /**
      * Take gold on this turn
+     *
      * @throws IllegalActionException If the action is invalid
      */
     public void takeGold() throws IllegalActionException {
@@ -52,6 +54,7 @@ public class RegularTurnAction {
 
     /**
      * Draw two cards on this turn
+     *
      * @return The two cards
      * @throws IllegalActionException If the action was invalid
      */
@@ -66,6 +69,7 @@ public class RegularTurnAction {
 
     /**
      * Choose a card that was drawn
+     *
      * @param district The card to choose
      * @throws IllegalActionException If the action was invalid
      */
@@ -92,6 +96,7 @@ public class RegularTurnAction {
 
     /**
      * Build a district on this turn
+     *
      * @param district The district to build
      * @throws IllegalActionException If the action was invalid
      */
@@ -117,6 +122,7 @@ public class RegularTurnAction {
 
     /**
      * Returns true if there is at least one card in the deck
+     *
      * @return true if there is at least one card in the deck
      */
     public boolean canDraw() {
@@ -125,6 +131,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the Ability Action of the current player
+     *
      * @return The Ability Action of the current player
      * @see AbilityAction
      */
@@ -134,6 +141,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the basic action done by the player (either drawing or picking gold)
+     *
      * @return The basic action done by the player
      */
     public BasicAction getBasicAction() {
@@ -142,6 +150,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the card chosen by the player between the two cards of the deck
+     *
      * @return The card chosen by the player between the two cards of the deck
      */
     public District getChosenCard() {
@@ -150,6 +159,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the card discarded by the player between the two cards of the deck
+     *
      * @return The card discarded by the player between the two cards of the deck
      */
     public District getDiscardedCard() {
@@ -158,6 +168,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the district built by the current player
+     *
      * @return The district built by the current player
      */
     public District getBuiltDistrict() {

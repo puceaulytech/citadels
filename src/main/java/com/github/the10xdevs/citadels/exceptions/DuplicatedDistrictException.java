@@ -8,6 +8,7 @@ import com.github.the10xdevs.citadels.models.District;
 public class DuplicatedDistrictException extends Exception {
     /**
      * Constructs a DuplicatedDistrictException with the district that caused the error
+     *
      * @param district The district that caused the error
      */
     public DuplicatedDistrictException(District district) {

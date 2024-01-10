@@ -13,6 +13,7 @@ public class AssassinAbilityAction extends AbilityAction {
 
     /**
      * Stores the role that the assassin wants to kill
+     *
      * @param role Role killed
      */
     public void kill(Role role) throws IllegalActionException {
@@ -24,6 +25,7 @@ public class AssassinAbilityAction extends AbilityAction {
 
     /**
      * Returns the role killed by the assassin
+     *
      * @return The role killed by the assassin
      */
     public Role getKilledRole() {

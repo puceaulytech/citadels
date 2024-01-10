@@ -9,6 +9,7 @@ import java.util.Set;
 
 /**
  * A city of districts
+ *
  * @see District
  */
 public class City implements Iterable<District> {
@@ -27,6 +28,7 @@ public class City implements Iterable<District> {
 
     /**
      * Returns an immutable collection of all the districts in this City
+     *
      * @return An immutable collection of all the districts in this City
      */
     public Set<District> getDistricts() {
@@ -35,6 +37,7 @@ public class City implements Iterable<District> {
 
     /**
      * Returns how many districts have been built in this city
+     *
      * @return How many districts have been built in this city
      */
     public int getSize() {

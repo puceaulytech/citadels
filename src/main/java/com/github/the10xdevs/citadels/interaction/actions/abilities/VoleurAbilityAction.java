@@ -13,6 +13,7 @@ public class VoleurAbilityAction extends AbilityAction {
 
     /**
      * Stores the role that the thief wants to steal from
+     *
      * @param role Role robbed
      * @throws IllegalActionException If the thief tried to steal from the assassin
      */
@@ -30,6 +31,7 @@ public class VoleurAbilityAction extends AbilityAction {
 
     /**
      * Returns the role stolen from
+     *
      * @return The role stolen from
      */
     public Role getStolenRole() {

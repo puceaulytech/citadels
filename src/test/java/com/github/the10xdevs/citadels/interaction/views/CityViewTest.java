@@ -5,7 +5,7 @@ import com.github.the10xdevs.citadels.models.City;
 import com.github.the10xdevs.citadels.models.District;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CityViewTest {
     @SuppressWarnings("DataFlowIssue")

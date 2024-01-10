@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class RandomUtils {
+    private RandomUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static <T> T chooseFrom(Random randomGenerator, Collection<T> collection) {
         if (collection.isEmpty()) return null;
 
@@ -22,9 +26,5 @@ public class RandomUtils {
         }
 
         throw new IllegalStateException("Out of bound random position");
-    }
-
-    private RandomUtils()  {
-        throw new IllegalStateException("Utility class");
     }
 }

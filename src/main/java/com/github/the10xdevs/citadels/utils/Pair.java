@@ -2,6 +2,7 @@ package com.github.the10xdevs.citadels.utils;
 
 /**
  * A pair of two values
+ *
  * @param <A> First value
  * @param <B> Second value
  */
@@ -11,7 +12,8 @@ public class Pair<A, B> {
 
     /**
      * Construct a new pair with two initial values
-     * @param first The first initial value
+     *
+     * @param first  The first initial value
      * @param second The second initial value
      */
     public Pair(A first, B second) {
@@ -21,6 +23,7 @@ public class Pair<A, B> {
 
     /**
      * Get the first value
+     *
      * @return The first value
      */
     public A first() {
@@ -29,6 +32,7 @@ public class Pair<A, B> {
 
     /**
      * Get the second value
+     *
      * @return The second value
      */
     public B second() {
@@ -37,6 +41,7 @@ public class Pair<A, B> {
 
     /**
      * Invert the pair, putting the first value into the second, and vice-versa.
+     *
      * @return The inverted pair
      */
     public Pair<B, A> invert() {
@@ -45,6 +50,7 @@ public class Pair<A, B> {
 
     /**
      * Check if the pair contains a specific object
+     *
      * @param o The object to check
      * @return true if the pair contains the object, otherwise false
      */
@@ -54,6 +60,7 @@ public class Pair<A, B> {
 
     /**
      * Returns true if the pair contains no elements
+     *
      * @return true if the pair contains no elements
      */
     public boolean isEmpty() {
