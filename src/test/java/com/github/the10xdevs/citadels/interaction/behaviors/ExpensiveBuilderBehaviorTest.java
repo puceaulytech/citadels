@@ -11,6 +11,7 @@ import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.EnumSet;
 import java.util.List;
@@ -18,69 +19,52 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExpensiveBuilderBehaviorTest {
+    ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
+    Set<Role> availableRoles = EnumSet.allOf(Role.class);
+    GameView game = new GameView(new Game(List.of()));
+
+    Player testPlayer;
+    SelfPlayerView selfTestPlayer;
+
+    @BeforeEach
+    void initPlayer() {
+        testPlayer = new Player(behavior);
+        selfTestPlayer = new SelfPlayerView(testPlayer);
+        testPlayer.setCurrentRole(Role.ARCHITECTE);
+    }
 
     @Test
-    void testPickRole() throws IllegalActionException {
-        ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-        RoleTurnAction action = new RoleTurnAction(EnumSet.allOf(Role.class));
-        SelfPlayerView self = new SelfPlayerView(new Player(new ExpensiveBuilderBehavior()));
-        GameView game = new GameView(new Game(List.of()));
-        Set<Role> availableRoles = EnumSet.allOf(Role.class);
-
-        assertDoesNotThrow(() -> behavior.pickRole(action, self, game, availableRoles));
+    void testPickRole() {
+        RoleTurnAction action = new RoleTurnAction(availableRoles);
+        assertDoesNotThrow(() -> behavior.pickRole(action, selfTestPlayer, game, availableRoles));
+        // maybe check for preferred role being picked
         assertNotNull(action.getPickedRole());
         assertNotNull(action.getDiscardedRole());
     }
 
     @Test
-    void testPlayTurn() throws IllegalActionException {
-        ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-        Set<Role> availableRoles = EnumSet.allOf(Role.class);
-        RoleTurnAction roleTurnAction = new RoleTurnAction(availableRoles);
-        RegularTurnAction action = new RegularTurnAction(new SelfPlayerView(new Player(new ExpensiveBuilderBehavior())), new Pair<>(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
-        SelfPlayerView self = new SelfPlayerView(new Player(new ExpensiveBuilderBehavior()));
-        GameView game = new GameView(new Game(List.of()));
-        behavior.pickRole(roleTurnAction, self, game, availableRoles);
-    }
-    @Test
-    void testPlayTurnWithMarkedDistrict() throws IllegalActionException {
-        ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-        Set<Role> availableRoles = EnumSet.allOf(Role.class);
-        RoleTurnAction roleTurnAction = new RoleTurnAction(availableRoles);
-        RegularTurnAction action = new RegularTurnAction(new SelfPlayerView(new Player(new ExpensiveBuilderBehavior())), new Pair<>(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
-        SelfPlayerView self = new SelfPlayerView(new Player(new ExpensiveBuilderBehavior()));
-        GameView game = new GameView(new Game(List.of()));
-        behavior.pickRole(roleTurnAction, self, game, availableRoles);
-
-        // Mark a district for building
-        District markedDistrict = new District("ExpensiveDistrict", Category.NOBLE, 10);
-        behavior.playTurn(action, self, game);
-        assertEquals(markedDistrict, action.getBuiltDistrict());
-
-        // Try to build the marked district
-        behavior.playTurn(action, self, game);
-        assertNull(action.getChosenCard());  // No card should be chosen
-        assertNull(action.getBuiltDistrict());  // No district should be built
-        assertEquals(Role.CONDOTTIERE, action.getChosenCard());  // Confirm the role picked after building
-
-        // Add more assertions as needed
+    void testPlayTurn() {
+        RegularTurnAction action = new RegularTurnAction(selfTestPlayer, new Pair<>(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
+        assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, game));
     }
 
     @Test
-    void testPlayTurnWithoutMarkedDistrict() throws IllegalActionException {
-        ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-        Set<Role> availableRoles = EnumSet.allOf(Role.class);
-        RoleTurnAction roleTurnAction = new RoleTurnAction(availableRoles);
-        RegularTurnAction action = new RegularTurnAction(new SelfPlayerView(new Player(new ExpensiveBuilderBehavior())), new Pair<>(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
-        SelfPlayerView self = new SelfPlayerView(new Player(new ExpensiveBuilderBehavior()));
-        GameView game = new GameView(new Game(List.of()));
-        behavior.pickRole(roleTurnAction, self, game, availableRoles);
+    void testPlayTurnMarkingDistrict() throws IllegalActionException {
+        District notGoodEnough = new District("DaHood", Category.MARCHAND, 2);
+        District goodButNotBest = new District("NobleDistrict", Category.NOBLE, 7);
+        District best = new District("ReligiousDistrict", Category.RELIGIEUX, 8);
+        testPlayer.getHand().addAll(List.of(notGoodEnough, goodButNotBest, best));
+        testPlayer.incrementGold(10);
 
-        // No marked district, so take gold
-        behavior.playTurn(action, self, game);
-        assertNull(action.getChosenCard());
+        // he should mark a district for the next turn
+        RegularTurnAction action = new RegularTurnAction(selfTestPlayer, null);
+        behavior.playTurn(action, selfTestPlayer, game);
+        assertEquals(RegularTurnAction.BasicAction.GOLD, action.getBasicAction());
         assertNull(action.getBuiltDistrict());
 
-        // Add more assertions as needed
+        // he should build the district with the highest score
+        action = new RegularTurnAction(selfTestPlayer, null);
+        behavior.playTurn(action, selfTestPlayer, game);
+        assertEquals(best, action.getBuiltDistrict());
     }
 }
