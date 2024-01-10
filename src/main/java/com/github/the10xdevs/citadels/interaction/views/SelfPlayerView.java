@@ -21,11 +21,6 @@ public final class SelfPlayerView extends PlayerView {
     }
 
     public Role getCurrentRole() {
-        if (this.player.getCurrentRole() == null) {
-            // Handle the case where the role is null, either throw an exception or provide a default role.
-            throw new IllegalStateException("Current role is null for the player.");
-        }
         return this.player.getCurrentRole();
     }
-
 }
