@@ -44,7 +44,7 @@ public class FastBuilderBehavior implements Behavior {
         action.pick(roleToPick);
         roles.remove(roleToPick);
 
-        if (this.previousRole != null)
+        if (availableRoles.contains(this.previousRole))
             roles.add(this.previousRole);
         Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.discard(roleToDiscard);
