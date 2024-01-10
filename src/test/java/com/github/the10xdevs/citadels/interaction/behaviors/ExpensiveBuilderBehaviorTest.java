@@ -1,6 +1,7 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExpensiveBuilderBehaviorTest {
     ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-    GameView game = new GameView(new Game(List.of()));
+    Game game = new Game(List.of());
 
     Player testPlayer;
     SelfPlayerView selfTestPlayer;
@@ -53,12 +54,15 @@ class ExpensiveBuilderBehaviorTest {
 
     @Test
     void testPlayTurn() {
-        RegularTurnAction action = new RegularTurnAction(selfTestPlayer, new Pair<>(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
-        assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, game));
+        Deck deck = new Deck(List.of(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
+        RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
+        assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, new GameView(game)));
     }
 
     @Test
     void testPlayTurnMarkingDistrict() throws IllegalActionException {
+        Deck deck = new Deck(List.of());
+
         District notGoodEnough = new District("DaHood", Category.MARCHAND, 2);
         District goodButNotBest = new District("NobleDistrict", Category.NOBLE, 7);
         District best = new District("ReligiousDistrict", Category.RELIGIEUX, 8);
@@ -66,14 +70,14 @@ class ExpensiveBuilderBehaviorTest {
         testPlayer.incrementGold(10);
 
         // he should mark a district for the next turn
-        RegularTurnAction action = new RegularTurnAction(selfTestPlayer, null);
-        behavior.playTurn(action, selfTestPlayer, game);
+        RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
+        behavior.playTurn(action, selfTestPlayer, new GameView(game));
         assertEquals(RegularTurnAction.BasicAction.GOLD, action.getBasicAction());
         assertNull(action.getBuiltDistrict());
 
         // he should build the district with the highest score
-        action = new RegularTurnAction(selfTestPlayer, null);
-        behavior.playTurn(action, selfTestPlayer, game);
+        action = new RegularTurnAction(game, testPlayer, deck);
+        behavior.playTurn(action, selfTestPlayer, new GameView(game));
         assertEquals(best, action.getBuiltDistrict());
     }
 }
