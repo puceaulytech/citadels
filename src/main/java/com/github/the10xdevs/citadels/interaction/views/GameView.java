@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * An immutable view of a Game
+ *
  * @see Game
  */
 public final class GameView {

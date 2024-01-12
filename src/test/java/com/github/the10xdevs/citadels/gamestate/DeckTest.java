@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,9 +44,9 @@ class DeckTest {
 
     @Test
     void peekTwo() {
-        Pair<District, District> pair = deck.peekFirstTwo();
+        Pair<District, Optional<District>> pair = deck.peekFirstTwo();
         assertEquals(romain, pair.first());
-        assertEquals(logan, pair.second());
+        assertEquals(logan, pair.second().orElseThrow());
     }
 
     @Test
@@ -57,8 +58,8 @@ class DeckTest {
     @Test
     void pickTwoWhenAlmostEmpty() {
         Deck deck = new Deck(List.of(new District("Baraque", Category.MERVEILLE, 10)));
-        Pair<District, District> pair = deck.peekFirstTwo();
+        Pair<District, Optional<District>> pair = deck.peekFirstTwo();
         assertNotNull(pair.first());
-        assertNull(pair.second());
+        assertTrue(pair.second().isEmpty());
     }
 }

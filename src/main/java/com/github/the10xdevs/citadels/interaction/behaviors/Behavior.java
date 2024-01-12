@@ -38,6 +38,7 @@ public interface Behavior {
 
     /**
      * Get the name of the behavior
+     *
      * @return The name of the behavior
      */
     default String getName() {

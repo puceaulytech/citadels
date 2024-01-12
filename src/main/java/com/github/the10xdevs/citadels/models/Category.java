@@ -25,6 +25,7 @@ public enum Category {
 
     /**
      * Get the corresponding ANSI color code
+     *
      * @return The color code
      */
     public String getANSIColorCode() {

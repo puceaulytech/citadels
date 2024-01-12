@@ -4,6 +4,7 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 
 /**
  * An immutable view of a Player
+ *
  * @see Player
  */
 public class PlayerView {
@@ -23,5 +24,13 @@ public class PlayerView {
 
     public int getHandSize() {
         return this.player.getHand().size();
+    }
+
+    public boolean represents(Player targetPlayer) {
+        return this.player.equals(targetPlayer);
+    }
+
+    public String getName() {
+        return this.player.getName();
     }
 }

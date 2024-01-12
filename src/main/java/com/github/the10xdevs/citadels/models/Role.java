@@ -1,7 +1,10 @@
 package com.github.the10xdevs.citadels.models;
 
+import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 
 /**
@@ -22,6 +25,7 @@ public enum Role {
 
     /**
      * Create a new role without a category
+     *
      * @param turnOrder The order in which this role play
      */
     Role(int turnOrder) {
@@ -30,8 +34,9 @@ public enum Role {
 
     /**
      * Create a new role with a category
+     *
      * @param turnOrder The order in which this role play
-     * @param category The category of the role
+     * @param category  The category of the role
      */
     Role(int turnOrder, Category category) {
         this.turnOrder = turnOrder;
@@ -40,6 +45,7 @@ public enum Role {
 
     /**
      * Returns the turn order of this role
+     *
      * @return The turn order of this role
      */
     public int getTurnOrder() {
@@ -48,20 +54,25 @@ public enum Role {
 
     /**
      * Returns the category of this role
+     *
      * @return The category of this role
      */
     public Category getCategory() {
         return this.category;
     }
 
-     /**
+    /**
      * Create a new AbilityAction corresponding to the role
+     *
+     * @param currentPlayer The current player
+     * @param game          The current game
      * @return The ability action
      */
-    public AbilityAction getAbilityAction() {
+    public AbilityAction getAbilityAction(Player currentPlayer, Game game) {
         return switch (this) {
-            case ASSASSIN -> new AssassinAbilityAction();
-            case VOLEUR -> new VoleurAbilityAction();
+            case ASSASSIN -> new AssassinAbilityAction(game);
+            case VOLEUR -> new VoleurAbilityAction(game);
+            case MAGICIEN -> new MagicienAbilityAction(currentPlayer, game);
             default -> null;
         };
     }

@@ -25,14 +25,27 @@ public class Player {
 
     /**
      * Constructs a Player with a specific behavior
+     *
      * @param behavior The player behavior for the decision-making
      */
     public Player(Behavior behavior) {
         this.behavior = behavior;
     }
 
+    public void swapHandWith(Player other) {
+        List<District> thisHand = new ArrayList<>(this.hand);
+        List<District> otherHand = new ArrayList<>(other.hand);
+
+        this.hand.clear();
+        other.hand.clear();
+
+        this.hand.addAll(otherHand);
+        other.hand.addAll(thisHand);
+    }
+
     /**
      * Returns the player behavior
+     *
      * @return The player behavior
      */
     public Behavior getBehavior() {
@@ -41,6 +54,7 @@ public class Player {
 
     /**
      * Returns the player's gold amount
+     *
      * @return The player's gold amount
      */
     public int getGold() {
@@ -49,6 +63,7 @@ public class Player {
 
     /**
      * Sets the player's gold amount
+     *
      * @param gold The amount of gold to set
      */
     public void setGold(int gold) {
@@ -57,6 +72,7 @@ public class Player {
 
     /**
      * Increases the player's gold amount by a certain amount
+     *
      * @param amount The amount of gold to add
      */
     public void incrementGold(int amount) {
@@ -65,6 +81,7 @@ public class Player {
 
     /**
      * Returns the player's city
+     *
      * @return The player's city
      */
     public City getCity() {
@@ -73,6 +90,7 @@ public class Player {
 
     /**
      * Computes and returns the player's score according to its built districts
+     *
      * @param wasFirstPlayer If the player was the first one to build 8 districts
      * @return The player's score
      */
@@ -97,6 +115,7 @@ public class Player {
 
     /**
      * Returns the player's current chosen role
+     *
      * @return The player's current chosen role
      */
     public Role getCurrentRole() {
@@ -105,6 +124,7 @@ public class Player {
 
     /**
      * Sets the player's chosen role
+     *
      * @param currentRole The player's chosen role
      */
     public void setCurrentRole(Role currentRole) {
@@ -113,9 +133,14 @@ public class Player {
 
     /**
      * Returns the player's hand
+     *
      * @return The player's hand
      */
     public List<District> getHand() {
         return this.hand;
+    }
+
+    public String getName() {
+        return this.behavior.getName();
     }
 }

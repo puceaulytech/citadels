@@ -1,11 +1,8 @@
 package com.github.the10xdevs.citadels.gamestate;
 
-import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -30,6 +27,7 @@ public class Game {
 
     /**
      * Constructs a Game with a list of Behaviors that will battle against each other
+     *
      * @param behaviors The list of Behaviors
      */
     public Game(List<Behavior> behaviors) {
@@ -44,8 +42,9 @@ public class Game {
     public void start() {
         this.deck.shuffle();
 
-        // Give four cards to each player
+        // Give four cards and two gold to each player
         for (Player player : this.players) {
+            player.incrementGold(2);
             for (int i = 0; i < 4; i++) {
                 player.getHand().add(this.deck.drawCard());
             }
@@ -79,6 +78,7 @@ public class Game {
 
     /**
      * Checks if the game has ended
+     *
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
@@ -100,6 +100,7 @@ public class Game {
 
     /**
      * Makes all the players choose their role
+     *
      * @throws IllegalActionException if a player has performed an action that is not permitted
      */
     private void playRoleTurn() throws IllegalActionException {
@@ -129,6 +130,7 @@ public class Game {
     /**
      * Computes the amount of gold gained by a player according to the number of districts in his city
      * matching his current role
+     *
      * @param player The player
      * @return The amount of gold the player is suppose to gain
      */
@@ -150,6 +152,7 @@ public class Game {
 
     /**
      * Makes all the players play their turn
+     *
      * @throws IllegalActionException if a player has performed an action that is not permitted
      */
     private void playRegularTurn() throws IllegalActionException {
@@ -166,8 +169,8 @@ public class Game {
             if (player.getCurrentRole() == this.stolenRole) {
                 // Find the thief
                 Optional<Player> thief = this.players.stream()
-                                .filter(p -> p.getCurrentRole() == Role.VOLEUR)
-                                .findFirst();
+                        .filter(p -> p.getCurrentRole() == Role.VOLEUR)
+                        .findFirst();
 
                 if (thief.isPresent()) {
                     // Give the stolen player's gold to the thief
@@ -181,13 +184,13 @@ public class Game {
             if (player.getCurrentRole() == Role.MARCHAND) {
                 player.incrementGold(1);
             }
-          
+
             // Give a gold reward to the player
             int goldReward = this.checkMatchingDistricts(player);
             player.incrementGold(goldReward);
 
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
-            RegularTurnAction action = new RegularTurnAction(currentPlayerView, this.deck.peekFirstTwo());
+            RegularTurnAction action = new RegularTurnAction(null, player, deck);
 
             try {
                 player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
@@ -196,54 +199,6 @@ public class Game {
             }
 
             this.logger.logRegularTurnAction(player, action);
-
-            this.applyRegularTurnAction(player, action);
-        }
-    }
-
-    /**
-     * Applies the actions a player has chosen to do during his turn
-     * @param player The player that performed the actions
-     * @param action The actions the player performed
-     * @throws IllegalActionException if the player has performed an action that is not permitted
-     */
-    private void applyRegularTurnAction(Player player, RegularTurnAction action) throws IllegalActionException {
-        // Apply abilities
-        if (player.getCurrentRole() == Role.ASSASSIN) {
-            AssassinAbilityAction assassinAction = (AssassinAbilityAction) action.getAbilityAction();
-            this.killedRole = assassinAction.getKilledRole();
-        } else if (player.getCurrentRole() == Role.VOLEUR) {
-            VoleurAbilityAction voleurAction = (VoleurAbilityAction) action.getAbilityAction();
-
-            if (voleurAction.getStolenRole() != this.killedRole) {
-                this.stolenRole = voleurAction.getStolenRole();
-            }
-        }
-
-        // Apply gold or deck drawing
-        if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
-            player.incrementGold(2);
-        } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
-            // To arrive here there is necessarily at least one card in the deck,
-            // so we can safely draw one card
-            this.deck.drawCard();
-            player.getHand().add(action.getChosenCard());
-            if (!deck.isEmpty()) {
-                this.deck.drawCard();
-                this.deck.enqueueCard(action.getDiscardedCard());
-            }
-        }
-
-        // Apply district building
-        District builtDistrict = action.getBuiltDistrict();
-        if (builtDistrict != null) {
-            player.incrementGold(-builtDistrict.getCost());
-            player.getHand().remove(builtDistrict);
-            try {
-                player.getCity().addDistrict(builtDistrict);
-            } catch (DuplicatedDistrictException e) {
-                throw new IllegalActionException("Cannot build the same district twice", e);
-            }
         }
     }
 
@@ -260,6 +215,7 @@ public class Game {
 
     /**
      * Returns the list of players
+     *
      * @return The list of players
      */
     public List<Player> getPlayers() {
@@ -268,6 +224,7 @@ public class Game {
 
     /**
      * Returns the deck
+     *
      * @return The deck
      */
     public Deck getDeck() {
@@ -276,9 +233,27 @@ public class Game {
 
     /**
      * Returns which turn is currently being played
+     *
      * @return The turn currently being played
      */
     public int getTurn() {
         return turn;
+    }
+
+
+    public Role getKilledRole() {
+        return killedRole;
+    }
+
+    public void setKilledRole(Role killedRole) {
+        this.killedRole = killedRole;
+    }
+
+    public Role getStolenRole() {
+        return stolenRole;
+    }
+
+    public void setStolenRole(Role stolenRole) {
+        this.stolenRole = stolenRole;
     }
 }

@@ -26,6 +26,8 @@ public class ExpensiveBuilderBehavior implements Behavior {
             Role.ASSASSIN,
             Role.MAGICIEN
     );
+    private static final int GOOD_DISTRICT_THRESHOLD = 4;
+    private District markedDistrict;
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
         return ExpensiveBuilderBehavior.rolesImportance.stream()
@@ -44,9 +46,6 @@ public class ExpensiveBuilderBehavior implements Behavior {
         Role roleToDiscard = ExpensiveBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.discard(roleToDiscard);
     }
-
-    private static final int GOOD_DISTRICT_THRESHOLD = 4;
-    private District markedDistrict;
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
@@ -72,11 +71,11 @@ public class ExpensiveBuilderBehavior implements Behavior {
                 action.takeGold();
             } else if (action.canDraw()) {
                 // Draw cards and choose the best district
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
 
-                District bestDistrict = cards.second() == null || cards.first().getScore() > cards.second().getScore()
+                District bestDistrict = cards.second().isEmpty() || cards.first().getScore() > cards.second().get().getScore()
                         ? cards.first()
-                        : cards.second();
+                        : cards.second().get();
                 action.chooseCard(bestDistrict);
             }
         }

@@ -50,10 +50,10 @@ public class RandomBehavior implements Behavior {
         if (!action.canDraw() || this.randomGenerator.nextBoolean()) {
             action.takeGold();
         } else {
-            Pair<District, District> cards = action.drawCards();
+            Pair<District, Optional<District>> cards = action.drawCards();
 
             // pick a random card between the two options
-            action.chooseCard(cards.second() == null || this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
+            action.chooseCard(cards.second().isEmpty() || this.randomGenerator.nextBoolean() ? cards.first() : cards.second().get());
         }
 
         // randomly choose to build a random affordable district

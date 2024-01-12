@@ -9,7 +9,10 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * A bot that tries to build as fast as possible
@@ -57,7 +60,7 @@ public class FastBuilderBehavior implements Behavior {
 
         // Always Draw a card until HandSize equals eight
         if (action.canDraw() && self.getHandSize() < 8) {
-            Pair<District, District> cards = action.drawCards();
+            Pair<District, Optional<District>> cards = action.drawCards();
             action.chooseCard(cards.first());
         } else {
             // Always take gold after reaching eight card in hand

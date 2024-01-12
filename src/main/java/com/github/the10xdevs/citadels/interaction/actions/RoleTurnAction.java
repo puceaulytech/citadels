@@ -7,15 +7,17 @@ import java.util.Set;
 
 /**
  * A class used by Behaviors to store their choices regarding roles
+ *
  * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
  */
 public class RoleTurnAction {
+    private final Set<Role> availableRoles;
     private Role pickedRole;
     private Role discardedRole;
-    private final Set<Role> availableRoles;
 
     /**
      * Constructs a RoleTurnAction with a set of available roles to choose from
+     *
      * @param availableRoles Set of available roles to choose from
      */
     public RoleTurnAction(Set<Role> availableRoles) {
@@ -24,6 +26,7 @@ public class RoleTurnAction {
 
     /**
      * Pick this role
+     *
      * @param role The role to pick
      */
     public void pick(Role role) throws IllegalActionException {
@@ -36,6 +39,7 @@ public class RoleTurnAction {
 
     /**
      * Discard this role
+     *
      * @param role The role to discard
      */
     public void discard(Role role) throws IllegalActionException {
@@ -48,6 +52,7 @@ public class RoleTurnAction {
 
     /**
      * Returns the role chosen by the player among the available roles
+     *
      * @return The role chosen by the player among the available roles
      */
     public Role getPickedRole() {
@@ -56,6 +61,7 @@ public class RoleTurnAction {
 
     /**
      * Returns the role discarded by the player among the available roles
+     *
      * @return The role discarded by the player among the available roles
      */
     public Role getDiscardedRole() {

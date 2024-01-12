@@ -17,10 +17,11 @@ public final class District {
 
     /**
      * Constructs a District with a name, a {@link Category category}, a cost and a score
-     * @param name The name of the district
+     *
+     * @param name     The name of the district
      * @param category The category of the district
-     * @param cost The cost of the district
-     * @param score The score of the district
+     * @param cost     The cost of the district
+     * @param score    The score of the district
      */
     public District(String name, Category category, int cost, int score) {
         this.name = name;
@@ -31,9 +32,10 @@ public final class District {
 
     /**
      * Create a new district, where its score is equal to its cost
-     * @param name The name of the district
+     *
+     * @param name     The name of the district
      * @param category The category of the district
-     * @param cost The cost of the district
+     * @param cost     The cost of the district
      */
     public District(String name, Category category, int cost) {
         this(name, category, cost, cost);
@@ -79,6 +81,7 @@ public final class District {
 
     /**
      * Returns the category of this district
+     *
      * @return The category of this district
      */
     public Category getCategory() {
@@ -88,6 +91,7 @@ public final class District {
     /**
      * Get the cost of the district i.e. the amount of gold
      * to pay when building it
+     *
      * @return The cost
      */
     public int getCost() {
@@ -97,6 +101,7 @@ public final class District {
     /**
      * Get the score of the district i.e. the amount of point
      * that the district earns at the end of the game
+     *
      * @return The score
      */
     public int getScore() {
@@ -105,6 +110,7 @@ public final class District {
 
     /**
      * Returns the name of this district
+     *
      * @return The name of this district
      */
     public String getName() {
