@@ -190,7 +190,7 @@ public class Game {
             player.incrementGold(goldReward);
 
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
-            RegularTurnAction action = new RegularTurnAction(null, player, deck);
+            RegularTurnAction action = new RegularTurnAction(this, player, deck);
 
             try {
                 player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
