@@ -18,13 +18,15 @@ import java.util.Set;
  * A bot that tries to build as fast as possible
  */
 public class FastBuilderBehavior implements Behavior {
+    private Role previousRole;
+
     private static final List<Role> rolesImportance = List.of(
             Role.ROI,
             Role.CONDOTTIERE,
-            Role.VOLEUR,
             Role.MARCHAND,
             Role.EVEQUE,
             Role.ASSASSIN,
+            Role.VOLEUR,
             Role.MAGICIEN,
             Role.ARCHITECTE
     );
@@ -38,13 +40,19 @@ public class FastBuilderBehavior implements Behavior {
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
         Set<Role> roles = EnumSet.copyOf(availableRoles);
+        if (this.previousRole != null)
+            roles.remove(this.previousRole);
 
         Role roleToPick = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.pick(roleToPick);
         roles.remove(roleToPick);
 
+        if (availableRoles.contains(this.previousRole))
+            roles.add(this.previousRole);
         Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.discard(roleToDiscard);
+
+        this.previousRole = roleToPick;
     }
 
     @Override
