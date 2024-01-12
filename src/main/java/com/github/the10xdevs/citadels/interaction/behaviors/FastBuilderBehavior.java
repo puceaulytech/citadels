@@ -52,7 +52,7 @@ public class FastBuilderBehavior implements Behavior {
 
         // Always Draw a card until HandSize equals eight
         if (action.canDraw() && self.getHandSize() < 8) {
-            Pair<District, District> cards = action.drawCards();
+            Pair<District, Optional<District>> cards = action.drawCards();
             action.chooseCard(cards.first());
         } else {
             // Always take gold after reaching eight card in hand

@@ -13,6 +13,7 @@ import com.github.the10xdevs.citadels.utils.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,7 +87,7 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
                 action.chooseCard(cards.first());
             }
         };
@@ -95,7 +96,7 @@ class RegularTurnActionTest {
         RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck(List.of(a, b)));
         cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null);
         assertEquals(a, action.getChosenCard());
-        assertEquals(b, action.getDiscardedCard());
+        assertEquals(b, action.getDiscardedCard().orElseThrow());
     }
 
     @Test
@@ -108,7 +109,7 @@ class RegularTurnActionTest {
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
                 action.takeGold();
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
                 action.chooseCard(cards.first());
             }
         };
@@ -145,9 +146,9 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                Pair<District, Optional<District>> cards = action.drawCards();
                 action.chooseCard(cards.first());
-                action.chooseCard(cards.second());
+                action.chooseCard(cards.second().orElseThrow());
             }
         };
 
@@ -165,7 +166,7 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                action.drawCards();
                 action.chooseCard(new District("Amphi forum", Category.MERVEILLE, 9));
             }
         };
@@ -184,7 +185,7 @@ class RegularTurnActionTest {
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                Pair<District, District> cards = action.drawCards();
+                action.drawCards();
                 action.chooseCard(null);
             }
         };

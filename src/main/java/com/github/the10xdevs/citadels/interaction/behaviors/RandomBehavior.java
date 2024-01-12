@@ -10,10 +10,7 @@ import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 import com.github.the10xdevs.citadels.utils.RandomUtils;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A bot that does random things
@@ -34,9 +31,9 @@ public class RandomBehavior implements Behavior {
         if (!action.canDraw() || this.randomGenerator.nextBoolean()) {
             action.takeGold();
         } else {
-            Pair<District, District> cards = action.drawCards();
+            Pair<District, Optional<District>> cards = action.drawCards();
 
-            action.chooseCard(cards.second() == null || this.randomGenerator.nextBoolean() ? cards.first() : cards.second());
+            action.chooseCard(cards.second().isEmpty() || this.randomGenerator.nextBoolean() ? cards.first() : cards.second().get());
         }
 
         if (this.randomGenerator.nextBoolean()) {

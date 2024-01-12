@@ -15,6 +15,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Optional;
 
 public class ConsoleLogger {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -120,14 +121,14 @@ public class ConsoleLogger {
         if (action.getBasicAction() == RegularTurnAction.BasicAction.GOLD) {
             this.println("Prend deux pièces d'or");
         } else if (action.getBasicAction() == RegularTurnAction.BasicAction.CARDS) {
-            District discarded = action.getDiscardedCard();
-            if (discarded != null) {
+            Optional<District> discarded = action.getDiscardedCard();
+            if (discarded.isPresent()) {
                 this.println("Pioche deux cartes");
                 this.print("    garde    ");
                 this.printColorized(action.getChosenCard());
                 this.println();
                 this.print("    défausse ");
-                this.printColorized(discarded);
+                this.printColorized(discarded.get());
                 this.println();
             } else {
                 this.println("Pioche une carte");

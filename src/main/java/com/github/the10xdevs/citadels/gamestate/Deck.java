@@ -65,9 +65,9 @@ public class Deck {
      *
      * @return A pair containing the first two elements or some null if the deck has one or no cards
      */
-    public Pair<District, District> peekFirstTwo() {
+    public Pair<District, Optional<District>> peekFirstTwo() {
         Iterator<District> iterator = this.districts.iterator();
-        return new Pair<>(iterator.hasNext() ? iterator.next() : null, iterator.hasNext() ? iterator.next() : null);
+        return new Pair<>(iterator.hasNext() ? iterator.next() : null, iterator.hasNext() ? Optional.of(iterator.next()) : Optional.empty());
     }
 
     /**
