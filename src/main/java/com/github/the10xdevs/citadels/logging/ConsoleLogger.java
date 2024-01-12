@@ -5,6 +5,7 @@ import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
@@ -91,6 +92,12 @@ public class ConsoleLogger {
                 this.print("Vole le rôle ");
                 this.printColorized(voleurAction.getStolenRole());
                 this.println();
+            }
+        } else if (player.getCurrentRole() == Role.MAGICIEN) {
+            MagicienAbilityAction magicienAction = (MagicienAbilityAction) action;
+            if (magicienAction.getExchangedPlayer() != null) {
+                this.print("Echange ses cartes avec ");
+                this.println(magicienAction.getExchangedPlayer().getName());
             }
         }
     }

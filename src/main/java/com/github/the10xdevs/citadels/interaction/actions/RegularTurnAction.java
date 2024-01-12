@@ -1,8 +1,11 @@
 package com.github.the10xdevs.citadels.interaction.actions;
 
+import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Deck;
+import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
-import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.utils.Pair;
 
@@ -10,10 +13,12 @@ import java.util.Optional;
 
 /**
  * A class used by Behaviors to store the actions they want to perform
+ *
  * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
  */
 public class RegularTurnAction {
-    private final SelfPlayerView currentPlayerView;
+    private final Player currentPlayer;
+    private final Deck deck;
     private final Pair<District, Optional<District>> cardsToDraw;
     private final AbilityAction abilityAction;
 
@@ -22,37 +27,43 @@ public class RegularTurnAction {
     private District builtDistrict;
 
     /**
-     * Constructs a RegularTurnAction with a view of the player wanting to play
+     * Constructs a RegularTurnAction with the player wanting to play
      * and the first two cards of the deck
-     * @param playerView A view of the current player
-     * @param cards The first two cards of the deck
-     * @see SelfPlayerView
+     *
+     * @param game          The current game
+     * @param currentPlayer The current player
+     * @param deck          The deck of the game
      */
-    public RegularTurnAction(SelfPlayerView playerView, Pair<District, Optional<District>> cards) {
-        this.currentPlayerView = playerView;
-        this.abilityAction = playerView.getCurrentRole().getAbilityAction();
-        this.cardsToDraw = cards;
+    public RegularTurnAction(Game game, Player currentPlayer, Deck deck) {
+        this.currentPlayer = currentPlayer;
+        this.deck = deck;
+        this.abilityAction = currentPlayer.getCurrentRole().getAbilityAction(currentPlayer, game);
+        this.cardsToDraw = deck.peekFirstTwo();
     }
 
     /**
      * Take gold on this turn
+     *
      * @throws IllegalActionException If the action is invalid
      */
     public void takeGold() throws IllegalActionException {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot take gold because an action has already been performed");
         this.basicAction = BasicAction.GOLD;
+
+        currentPlayer.incrementGold(2);
     }
 
     /**
      * Draw two cards on this turn
+     *
      * @return The two cards
      * @throws IllegalActionException If the action was invalid
      */
     public Pair<District, Optional<District>> drawCards() throws IllegalActionException {
         if (this.basicAction != null)
             throw new IllegalActionException("Cannot draw cards because an action has already been performed");
-        if (this.cardsToDraw.isEmpty())
+        if (!this.canDraw())
             throw new IllegalActionException("Cannot draw cards because the deck is empty");
         this.basicAction = BasicAction.CARDS;
         return this.cardsToDraw;
@@ -60,6 +71,7 @@ public class RegularTurnAction {
 
     /**
      * Choose a card that was drawn
+     *
      * @param district The card to choose
      * @throws IllegalActionException If the action was invalid
      */
@@ -73,35 +85,57 @@ public class RegularTurnAction {
         if (!this.cardsToDraw.first().equals(district) && !this.cardsToDraw.second().equals(Optional.of(district)))
             throw new IllegalActionException("Cannot choose a card that is not at the top of deck");
         this.chosenCard = district;
+
+        // To arrive here there is necessarily at least one card in the deck,
+        // so we can safely draw one card
+        this.deck.drawCard();
+        currentPlayer.getHand().add(this.getChosenCard());
+
+        Optional<District> discardedCard = this.getDiscardedCard();
+        if (discardedCard.isPresent()) {
+            this.deck.drawCard();
+            this.deck.enqueueCard(discardedCard.get());
+        }
     }
 
     /**
      * Build a district on this turn
+     *
      * @param district The district to build
      * @throws IllegalActionException If the action was invalid
      */
     public void buildDistrict(District district) throws IllegalActionException {
         if (district == null)
             throw new IllegalActionException("Cannot build a district that is null");
-        if (!(this.currentPlayerView.getHand().contains(district) || district.equals(this.chosenCard)))
+        if (!currentPlayer.getHand().contains(district))
             throw new IllegalActionException("Cannot build a district that is not in hand");
-        if ((this.currentPlayerView.getGold() + (this.basicAction == BasicAction.GOLD ? 2 : 0)) < district.getCost())
+        if (currentPlayer.getGold() < district.getCost())
             throw new IllegalActionException("Cannot build district without enough gold");
         if (this.builtDistrict != null)
             throw new IllegalActionException("Cannot build multiple districts in one turn");
         this.builtDistrict = district;
+
+        currentPlayer.incrementGold(-builtDistrict.getCost());
+        currentPlayer.getHand().remove(builtDistrict);
+        try {
+            currentPlayer.getCity().addDistrict(builtDistrict);
+        } catch (DuplicatedDistrictException e) {
+            throw new IllegalActionException("Cannot build the same district twice", e);
+        }
     }
 
     /**
      * Returns true if there is at least one card in the deck
+     *
      * @return true if there is at least one card in the deck
      */
     public boolean canDraw() {
-        return !this.cardsToDraw.isEmpty();
+        return this.cardsToDraw.first() != null;
     }
 
     /**
      * Returns the Ability Action of the current player
+     *
      * @return The Ability Action of the current player
      * @see AbilityAction
      */
@@ -111,6 +145,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the basic action done by the player (either drawing or picking gold)
+     *
      * @return The basic action done by the player
      */
     public BasicAction getBasicAction() {
@@ -119,6 +154,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the card chosen by the player between the two cards of the deck
+     *
      * @return The card chosen by the player between the two cards of the deck
      */
     public District getChosenCard() {
@@ -127,6 +163,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the card discarded by the player between the two cards of the deck
+     *
      * @return The card discarded by the player between the two cards of the deck
      */
     public Optional<District> getDiscardedCard() {
@@ -135,6 +172,7 @@ public class RegularTurnAction {
 
     /**
      * Returns the district built by the current player
+     *
      * @return The district built by the current player
      */
     public District getBuiltDistrict() {

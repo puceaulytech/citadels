@@ -6,13 +6,13 @@ import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SelfPlayerViewTest {
     @SuppressWarnings("DataFlowIssue")
     @Test
     void cannotAddCard() {
-        SelfPlayerView playerView =  new SelfPlayerView(new Player(new FastBuilderBehavior()));
+        SelfPlayerView playerView = new SelfPlayerView(new Player(new FastBuilderBehavior()));
         assertThrows(Exception.class, () -> playerView.getHand().add(new District("de", Category.NOBLE, 10)));
     }
 }

@@ -11,7 +11,6 @@ import com.github.the10xdevs.citadels.utils.Pair;
 import com.github.the10xdevs.citadels.utils.RandomUtils;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * A bot that does random things
