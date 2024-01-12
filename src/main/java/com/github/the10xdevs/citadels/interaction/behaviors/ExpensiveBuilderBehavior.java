@@ -81,7 +81,7 @@ public class ExpensiveBuilderBehavior implements Behavior {
         }
 
         // If it has role thief, steals from role king
-        if (self.getCurrentRole() == Role.VOLEUR) {
+        if (self.getCurrentRole() == Role.VOLEUR && (game.getKilledRole().isEmpty() || game.getKilledRole().get() != Role.ROI)) {
             VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
             ability.stealFrom(Role.ROI);
         }

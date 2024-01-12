@@ -241,16 +241,16 @@ public class Game {
     }
 
 
-    public Role getKilledRole() {
-        return killedRole;
+    public Optional<Role> getKilledRole() {
+        return Optional.ofNullable(this.killedRole);
     }
 
     public void setKilledRole(Role killedRole) {
         this.killedRole = killedRole;
     }
 
-    public Role getStolenRole() {
-        return stolenRole;
+    public Optional<Role> getStolenRole() {
+        return Optional.ofNullable(this.stolenRole);
     }
 
     public void setStolenRole(Role stolenRole) {

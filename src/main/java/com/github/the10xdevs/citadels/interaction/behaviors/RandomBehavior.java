@@ -37,12 +37,24 @@ public class RandomBehavior implements Behavior {
             // kill a random role other than himself
             if (self.getCurrentRole() == Role.ASSASSIN) {
                 AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
-                ability.kill(RandomUtils.chooseFrom(this.randomGenerator, Arrays.stream(Role.values()).filter((role -> role != Role.ASSASSIN)).toList()));
+
+                List<Role> rolesToKill = Arrays.stream(Role.values())
+                        .filter(role -> role != Role.ASSASSIN)
+                        .toList();
+
+                ability.kill(RandomUtils.chooseFrom(this.randomGenerator, rolesToKill));
             }
             // steal from a random role other than himself and the assassin
             else if (self.getCurrentRole() == Role.VOLEUR) {
                 VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
-                ability.stealFrom(RandomUtils.chooseFrom(this.randomGenerator, Arrays.stream(Role.values()).filter((role -> role != Role.VOLEUR && role != Role.ASSASSIN)).toList()));
+
+                List<Role> rolesToSteal = Arrays.stream(Role.values())
+                        .filter(role -> role != Role.VOLEUR)
+                        .filter(role -> role != Role.ASSASSIN)
+                        .filter(role -> gameState.getKilledRole().isEmpty() || gameState.getKilledRole().get() != role)
+                        .toList();
+
+                ability.stealFrom(RandomUtils.chooseFrom(this.randomGenerator, rolesToSteal));
             }
         }
 

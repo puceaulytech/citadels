@@ -1,8 +1,10 @@
 package com.github.the10xdevs.citadels.interaction.views;
 
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * An immutable view of a Game
@@ -22,5 +24,9 @@ public final class GameView {
 
     public int getDeckSize() {
         return this.game.getDeck().getCardsCount();
+    }
+
+    public Optional<Role> getKilledRole() {
+        return this.game.getKilledRole();
     }
 }

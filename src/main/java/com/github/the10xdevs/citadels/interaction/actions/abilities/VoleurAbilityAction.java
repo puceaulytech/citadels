@@ -22,7 +22,7 @@ public class VoleurAbilityAction extends AbilityAction {
             throw new IllegalActionException("No role provided");
         if (role == Role.ASSASSIN)
             throw new IllegalActionException("Cannot steal from the assassin");
-        if (role == this.game.getKilledRole())
+        if (this.game.getKilledRole().isPresent() && role == this.game.getKilledRole().get())
             throw new IllegalActionException("Cannot steal the killed role");
 
         this.stolenRole = role;
