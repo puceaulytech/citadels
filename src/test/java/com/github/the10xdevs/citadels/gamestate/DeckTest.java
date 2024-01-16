@@ -15,11 +15,11 @@ class DeckTest {
     District romain = new District("Baraque de Romain", Category.MERVEILLE, 10);
     District logan = new District("Baraque de Logan", Category.MILITAIRE, 10);
     District vahan = new District("Baraque de Vahan", Category.NOBLE, 10);
-    Deck deck;
+    Deck<District> deck;
 
     @BeforeEach
     void setup() {
-        deck = new Deck(List.of(romain, logan, vahan));
+        deck = new Deck<>(List.of(romain, logan, vahan));
     }
 
     @Test
@@ -51,13 +51,13 @@ class DeckTest {
 
     @Test
     void drawWhenEmpty() {
-        Deck deck = new Deck(List.of());
+        Deck<District> deck = new Deck<>(List.of());
         assertThrows(IllegalStateException.class, deck::drawCard);
     }
 
     @Test
     void pickTwoWhenAlmostEmpty() {
-        Deck deck = new Deck(List.of(new District("Baraque", Category.MERVEILLE, 10)));
+        Deck<District> deck = new Deck<>(List.of(new District("Baraque", Category.MERVEILLE, 10)));
         Pair<District, Optional<District>> pair = deck.peekFirstTwo();
         assertNotNull(pair.first());
         assertTrue(pair.second().isEmpty());
