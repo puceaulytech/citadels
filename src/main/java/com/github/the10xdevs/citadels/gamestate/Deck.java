@@ -11,6 +11,8 @@ import java.util.*;
 public class Deck {
     private final Deque<District> districts = new ArrayDeque<>();
 
+    public Deck() {}
+
     /**
      * Create a new deck with initial values
      *
