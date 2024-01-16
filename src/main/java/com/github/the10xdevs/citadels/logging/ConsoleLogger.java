@@ -3,10 +3,7 @@ package com.github.the10xdevs.citadels.logging;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.*;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
@@ -98,6 +95,14 @@ public class ConsoleLogger {
             if (magicienAction.getExchangedPlayer() != null) {
                 this.print("Echange ses cartes avec ");
                 this.println(magicienAction.getExchangedPlayer().getName());
+            }
+        } else if (player.getCurrentRole() == Role.CONDOTTIERE) {
+            CondottiereAbilityAction condottiereAction = (CondottiereAbilityAction) action;
+            if (condottiereAction.getTargetDistrict() != null) {
+                this.print("Détruit ");
+                this.printColorized(condottiereAction.getTargetDistrict());
+                this.print(" chez ");
+                this.println(condottiereAction.getTargetPlayer().getName());
             }
         }
     }
