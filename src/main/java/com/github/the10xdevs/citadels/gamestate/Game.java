@@ -132,7 +132,7 @@ public class Game {
      * matching his current role
      *
      * @param player The player
-     * @return The amount of gold the player is suppose to gain
+     * @return The amount of gold the player is supposed to gain
      */
     private int checkMatchingDistricts(Player player) {
         int goldReward = 0;
