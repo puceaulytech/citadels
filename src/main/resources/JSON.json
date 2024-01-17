@@ -1,0 +1,164 @@
+[
+  {
+    "name": "Bibliothèque",
+    "category": "MERVEILLE",
+    "cost": 6,
+    "score": 6
+  },
+  {
+    "name": "Caserne",
+    "category": "MILITAIRE",
+    "cost": 3,
+    "score": 3
+  },
+  {
+    "name": "Cathédrale",
+    "category": "RELIGIEUX",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Château",
+    "category": "NOBLE",
+    "cost": 4,
+    "score": 4
+  },
+  {
+    "name": "Cimetière",
+    "category": "MERVEILLE",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Comptoir",
+    "category": "MARCHAND",
+    "cost": 3,
+    "score": 3
+  },
+  {
+    "name": "Cour des miracles",
+    "category": "MERVEILLE",
+    "cost": 2,
+    "score": 2
+  },
+  {
+    "name": "Donjon",
+    "category": "MERVEILLE",
+    "cost": 3,
+    "score": 3
+  },
+  {
+    "name": "Dracoport",
+    "category": "MERVEILLE",
+    "cost": 6,
+    "score": 8
+  },
+  {
+    "name": "Echoppe",
+    "category": "MARCHAND",
+    "cost": 2,
+    "score": 2
+  },
+  {
+    "name": "Ecole de magie",
+    "category": "MERVEILLE",
+    "cost": 6,
+    "score": 6
+  },
+  {
+    "name": "Eglise",
+    "category": "RELIGIEUX",
+    "cost": 2,
+    "score": 2
+  },
+  {
+    "name": "Forge",
+    "category": "MERVEILLE",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Forteresse",
+    "category": "MILITAIRE",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Hotel de ville",
+    "category": "MARCHAND",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Laboratoire",
+    "category": "MERVEILLE",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Manoir",
+    "category": "NOBLE",
+    "cost": 3,
+    "score": 3
+  },
+  {
+    "name": "Marché",
+    "category": "MARCHAND",
+    "cost": 2,
+    "score": 2
+  },
+  {
+    "name": "Monastère",
+    "category": "RELIGIEUX",
+    "cost": 3,
+    "score": 3
+  },
+  {
+    "name": "Observatoire",
+    "category": "MERVEILLE",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Palais",
+    "category": "NOBLE",
+    "cost": 5,
+    "score": 5
+  },
+  {
+    "name": "Port",
+    "category": "MARCHAND",
+    "cost": 4,
+    "score": 4
+  },
+  {
+    "name": "Prison",
+    "category": "MILITAIRE",
+    "cost": 2,
+    "score": 2
+  },
+  {
+    "name": "Taverne",
+    "category": "MARCHAND",
+    "cost": 1,
+    "score": 1
+  },
+  {
+    "name": "Temple",
+    "category": "RELIGIEUX",
+    "cost": 1,
+    "score": 1
+  },
+  {
+    "name": "Tour de guet",
+    "category": "MILITAIRE",
+    "cost": 1,
+    "score": 1
+  },
+  {
+    "name": "Université",
+    "category": "MERVEILLE",
+    "cost": 6,
+    "score": 8
+  }
+]

@@ -1,4 +1,4 @@
-package com.github.the10xdevs.citadels.resources;
+package com.github.the10xdevs.citadels.districtImporter;
 
 import com.github.the10xdevs.citadels.models.District;
 import com.google.gson.Gson;
