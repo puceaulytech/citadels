@@ -27,7 +27,9 @@ public class RandomBehavior implements Behavior {
         action.pick(RandomUtils.chooseFrom(this.randomGenerator, roles));
         roles.remove(action.getPickedRole());
         // discard a random role
-        action.discard(RandomUtils.chooseFrom(this.randomGenerator, roles));
+        if (gameState.getPlayers().size() <= 3) {
+            action.discard(RandomUtils.chooseFrom(this.randomGenerator, roles));
+        }
     }
 
     @Override

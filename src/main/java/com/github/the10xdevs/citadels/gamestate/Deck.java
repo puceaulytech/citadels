@@ -77,4 +77,12 @@ public class Deck<E> {
     public boolean isEmpty() {
         return this.elements.isEmpty();
     }
+
+    public boolean remove(E element) {
+        return this.elements.remove(element);
+    }
+
+    public Deque<E> getElements() {
+        return this.elements;
+    }
 }

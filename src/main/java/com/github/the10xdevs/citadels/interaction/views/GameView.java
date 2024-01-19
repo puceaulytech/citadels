@@ -5,6 +5,7 @@ import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * An immutable view of a Game
@@ -24,6 +25,10 @@ public final class GameView {
 
     public int getDeckSize() {
         return this.game.getDeck().getCardsCount();
+    }
+
+    public Set<Role> getRolesFacingUp() {
+        return this.game.getRolesFacingUp();
     }
 
     public Optional<Role> getKilledRole() {
