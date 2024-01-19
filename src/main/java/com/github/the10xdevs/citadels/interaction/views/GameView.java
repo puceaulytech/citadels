@@ -19,7 +19,13 @@ public final class GameView {
     }
 
     public List<PlayerView> getPlayers() {
-        return this.game.getPlayers().stream().map(PlayerView::new).toList();
+        return this.game.getPlayers()
+                .stream()
+                .map(player -> new PlayerView(
+                        player,
+                        this.game.getCurrentTurnOrder() >= player.getCurrentRole().getTurnOrder()
+                ))
+                .toList();
     }
 
     public int getDeckSize() {

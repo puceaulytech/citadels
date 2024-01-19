@@ -21,6 +21,7 @@ public class Game {
     private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
+    private int currentTurnOrder;
 
     private Role killedRole;
     private Role stolenRole;
@@ -96,6 +97,7 @@ public class Game {
     private void initTurn() {
         this.killedRole = null;
         this.stolenRole = null;
+        this.currentTurnOrder = 1;
     }
 
     /**
@@ -198,6 +200,8 @@ public class Game {
                 throw new IllegalActionException("Player failed to play turn", e);
             }
 
+            this.currentTurnOrder++;
+
             this.logger.logRegularTurnAction(player, action);
         }
     }
@@ -240,6 +244,9 @@ public class Game {
         return turn;
     }
 
+    public int getCurrentTurnOrder() {
+        return this.currentTurnOrder;
+    }
 
     public Optional<Role> getKilledRole() {
         return Optional.ofNullable(this.killedRole);
@@ -256,4 +263,5 @@ public class Game {
     public void setStolenRole(Role stolenRole) {
         this.stolenRole = stolenRole;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.github.the10xdevs.citadels.interaction.views;
 
 import com.github.the10xdevs.citadels.gamestate.Player;
+import com.github.the10xdevs.citadels.models.Role;
 
 /**
  * An immutable view of a Player
@@ -9,9 +10,15 @@ import com.github.the10xdevs.citadels.gamestate.Player;
  */
 public class PlayerView {
     protected final Player player;
+    private final boolean roleKnownToAll;
 
     public PlayerView(Player player) {
+        this(player, false);
+    }
+
+    public PlayerView(Player player, boolean roleKnownToAll) {
         this.player = player;
+        this.roleKnownToAll = roleKnownToAll;
     }
 
     public int getGold() {
@@ -32,5 +39,9 @@ public class PlayerView {
 
     public String getName() {
         return this.player.getName();
+    }
+
+    public Role getCurrentRole() {
+        return this.roleKnownToAll ? this.player.getCurrentRole() : null;
     }
 }

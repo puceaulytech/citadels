@@ -3,7 +3,6 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.CondottiereAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
