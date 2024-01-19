@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.views;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.models.Role;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,7 +40,7 @@ public final class GameView {
     }
 
     public Set<Role> getRolesFacingUp() {
-        return this.game.getRolesFacingUp();
+        return Collections.unmodifiableSet(this.game.getRolesFacingUp());
     }
 
     public Optional<Role> getKilledRole() {
