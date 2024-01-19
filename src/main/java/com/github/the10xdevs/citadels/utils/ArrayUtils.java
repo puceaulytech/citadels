@@ -3,6 +3,10 @@ package com.github.the10xdevs.citadels.utils;
 import java.util.List;
 
 public class ArrayUtils {
+    private ArrayUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Add an element multiple times into a list
      *
