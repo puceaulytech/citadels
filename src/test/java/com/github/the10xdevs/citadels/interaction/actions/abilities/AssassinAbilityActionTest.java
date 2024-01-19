@@ -22,7 +22,7 @@ class AssassinAbilityActionTest {
     void use() throws IllegalActionException {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
 
             }
 
@@ -38,7 +38,7 @@ class AssassinAbilityActionTest {
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.ASSASSIN);
 
-        RegularTurnAction action = new RegularTurnAction(game, player, new Deck(List.of()));
+        RegularTurnAction action = new RegularTurnAction(game, player, new Deck<>());
         player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(game));
 
         AssassinAbilityAction assassinAction = (AssassinAbilityAction) action.getAbilityAction();

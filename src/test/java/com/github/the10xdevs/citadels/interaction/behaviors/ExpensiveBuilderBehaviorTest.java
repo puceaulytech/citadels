@@ -69,7 +69,7 @@ class ExpensiveBuilderBehaviorTest {
 
     @Test
     void testPlayTurnMarkingDistrict() throws IllegalActionException {
-        Deck<District> deck = new Deck<>(List.of());
+        Deck<District> deck = new Deck<>();
 
         District notGoodEnough = new District("DaHood", Category.MARCHAND, 2);
         District goodButNotBest = new District("NobleDistrict", Category.NOBLE, 7);

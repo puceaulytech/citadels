@@ -51,7 +51,7 @@ class DeckTest {
 
     @Test
     void drawWhenEmpty() {
-        Deck<District> deck = new Deck<>(List.of());
+        Deck<District> deck = new Deck<>();
         assertThrows(IllegalStateException.class, deck::drawCard);
     }
 
