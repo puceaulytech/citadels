@@ -2,10 +2,7 @@ package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.*;
 
 /**
  * A role in the game
@@ -73,6 +70,7 @@ public enum Role {
             case ASSASSIN -> new AssassinAbilityAction(game);
             case VOLEUR -> new VoleurAbilityAction(game);
             case MAGICIEN -> new MagicienAbilityAction(currentPlayer, game);
+            case CONDOTTIERE -> new CondottiereAbilityAction(currentPlayer, game);
             default -> null;
         };
     }

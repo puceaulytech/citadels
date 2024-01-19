@@ -27,12 +27,12 @@ public class City implements Iterable<District> {
     }
 
     /**
-     * Returns an immutable collection of all the districts in this City
+     * Returns a collection of all the districts in this City
      *
-     * @return An immutable collection of all the districts in this City
+     * @return A collection of all the districts in this City
      */
     public Set<District> getDistricts() {
-        return Collections.unmodifiableSet(this.districts);
+        return this.districts;
     }
 
     /**

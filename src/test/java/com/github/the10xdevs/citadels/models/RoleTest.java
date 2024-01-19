@@ -1,6 +1,7 @@
 package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.CondottiereAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,6 +21,8 @@ class RoleTest {
             assertInstanceOf(VoleurAbilityAction.class, targetRole.getAbilityAction(null, null));
         } else if (targetRole == Role.MAGICIEN) {
             assertInstanceOf(MagicienAbilityAction.class, targetRole.getAbilityAction(null, null));
+        } else if (targetRole == Role.CONDOTTIERE) {
+            assertInstanceOf(CondottiereAbilityAction.class, targetRole.getAbilityAction(null, null));
         } else {
             assertNull(targetRole.getAbilityAction(null, null));
         }
