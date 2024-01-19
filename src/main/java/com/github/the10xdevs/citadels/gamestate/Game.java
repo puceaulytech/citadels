@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Game {
     private final List<Player> players = new ArrayList<>();
-    private final Deck deck = new Deck(District.all());
+    private final Deck<District> deck = new Deck<>(District.all());
     private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
@@ -25,6 +25,8 @@ public class Game {
 
     private Role killedRole;
     private Role stolenRole;
+
+    private final Set<Role> rolesFacingUp = EnumSet.noneOf(Role.class);
 
     /**
      * Constructs a Game with a list of Behaviors that will battle against each other
@@ -100,23 +102,50 @@ public class Game {
         this.currentTurnOrder = 0;
     }
 
+    private Role drawUntilNotKing(Deck<Role> deck) {
+        Role r = deck.drawCard();
+        while (r == Role.ROI) {
+            deck.enqueueCard(r);
+            r = deck.drawCard();
+        }
+        return r;
+    }
+
     /**
      * Makes all the players choose their role
      *
      * @throws IllegalActionException if a player has performed an action that is not permitted
      */
     private void playRoleTurn() throws IllegalActionException {
-        // Create a set with all available roles
-        Set<Role> roles = EnumSet.allOf(Role.class);
+        // Create a deck all available roles
+        Deck<Role> roles = new Deck<>(Arrays.asList(Role.values()));
+        roles.shuffle();
+        // Put a random role facing down
+        Role roleFacingDown = roles.drawCard();
+        // Clear roles facing up from last turn
+        this.rolesFacingUp.clear();
+        // Put 0, 1 or 2 roles facing up depending on the number of players
+        if (this.players.size() == 5) {
+            this.rolesFacingUp.add(this.drawUntilNotKing(roles));
+        }
+        if (this.players.size() == 4) {
+            this.rolesFacingUp.add(this.drawUntilNotKing(roles));
+            this.rolesFacingUp.add(this.drawUntilNotKing(roles));
+        }
+
         for (int i = 0; i < this.players.size(); i++) {
             // Get next player to play
             Player player = this.players.get((i + firstPlayerIndex) % this.players.size());
 
-
-            RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(roles));
+            Set<Role> availableRoles = EnumSet.copyOf(roles.getElements());
+            // If this is the turn of the seventh player, add the card facing down
+            if (i == 6) {
+                availableRoles.add(roleFacingDown);
+            }
+            RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
             try {
-                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(roles));
+                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(availableRoles));
             } catch (Exception e) {
                 throw new IllegalActionException("Player failed to pick role", e);
             }
@@ -124,8 +153,9 @@ public class Game {
             this.logger.logRoleTurnAction(i, player, roleTurnAction);
 
             player.setCurrentRole(roleTurnAction.getPickedRole());
-            roles.remove(roleTurnAction.getPickedRole());
-            roles.remove(roleTurnAction.getDiscardedRole());
+            if (this.players.size() == 2)
+                roles.remove(roleTurnAction.getDiscardedRole());
+            roles.remove(roleTurnAction.getPickedRole()); // if the 7th player chose the card facing down nothing happens here
         }
     }
 
@@ -134,7 +164,7 @@ public class Game {
      * matching his current role
      *
      * @param player The player
-     * @return The amount of gold the player is suppose to gain
+     * @return The amount of gold the player is supposed to gain
      */
     private int checkMatchingDistricts(Player player) {
         int goldReward = 0;
@@ -231,7 +261,7 @@ public class Game {
      *
      * @return The deck
      */
-    public Deck getDeck() {
+    public Deck<District> getDeck() {
         return deck;
     }
 
@@ -246,6 +276,10 @@ public class Game {
 
     public int getCurrentTurnOrder() {
         return this.currentTurnOrder;
+    }
+
+    public Set<Role> getRolesFacingUp() {
+        return this.rolesFacingUp;
     }
 
     public Optional<Role> getKilledRole() {

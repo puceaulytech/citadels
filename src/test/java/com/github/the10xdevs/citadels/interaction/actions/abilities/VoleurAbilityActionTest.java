@@ -23,7 +23,7 @@ class VoleurAbilityActionTest {
     void use() throws IllegalActionException {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
 
             }
 
@@ -39,7 +39,7 @@ class VoleurAbilityActionTest {
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.VOLEUR);
 
-        RegularTurnAction action = new RegularTurnAction(game, player, new Deck(List.of()));
+        RegularTurnAction action = new RegularTurnAction(game, player, new Deck<>());
         player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(game));
 
         VoleurAbilityAction voleurAction = (VoleurAbilityAction) action.getAbilityAction();
@@ -65,7 +65,7 @@ class VoleurAbilityActionTest {
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.VOLEUR);
 
-        RegularTurnAction action = new RegularTurnAction(null, player, new Deck(List.of()));
+        RegularTurnAction action = new RegularTurnAction(null, player, new Deck<>());
         assertThrows(IllegalActionException.class, () -> player.getBehavior().playTurn(action, new SelfPlayerView(player), null));
     }
 }
