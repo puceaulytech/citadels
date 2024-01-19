@@ -68,15 +68,17 @@ public class RandomBehavior implements Behavior {
 
                 PlayerView targetPlayer = RandomUtils.chooseFrom(this.randomGenerator, targetPlayers);
 
-                List<District> targetDistricts = targetPlayer.getCity().getDistricts()
-                        .stream()
-                        .filter(district -> district.getCost() - 1 <= self.getGold())
-                        .toList();
+                if (targetPlayer != null) {
+                    List<District> targetDistricts = targetPlayer.getCity().getDistricts()
+                            .stream()
+                            .filter(district -> district.getCost() - 1 <= self.getGold())
+                            .toList();
 
-                if (!targetDistricts.isEmpty()) {
-                    District targetDistrict = RandomUtils.chooseFrom(this.randomGenerator, targetDistricts);
+                    if (!targetDistricts.isEmpty()) {
+                        District targetDistrict = RandomUtils.chooseFrom(this.randomGenerator, targetDistricts);
 
-                    ability.destroy(targetPlayer, targetDistrict);
+                        ability.destroy(targetPlayer, targetDistrict);
+                    }
                 }
             }
         }

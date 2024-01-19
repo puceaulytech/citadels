@@ -72,16 +72,25 @@ public class ExpensiveBuilderBehavior implements Behavior {
             } else if (action.canDraw()) {
                 // Draw cards and choose the best district
                 Pair<District, Optional<District>> cards = action.drawCards();
+                District bestDistrict;
 
-                District bestDistrict = cards.second().isEmpty() || cards.first().getScore() > cards.second().get().getScore()
-                        ? cards.first()
-                        : cards.second().get();
+                District firstCard = cards.first();
+                Optional<District> secondCard = cards.second();
+
+                if (secondCard.isEmpty() || firstCard.getScore() > secondCard.get().getScore()) {
+                    bestDistrict = cards.first();
+                } else {
+                    bestDistrict = secondCard.get();
+                }
+
                 action.chooseCard(bestDistrict);
             }
         }
 
+        Optional<Role> killedRole = game.getKilledRole();
+
         // If it has role thief, steals from role king
-        if (self.getCurrentRole() == Role.VOLEUR && (game.getKilledRole().isEmpty() || game.getKilledRole().get() != Role.ROI)) {
+        if (self.getCurrentRole() == Role.VOLEUR && (killedRole.isEmpty() || killedRole.get() != Role.ROI)) {
             VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
             ability.stealFrom(Role.ROI);
         }

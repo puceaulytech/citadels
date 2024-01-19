@@ -4,6 +4,8 @@ import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.models.Role;
 
+import java.util.Optional;
+
 public class VoleurAbilityAction extends AbilityAction {
     private Role stolenRole;
 
@@ -22,7 +24,10 @@ public class VoleurAbilityAction extends AbilityAction {
             throw new IllegalActionException("No role provided");
         if (role == Role.ASSASSIN)
             throw new IllegalActionException("Cannot steal from the assassin");
-        if (this.game.getKilledRole().isPresent() && role == this.game.getKilledRole().get())
+
+        Optional<Role> killedRole = this.game.getKilledRole();
+
+        if (killedRole.isPresent() && role == killedRole.get())
             throw new IllegalActionException("Cannot steal the killed role");
 
         this.stolenRole = role;
