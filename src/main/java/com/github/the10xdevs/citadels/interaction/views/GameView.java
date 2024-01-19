@@ -22,10 +22,15 @@ public final class GameView {
     public List<PlayerView> getPlayers() {
         return this.game.getPlayers()
                 .stream()
-                .map(player -> new PlayerView(
-                        player,
-                        this.game.getCurrentTurnOrder() >= player.getCurrentRole().getTurnOrder()
-                ))
+                .map(player -> {
+                    if (player.getCurrentRole() == null)
+                        return new PlayerView(player);
+
+                    return new PlayerView(
+                            player,
+                            this.game.getCurrentTurnOrder() >= player.getCurrentRole().getTurnOrder()
+                    );
+                })
                 .toList();
     }
 
