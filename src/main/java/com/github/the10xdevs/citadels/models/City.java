@@ -2,7 +2,6 @@ package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
