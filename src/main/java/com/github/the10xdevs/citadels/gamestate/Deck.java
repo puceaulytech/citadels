@@ -10,6 +10,8 @@ import java.util.*;
 public class Deck<E> {
     private final Deque<E> elements = new ArrayDeque<>();
 
+    public Deck() {}
+
     /**
      * Create a new deck with initial values
      *

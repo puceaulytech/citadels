@@ -19,13 +19,10 @@ public class MagicienAbilityAction extends AbilityAction {
     public void exchangeHandWith(PlayerView targetPlayer) throws IllegalActionException {
         this.exchangedPlayer = targetPlayer;
 
-        Optional<Player> player = this.game.getPlayers()
-                .stream()
-                .filter(targetPlayer::represents)
-                .findFirst();
+        Optional<Player> player = this.findPlayerByView(targetPlayer);
 
         if (player.isEmpty())
-            throw new IllegalActionException("Provided player view does not refer that an existing player");
+            throw new IllegalActionException("Provided player view does not refer to an existing player");
 
         this.currentPlayer.swapHandWith(player.get());
     }
