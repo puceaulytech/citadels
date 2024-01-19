@@ -24,6 +24,8 @@ public interface Behavior {
     void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException;
 
 
+
+
     /**
      * Play a regular turn
      * <br>

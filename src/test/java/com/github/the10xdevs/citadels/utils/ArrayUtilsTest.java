@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 class ArrayUtilsTest {
 
@@ -19,5 +21,6 @@ class ArrayUtilsTest {
         assertEquals(4, example.stream().filter(i -> i == 4).count());
         assertEquals(2, example.stream().filter(i -> i == 3).count());
         assertEquals(1, example.stream().filter(i -> i == 88).count());
+
     }
 }
