@@ -29,7 +29,8 @@ import static org.mockito.Mockito.when;
 class ExpensiveBuilderBehaviorTest {
     ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
     Game game = new Game(List.of());
-    @Mock GameView state = mock(GameView.class);
+    @Mock
+    GameView state = mock(GameView.class);
 
     Player testPlayer;
     SelfPlayerView selfTestPlayer;

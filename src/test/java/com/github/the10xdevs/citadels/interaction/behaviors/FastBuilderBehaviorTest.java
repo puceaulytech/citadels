@@ -1,6 +1,5 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
-import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
@@ -9,7 +8,6 @@ import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
-import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
@@ -23,7 +21,6 @@ import org.mockito.Mock;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +28,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class FastBuilderBehaviorTest {
-    @Mock GameView state = mock(GameView.class);
+    @Mock
+    GameView state = mock(GameView.class);
     FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
     PlayerView view = new PlayerView(new Player(fastBuilderBehavior));
 
@@ -98,18 +96,6 @@ class FastBuilderBehaviorTest {
         assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, null, state, availableRoles));
 
         // Check if the picked and discarded roles are valid
-        assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
-        assertTrue(availableRoles.contains(roleTurnAction.getDiscardedRole()));
-        assertNotEquals(roleTurnAction.getPickedRole(), roleTurnAction.getDiscardedRole());
-    }
-
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
-    void pickRoleTest_FastBuilder(Set<Role> availableRoles) {
-        FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
-        RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
-
-        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, null, null, availableRoles));
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
         assertTrue(availableRoles.contains(roleTurnAction.getDiscardedRole()));
         assertNotEquals(roleTurnAction.getPickedRole(), roleTurnAction.getDiscardedRole());
@@ -192,13 +178,18 @@ class FastBuilderBehaviorTest {
         assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
         assertNotNull(regularTurnAction.getBuiltDistrict());
     }
+
     @Test
     void pickRoleTest() {
         FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         RoleTurnAction roleTurnAction = new RoleTurnAction(EnumSet.allOf(Role.class));
         SelfPlayerView selfPlayerView = new SelfPlayerView(new Player(fastBuilderBehavior));
         GameView gameView = new GameView(new Game(List.of(fastBuilderBehavior)));
-
+        try {
+            roleTurnAction.discard(Role.MAGICIEN);
+        } catch (IllegalActionException e) {
+            throw new RuntimeException(e);
+        }
         assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, selfPlayerView, gameView, EnumSet.allOf(Role.class)));
         assertNotNull(roleTurnAction.getPickedRole());
         assertNotNull(roleTurnAction.getDiscardedRole());
