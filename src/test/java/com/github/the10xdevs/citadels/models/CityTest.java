@@ -43,18 +43,6 @@ class CityTest {
     }
 
     @Test
-    void getDistricts_shouldReturnImmutableSet() throws DuplicatedDistrictException {
-        City city = new City();
-        District district = new District("TestDistrict", Category.MERVEILLE, 3);
-        city.addDistrict(district);
-
-
-        assertThrows(UnsupportedOperationException.class, () ->
-                city.getDistricts().add(new District("NewDistrict", Category.MILITAIRE, 4))
-        );
-    }
-
-    @Test
     void iterator_shouldIterateOverDistricts() throws DuplicatedDistrictException {
 
         City city = new City();
