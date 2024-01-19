@@ -97,7 +97,7 @@ public class Game {
     private void initTurn() {
         this.killedRole = null;
         this.stolenRole = null;
-        this.currentTurnOrder = 1;
+        this.currentTurnOrder = 0;
     }
 
     /**
@@ -200,7 +200,7 @@ public class Game {
                 throw new IllegalActionException("Player failed to play turn", e);
             }
 
-            this.currentTurnOrder++;
+            this.currentTurnOrder = player.getCurrentRole().getTurnOrder();
 
             this.logger.logRegularTurnAction(player, action);
         }
