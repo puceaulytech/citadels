@@ -4,21 +4,27 @@ import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
+import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class RandomBehaviorTest {
     @BeforeEach
@@ -38,16 +44,19 @@ class RandomBehaviorTest {
                 )));
 
     }
+    @Mock GameView state = mock(GameView.class);
+    RandomBehavior dummyBehavior = new RandomBehavior();
+    PlayerView view = new PlayerView(new Player(dummyBehavior));
+
     @ParameterizedTest
     @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
     void pickRoleTest(Set<Role> availableRoles) {
-        RandomBehavior dummyBehavior = new RandomBehavior();
-
         // Create a RoleTurnAction
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, null, availableRoles));
+        when(state.getPlayers()).thenReturn(List.of(view, view));
+        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, state, availableRoles));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));

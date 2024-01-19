@@ -7,6 +7,7 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
@@ -15,25 +16,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ExpensiveBuilderBehaviorTest {
     ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
     Game game = new Game(List.of());
+    @Mock GameView state = mock(GameView.class);
 
     Player testPlayer;
     SelfPlayerView selfTestPlayer;
+    PlayerView testView;
 
     @BeforeEach
     void initPlayer() {
         testPlayer = new Player(behavior);
         selfTestPlayer = new SelfPlayerView(testPlayer);
+        testView = new PlayerView(testPlayer);
         testPlayer.setCurrentRole(Role.ARCHITECTE);
+
+        when(state.getPlayers()).thenReturn(List.of(testView, testView));
     }
 
     @ParameterizedTest
@@ -43,7 +52,7 @@ class ExpensiveBuilderBehaviorTest {
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, null, availableRoles));
+        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, state, availableRoles));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -53,14 +62,14 @@ class ExpensiveBuilderBehaviorTest {
 
     @Test
     void testPlayTurn() {
-        Deck deck = new Deck(List.of(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
+        Deck<District> deck = new Deck<>(List.of(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
         RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
         assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, new GameView(game)));
     }
 
     @Test
     void testPlayTurnMarkingDistrict() throws IllegalActionException {
-        Deck deck = new Deck(List.of());
+        Deck<District> deck = new Deck<>();
 
         District notGoodEnough = new District("DaHood", Category.MARCHAND, 2);
         District goodButNotBest = new District("NobleDistrict", Category.NOBLE, 7);

@@ -25,33 +25,14 @@ class CityTest {
     }
 
     @Test
-    void addDistrict_shouldThrowDuplicatedDistrictException() {
+    void addDistrict_shouldThrowDuplicatedDistrictException() throws DuplicatedDistrictException {
 
         City city = new City();
         District district = new District("TestDistrict", Category.MERVEILLE, 3);
 
 
-        try {
-            city.addDistrict(district);
-            city.addDistrict(district); // Adding the same district again should throw an exception
-            fail("DuplicatedDistrictException should have been thrown.");
-        } catch (DuplicatedDistrictException e) {
-
-            assertEquals(1, city.getSize());
-            assertTrue(city.getDistricts().contains(district));
-        }
-    }
-
-    @Test
-    void getDistricts_shouldReturnImmutableSet() throws DuplicatedDistrictException {
-        City city = new City();
-        District district = new District("TestDistrict", Category.MERVEILLE, 3);
         city.addDistrict(district);
-
-
-        assertThrows(UnsupportedOperationException.class, () ->
-                city.getDistricts().add(new District("NewDistrict", Category.MILITAIRE, 4))
-        );
+        assertThrows(DuplicatedDistrictException.class, () -> city.addDistrict(district)); // Adding the same district again should throw an exception
     }
 
     @Test

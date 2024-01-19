@@ -4,8 +4,10 @@ import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.CondottiereAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
@@ -27,7 +29,9 @@ public class RandomBehavior implements Behavior {
         action.pick(RandomUtils.chooseFrom(this.randomGenerator, roles));
         roles.remove(action.getPickedRole());
         // discard a random role
-        action.discard(RandomUtils.chooseFrom(this.randomGenerator, roles));
+        if (gameState.getPlayers().size() == 2) {
+            action.discard(RandomUtils.chooseFrom(this.randomGenerator, roles));
+        }
     }
 
     @Override
@@ -55,6 +59,29 @@ public class RandomBehavior implements Behavior {
                         .toList();
 
                 ability.stealFrom(RandomUtils.chooseFrom(this.randomGenerator, rolesToSteal));
+            } else if (self.getCurrentRole() == Role.CONDOTTIERE) {
+                CondottiereAbilityAction ability = (CondottiereAbilityAction) action.getAbilityAction();
+
+                List<PlayerView> targetPlayers = gameState.getPlayers()
+                        .stream()
+                        .filter(player -> player.getCurrentRole() != Role.EVEQUE)
+                        .filter(player -> player.getCity().getDistricts().size() != 8)
+                        .toList();
+
+                PlayerView targetPlayer = RandomUtils.chooseFrom(this.randomGenerator, targetPlayers);
+
+                if (targetPlayer != null) {
+                    List<District> targetDistricts = targetPlayer.getCity().getDistricts()
+                            .stream()
+                            .filter(district -> district.getCost() - 1 <= self.getGold())
+                            .toList();
+
+                    if (!targetDistricts.isEmpty()) {
+                        District targetDistrict = RandomUtils.chooseFrom(this.randomGenerator, targetDistricts);
+
+                        ability.destroy(targetPlayer, targetDistrict);
+                    }
+                }
             }
         }
 

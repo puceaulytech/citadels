@@ -3,8 +3,10 @@ package com.github.the10xdevs.citadels.interaction.views;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.models.Role;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * An immutable view of a Game
@@ -19,11 +21,26 @@ public final class GameView {
     }
 
     public List<PlayerView> getPlayers() {
-        return this.game.getPlayers().stream().map(PlayerView::new).toList();
+        return this.game.getPlayers()
+                .stream()
+                .map(player -> {
+                    if (player.getCurrentRole() == null)
+                        return new PlayerView(player);
+
+                    return new PlayerView(
+                            player,
+                            this.game.getCurrentTurnOrder() >= player.getCurrentRole().getTurnOrder()
+                    );
+                })
+                .toList();
     }
 
     public int getDeckSize() {
         return this.game.getDeck().getCardsCount();
+    }
+
+    public Set<Role> getRolesFacingUp() {
+        return Collections.unmodifiableSet(this.game.getRolesFacingUp());
     }
 
     public Optional<Role> getKilledRole() {

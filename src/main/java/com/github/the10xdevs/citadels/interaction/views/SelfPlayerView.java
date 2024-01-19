@@ -21,6 +21,7 @@ public final class SelfPlayerView extends PlayerView {
         return Collections.unmodifiableList(this.player.getHand());
     }
 
+    @Override
     public Role getCurrentRole() {
         return this.player.getCurrentRole();
     }

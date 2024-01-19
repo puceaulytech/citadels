@@ -1,6 +1,5 @@
 package com.github.the10xdevs.citadels.gamestate;
 
-import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.utils.Pair;
 
 import java.util.*;
@@ -8,26 +7,28 @@ import java.util.*;
 /**
  * A deck of cards
  */
-public class Deck {
-    private final Deque<District> districts = new ArrayDeque<>();
+public class Deck<E> {
+    private final Deque<E> elements = new ArrayDeque<>();
+
+    public Deck() {}
 
     /**
      * Create a new deck with initial values
      *
      * @param cards The initial values, will be inserted in order
      */
-    public Deck(Collection<District> cards) {
-        this.districts.addAll(cards);
+    public Deck(Collection<E> cards) {
+        this.elements.addAll(cards);
     }
 
     /**
      * Shuffle the deck
      */
     public void shuffle() {
-        List<District> elements = new ArrayList<>(this.districts);
-        Collections.shuffle(elements);
-        this.districts.clear();
-        this.districts.addAll(elements);
+        List<E> temporary = new ArrayList<>(this.elements);
+        Collections.shuffle(temporary);
+        this.elements.clear();
+        this.elements.addAll(temporary);
     }
 
     /**
@@ -35,20 +36,20 @@ public class Deck {
      *
      * @return The drawn card
      */
-    public District drawCard() {
-        if (this.districts.isEmpty())
+    public E drawCard() {
+        if (this.elements.isEmpty())
             throw new IllegalStateException("Deck is empty");
 
-        return this.districts.poll();
+        return this.elements.poll();
     }
 
     /**
      * Put a card at the bottom of the deck
      *
-     * @param district The card to put
+     * @param element The card to put
      */
-    public void enqueueCard(District district) {
-        this.districts.offer(district);
+    public void enqueueCard(E element) {
+        this.elements.offer(element);
     }
 
     /**
@@ -57,7 +58,7 @@ public class Deck {
      * @return The number of cards
      */
     public int getCardsCount() {
-        return this.districts.size();
+        return this.elements.size();
     }
 
     /**
@@ -65,8 +66,8 @@ public class Deck {
      *
      * @return A pair containing the first two elements or some null if the deck has one or no cards
      */
-    public Pair<District, Optional<District>> peekFirstTwo() {
-        Iterator<District> iterator = this.districts.iterator();
+    public Pair<E, Optional<E>> peekFirstTwo() {
+        Iterator<E> iterator = this.elements.iterator();
         return new Pair<>(iterator.hasNext() ? iterator.next() : null, iterator.hasNext() ? Optional.of(iterator.next()) : Optional.empty());
     }
 
@@ -76,6 +77,14 @@ public class Deck {
      * @return true if the deck contains no district cards
      */
     public boolean isEmpty() {
-        return this.districts.isEmpty();
+        return this.elements.isEmpty();
+    }
+
+    public boolean remove(E element) {
+        return this.elements.remove(element);
+    }
+
+    public Deque<E> getElements() {
+        return this.elements;
     }
 }
