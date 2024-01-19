@@ -2,6 +2,8 @@ package com.github.the10xdevs.citadels.models;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -19,5 +21,45 @@ class DistrictTest {
         assertNotEquals(romain, logan);
         assertNotEquals(vahan, logan);
         assertNotEquals(4, vahan);
+        assertNotEquals(romain, null);
+        assertNotEquals(romain, "Baraque de Romain");
+
+        // Test hashCode
+        assertEquals(romain.hashCode(), otherRomain.hashCode());
+        assertNotEquals(romain.hashCode(), logan.hashCode());
     }
+
+    @Test
+    void toStringFormat() {
+        District district = new District("Baraque de Romain", Category.MERVEILLE, 10);
+        String expectedString = "Baraque de Romain, Merveille, prix: 10, score : 10";
+        assertEquals(expectedString, district.toString());
+    }
+    @Test
+    void getCategory() {
+        District district = new District("Test District", Category.MILITAIRE, 5, 8);
+        assertEquals(Category.MILITAIRE, district.getCategory());
+    }
+
+    @Test
+    void getCost() {
+        District district = new District("Test District", Category.MILITAIRE, 5, 8);
+        assertEquals(5, district.getCost());
+    }
+
+    @Test
+    void getScore() {
+        District district = new District("Test District", Category.MILITAIRE, 5, 8);
+        assertEquals(8, district.getScore());
+    }
+
+    @Test
+    void getName() {
+        District district = new District("Test District", Category.MILITAIRE, 5, 8);
+        assertEquals("Test District", district.getName());
+    }
+
+
 }
+
+

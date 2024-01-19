@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CityTest {
 
     @Test
-    void addDistrict_shouldAddDistrictSuccessfully() throws DuplicatedDistrictException {
+    void addDistrict() throws DuplicatedDistrictException {
 
         City city = new City();
         District district = new District("TestDistrict", Category.MERVEILLE, 3);
@@ -36,7 +36,7 @@ class CityTest {
     }
 
     @Test
-    void iterator_shouldIterateOverDistricts() throws DuplicatedDistrictException {
+    void iterator() throws DuplicatedDistrictException {
 
         City city = new City();
         District district1 = new District("District1", Category.MERVEILLE, 3);

@@ -3,7 +3,7 @@ package com.github.the10xdevs.citadels.utils;
 import java.util.List;
 
 public class ArrayUtils {
-    private ArrayUtils() {
+    ArrayUtils() {
         throw new IllegalStateException("Utility class");
     }
 
