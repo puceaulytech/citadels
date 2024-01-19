@@ -5,9 +5,15 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RandomUtilsTest {
+
+    @Test
+    void RandomUtils() {
+        assertThrows(IllegalStateException.class, ArrayUtils::new);
+    }
 
     @Test
     void chooseFrom() {
