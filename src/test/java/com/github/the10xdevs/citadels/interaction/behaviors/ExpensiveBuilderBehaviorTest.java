@@ -42,7 +42,7 @@ class ExpensiveBuilderBehaviorTest {
         testView = new PlayerView(testPlayer);
         testPlayer.setCurrentRole(Role.ARCHITECTE);
 
-        when(state.getPlayers()).thenReturn(List.of(testView, testView, testView));
+        when(state.getPlayers()).thenReturn(List.of(testView, testView));
     }
 
     @ParameterizedTest

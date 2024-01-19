@@ -43,7 +43,7 @@ public class ExpensiveBuilderBehavior implements Behavior {
         action.pick(roleToPick);
         roles.remove(roleToPick);
 
-        if (gameState.getPlayers().size() <= 3) {
+        if (gameState.getPlayers().size() == 2) {
             Role roleToDiscard = ExpensiveBuilderBehavior.getMostImportantRole(roles).orElseThrow();
             action.discard(roleToDiscard);
         }

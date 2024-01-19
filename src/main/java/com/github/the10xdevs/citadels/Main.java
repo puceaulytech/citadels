@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Game game = new Game(List.of(new RandomBehavior(), new RandomBehavior(), new FastBuilderBehavior(), new RandomBehavior(), new RandomBehavior(), new FastBuilderBehavior(), new ExpensiveBuilderBehavior()));
+        Game game = new Game(List.of(new RandomBehavior(), new RandomBehavior(), new FastBuilderBehavior(), new ExpensiveBuilderBehavior()));
         game.start();
     }
 }

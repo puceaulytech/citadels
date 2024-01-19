@@ -29,7 +29,7 @@ class FastBuilderBehaviorTest {
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        when(state.getPlayers()).thenReturn(List.of(view, view, view));
+        when(state.getPlayers()).thenReturn(List.of(view, view));
         assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, null, state, availableRoles));
 
         // Check if the picked and discarded roles are valid

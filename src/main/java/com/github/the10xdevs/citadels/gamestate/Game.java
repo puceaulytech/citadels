@@ -123,10 +123,11 @@ public class Game {
         // Clear roles facing up from last turn
         this.rolesFacingUp.clear();
         // Put 0, 1 or 2 roles facing up depending on the number of players
-        if (this.players.size() <= 5) {
+        if (this.players.size() == 5) {
             this.rolesFacingUp.add(this.drawUntilNotKing(roles));
         }
-        if (this.players.size() <= 4) {
+        if (this.players.size() == 4) {
+            this.rolesFacingUp.add(this.drawUntilNotKing(roles));
             this.rolesFacingUp.add(this.drawUntilNotKing(roles));
         }
 
@@ -150,6 +151,8 @@ public class Game {
             this.logger.logRoleTurnAction(i, player, roleTurnAction);
 
             player.setCurrentRole(roleTurnAction.getPickedRole());
+            if (this.players.size() == 2)
+                roles.remove(roleTurnAction.getDiscardedRole());
             roles.remove(roleTurnAction.getPickedRole()); // if the 7th player chose the card facing down nothing happens here
         }
     }
