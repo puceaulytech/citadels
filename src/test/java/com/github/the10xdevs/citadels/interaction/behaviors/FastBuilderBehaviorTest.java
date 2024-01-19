@@ -1,27 +1,36 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
+import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FastBuilderBehaviorTest {
+    @Mock GameView state = mock(GameView.class);
+    FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
+    PlayerView view = new PlayerView(new Player(fastBuilderBehavior));
 
     @ParameterizedTest
     @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
     void pickRoleTest(Set<Role> availableRoles) {
-        FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
-
         // Create a RoleTurnAction
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, null, null, availableRoles));
+        when(state.getPlayers()).thenReturn(List.of(view, view));
+        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, null, state, availableRoles));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
