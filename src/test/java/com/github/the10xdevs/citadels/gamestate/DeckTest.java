@@ -62,4 +62,68 @@ class DeckTest {
         assertNotNull(pair.first());
         assertTrue(pair.second().isEmpty());
     }
+    @Test
+    void shuffle() {
+        Deck<District> deck = new Deck<>(List.of(
+                new District("Card1", Category.MERVEILLE, 5),
+                new District("Card2", Category.MILITAIRE, 3),
+                new District("Card3", Category.NOBLE, 8)
+        ));
+
+        District drawnCardBeforeShuffle = deck.drawCard();
+        deck.shuffle();
+
+        // Draw a card after shuffling
+        District drawnCardAfterShuffle = deck.drawCard();
+
+        assertNotEquals(drawnCardBeforeShuffle, drawnCardAfterShuffle);
+    }
+    @Test
+    void isEmpty() {
+        Deck<District> emptyDeck = new Deck<>();
+        assertTrue(emptyDeck.isEmpty());
+
+        Deck<District> nonEmptyDeck = new Deck<>(List.of(new District("Card", Category.MERVEILLE, 5)));
+        assertFalse(nonEmptyDeck.isEmpty());
+    }
+
+    @Test
+    void remove() {
+        // Create a deck with known cards
+        Deck<District> deck = new Deck<>(List.of(
+                new District("Card1", Category.MERVEILLE, 5),
+                new District("Card2", Category.MILITAIRE, 3),
+                new District("Card3", Category.NOBLE, 8)
+        ));
+
+        // Remove a card from the deck
+        boolean removed = deck.remove(deck.peekFirstTwo().first());
+
+        // Assert that the removal was successful
+        assertTrue(removed);
+
+        // Assert that the deck size has decreased
+        assertEquals(2, deck.getCardsCount());
+    }
+
+    @Test
+    void getElements() {
+        // Create a deck with known cards
+        Deck<District> deck = new Deck<>(List.of(
+                new District("Card1", Category.MERVEILLE, 5),
+                new District("Card2", Category.MILITAIRE, 3),
+                new District("Card3", Category.NOBLE, 8)
+        ));
+
+        // Get the elements from the deck
+        List<District> elements = List.copyOf(deck.getElements());
+
+        // Assert that the retrieved elements match the original order
+        assertEquals(3, elements.size());
+        assertEquals("Card1", elements.get(0).getName());
+        assertEquals("Card2", elements.get(1).getName());
+        assertEquals("Card3", elements.get(2).getName());
+    }
+
+
 }
