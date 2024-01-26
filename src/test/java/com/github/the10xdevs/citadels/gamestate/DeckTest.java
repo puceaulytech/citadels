@@ -70,14 +70,21 @@ class DeckTest {
                 new District("Card3", Category.NOBLE, 8)
         ));
 
-        District drawnCardBeforeShuffle = deck.drawCard();
-        deck.shuffle();
+        // Version of the deck that will not be shuffled
+        Deck<District> nonShuffledDeck = new Deck<>(deck.getElements());
 
-        // Draw a card after shuffling
-        District drawnCardAfterShuffle = deck.drawCard();
-
-        assertNotEquals(drawnCardBeforeShuffle, drawnCardAfterShuffle);
+        int i;
+        for (i = 0; deck.getElements().equals(nonShuffledDeck.getElements()) && i <= 10000; i++) {
+            deck.shuffle();
+        }
+        // It is assumed that when shuffling the deck 10000 times, it will be in a different state than originally
+        assertTrue(i < 10000);
+        // And testing if there are still the same cards
+        for (District d : nonShuffledDeck.getElements()) {
+            assertTrue(deck.getElements().contains(d));
+        }
     }
+
     @Test
     void isEmpty() {
         Deck<District> emptyDeck = new Deck<>();
@@ -124,6 +131,4 @@ class DeckTest {
         assertEquals("Card2", elements.get(1).getName());
         assertEquals("Card3", elements.get(2).getName());
     }
-
-
 }
