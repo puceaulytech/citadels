@@ -71,8 +71,6 @@ public class RandomBehavior implements Behavior {
                 PlayerView targetPlayer = RandomUtils.chooseFrom(this.randomGenerator, targetPlayers);
 
                 if (targetPlayer != null) {
-                    System.out.println(targetPlayer.getCurrentRole());
-
                     List<District> targetDistricts = targetPlayer.getCity().getDistricts()
                             .stream()
                             .filter(district -> district.getCost() - 1 <= self.getGold())
