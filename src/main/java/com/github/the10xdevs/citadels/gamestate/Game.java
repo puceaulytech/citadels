@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Game {
     private final List<Player> players = new ArrayList<>();
-    private final Deck<District> deck = new Deck<>(District.all());
+    private final Deck<District> deck;
     private final ConsoleLogger logger = new ConsoleLogger();
     private int firstPlayerIndex = 0;
     private int turn = 1;
@@ -33,10 +33,16 @@ public class Game {
      *
      * @param behaviors The list of Behaviors
      */
-    public Game(List<Behavior> behaviors) {
+    public Game(List<Behavior> behaviors, Deck<District> deck) {
+        this.deck = deck;
+
         for (Behavior behavior : behaviors) {
             players.add(new Player(behavior));
         }
+    }
+
+    public Game(List<Behavior> behaviors) {
+        this(behaviors, new Deck<>(District.all()));
     }
 
     /**
