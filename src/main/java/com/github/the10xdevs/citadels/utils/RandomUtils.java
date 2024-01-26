@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class RandomUtils {
-    private RandomUtils() {
+    RandomUtils() {
         throw new IllegalStateException("Utility class");
     }
 

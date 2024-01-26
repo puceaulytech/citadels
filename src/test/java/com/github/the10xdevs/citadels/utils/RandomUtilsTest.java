@@ -12,7 +12,7 @@ class RandomUtilsTest {
 
     @Test
     void RandomUtils() {
-        assertThrows(IllegalStateException.class, ArrayUtils::new);
+        assertThrows(IllegalStateException.class, RandomUtils::new);
     }
 
     @Test
