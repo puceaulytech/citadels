@@ -4,6 +4,9 @@ import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
+import com.github.the10xdevs.citadels.interaction.behaviors.ExpensiveBuilderBehavior;
+import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
+import com.github.the10xdevs.citadels.interaction.behaviors.RandomBehavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.District;
@@ -15,8 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     Behavior emptyBehavior = new Behavior() {
@@ -35,6 +37,13 @@ class GameTest {
         for (int i = 0; i < 8; i++) {
             game.getPlayers().get(1).getCity().addDistrict(districts.get(i));
         }
+        assertTrue(game.isGameOver());
+    }
+
+    @Test
+    void gameGoingWell() {
+        Game game = new Game(List.of(new RandomBehavior(), new RandomBehavior(), new FastBuilderBehavior(), new ExpensiveBuilderBehavior()));
+        assertDoesNotThrow(game::start);
         assertTrue(game.isGameOver());
     }
 }
