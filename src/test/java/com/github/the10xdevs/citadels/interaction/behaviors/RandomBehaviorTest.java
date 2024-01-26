@@ -49,8 +49,7 @@ class RandomBehaviorTest {
     }
 
 
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    @Test
     void playTurnTest_RandomAction() {
         RandomBehavior dummyBehavior = new RandomBehavior();
         Player dummyPlayer = new Player(dummyBehavior);
@@ -63,8 +62,7 @@ class RandomBehaviorTest {
         assertDoesNotThrow(() -> dummyBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
     }
 
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    @Test
     void playTurnTest_AssassinAbility() {
 
         RandomBehavior dummyBehavior = new RandomBehavior();
@@ -95,8 +93,7 @@ class RandomBehaviorTest {
         assertNotNull(regularTurnAction.getAbilityAction());
     }
 
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    @Test
     void playTurnTest_VoleurAbility() {
         RandomBehavior dummyBehavior = new RandomBehavior();
         Player dummyPlayer = new Player(dummyBehavior);
