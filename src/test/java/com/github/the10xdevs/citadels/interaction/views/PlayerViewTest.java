@@ -1,9 +1,14 @@
 package com.github.the10xdevs.citadels.interaction.views;
 
+import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Player;
+import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -13,18 +18,14 @@ class PlayerViewTest {
 
     @Test
     void getGold() {
-        Player player = mock(Player.class);
-        when(player.getGold()).thenReturn(10);
+        Player player = new Player(null);
+
+        player.setGold(10); // Set the gold value
 
         PlayerView playerView = new PlayerView(player);
 
         assertEquals(10, playerView.getGold());
     }
-
-
-
-
-
     @Test
     void represents() {
         Behavior behavior1 = mock(Behavior.class);
