@@ -59,7 +59,7 @@ class CondottiereAbilityActionTest {
         opponent.setCurrentRole(Role.ROI);
         opponent.getCity().addDistrict(targetDistrict);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
 
         testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game));
 
@@ -82,7 +82,7 @@ class CondottiereAbilityActionTest {
         opponent.setCurrentRole(Role.EVEQUE);
         opponent.getCity().addDistrict(targetDistrict);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -99,7 +99,7 @@ class CondottiereAbilityActionTest {
         opponent.setCurrentRole(Role.ROI);
         opponent.getCity().addDistrict(targetDistrict);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -119,7 +119,7 @@ class CondottiereAbilityActionTest {
             opponent.getCity().addDistrict(new District("Fake n" + i, Category.RELIGIEUX, 2));
         }
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -135,7 +135,7 @@ class CondottiereAbilityActionTest {
         Player opponent = game.getPlayers().get(1);
         opponent.setCurrentRole(Role.ROI);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -162,7 +162,7 @@ class CondottiereAbilityActionTest {
         Player opponent = game.getPlayers().get(1);
         opponent.setCurrentRole(Role.ROI);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
 
         assertThrows(IllegalActionException.class, () -> badBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
