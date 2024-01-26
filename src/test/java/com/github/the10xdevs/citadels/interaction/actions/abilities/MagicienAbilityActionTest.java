@@ -7,91 +7,129 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.ExpensiveBuilderBehavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MagicienAbilityActionTest {
-    @Test
-    void useMagicienAbility() {
-        Behavior testBehavior = new Behavior() {
-            @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
-                // ...
-            }
+class MagicienAbilityActionTest {
+    Behavior emptyBehavior = new Behavior() {
+        @Override
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+        @Override
+        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {}
+    };
 
-            @Override
-            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-                MagicienAbilityAction magicienAction = (MagicienAbilityAction) action.getAbilityAction();
+    District card0 = new District("Baraque de Chardinoob", Category.MILITAIRE, 2);
+    District card1 = new District("Baraque de Logan", Category.MERVEILLE, 2);
+    District card2 = new District("Baraque de Vahan", Category.MILITAIRE, 6);
+    District card3 = new District("Baraque de Robin", Category.MERVEILLE, 5);
+    Game game = new Game(List.of(emptyBehavior, emptyBehavior), new Deck<>(List.of(card2, card3)));
+    Player target = game.getPlayers().get(0);
 
-                List<PlayerView> players = gameState.getPlayers();
-                if (!players.isEmpty()) {
-                    PlayerView targetPlayer = players.get(0);
-
-                    magicienAction.exchangeHandWith(targetPlayer);
-                }
-
-            }
-        };
-
-        Game game = new Game(Collections.emptyList());
-
-        Player player = new Player(testBehavior);
-        player.setCurrentRole(Role.MAGICIEN);
-
-        RegularTurnAction action = new RegularTurnAction(game, player, new Deck(Collections.emptyList()));
-
-        assertDoesNotThrow(() -> player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(game)));
-
-        MagicienAbilityAction magicienAction = (MagicienAbilityAction) action.getAbilityAction();
+    @BeforeEach
+    void setupFakePlayer() {
+        target.setCurrentRole(Role.ROI);
+        target.getHand().add(card0);
+        target.getHand().add(card1);
     }
 
     @Test
     void testExchangeHandWith() {
-        Game game = new Game(List.of(
-                new ExpensiveBuilderBehavior(),
-                new FastBuilderBehavior()
-        ));
+        Behavior swapper = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
 
-        MagicienAbilityAction magicienAction = new MagicienAbilityAction(game.getPlayers().get(0), game);
-        PlayerView targetPlayerView = new PlayerView(game.getPlayers().get(1));
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
+                abilityAction.exchangeHandWith(gameState.getPlayers().get(0));
+            }
+        };
 
-        assertDoesNotThrow(() -> magicienAction.exchangeHandWith(targetPlayerView));
+        Player swapperPlayer = new Player(swapper);
+        swapperPlayer.setCurrentRole(Role.MAGICIEN);
+        RegularTurnAction action = new RegularTurnAction(game, swapperPlayer, new Deck<>());
 
-        assertEquals(game.getPlayers().get(0).getHand(), game.getPlayers().get(1).getHand());
+        assertDoesNotThrow(() -> swapper.playTurn(action, new SelfPlayerView(swapperPlayer), new GameView(game)));
+        MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
+        assertTrue(abilityAction.getExchangedPlayer().represents(target));
+        assertEquals(card0, swapperPlayer.getHand().get(0));
+        assertEquals(card1, swapperPlayer.getHand().get(1));
     }
 
     @Test
-    void testGetExchangedPlayer() throws IllegalActionException {
-        Game game = new Game(List.of(
-                new ExpensiveBuilderBehavior(),
-                new FastBuilderBehavior()
-        ));
+    void testExchangeWithNonExistingPlayer() {
+        Behavior swapper = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
 
-        MagicienAbilityAction magicienAction = new MagicienAbilityAction(game.getPlayers().get(0), game);
-        PlayerView targetPlayerView = new PlayerView(game.getPlayers().get(1));
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
+                abilityAction.exchangeHandWith(new PlayerView(new Player(emptyBehavior)));
+            }
+        };
 
-        assertDoesNotThrow(() -> magicienAction.exchangeHandWith(targetPlayerView));
+        Player swapperPlayer = new Player(swapper);
+        swapperPlayer.setCurrentRole(Role.MAGICIEN);
+        RegularTurnAction action = new RegularTurnAction(game, swapperPlayer, new Deck<>());
 
-        PlayerView exchangedPlayer = magicienAction.getExchangedPlayer();
-
-        assertEquals(targetPlayerView, exchangedPlayer);
+        assertThrows(IllegalActionException.class, () -> swapper.playTurn(action, new SelfPlayerView(swapperPlayer), new GameView(game)));
     }
 
+    @Test
+    void testDiscardAndDraw() {
+        Behavior discarder = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
 
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
+                abilityAction.discardAndDraw(new ArrayList<>(self.getHand()));
+            }
+        };
+
+        Player discarderPlayer = new Player(discarder);
+        discarderPlayer.setCurrentRole(Role.MAGICIEN);
+        discarderPlayer.getHand().add(card0);
+        discarderPlayer.getHand().add(card1);
+        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer, game.getDeck());
+
+        assertDoesNotThrow(() -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
+        assertTrue(discarderPlayer.getHand().contains(card2));
+        assertTrue(discarderPlayer.getHand().contains(card3));
+    }
+
+    @Test
+    void testIllegalDiscardAndDraw() {
+        Behavior discarder = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
+                abilityAction.discardAndDraw(List.of(card0));
+            }
+        };
+
+        Player discarderPlayer = new Player(discarder);
+        discarderPlayer.setCurrentRole(Role.MAGICIEN);
+
+        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer, new Deck<>());
+        assertThrows(IllegalActionException.class, () -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
+    }
 }
-
