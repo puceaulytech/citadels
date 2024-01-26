@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public class RegularTurnAction {
     private final Player currentPlayer;
-    private final Deck deck;
+    private final Deck<District> deck;
     private final Pair<District, Optional<District>> cardsToDraw;
     private final AbilityAction abilityAction;
 
@@ -34,7 +34,7 @@ public class RegularTurnAction {
      * @param currentPlayer The current player
      * @param deck          The deck of the game
      */
-    public RegularTurnAction(Game game, Player currentPlayer, Deck deck) {
+    public RegularTurnAction(Game game, Player currentPlayer, Deck<District> deck) {
         this.currentPlayer = currentPlayer;
         this.deck = deck;
         this.abilityAction = currentPlayer.getCurrentRole().getAbilityAction(currentPlayer, game);

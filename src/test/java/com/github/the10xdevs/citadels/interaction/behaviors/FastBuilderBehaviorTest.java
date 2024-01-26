@@ -101,8 +101,7 @@ class FastBuilderBehaviorTest {
         assertNotEquals(roleTurnAction.getPickedRole(), roleTurnAction.getDiscardedRole());
     }
 
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    @Test
     void playTurnTest_DrawCardUntilEight() {
         FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         Player pl = new Player(fastBuilderBehavior);
@@ -126,8 +125,7 @@ class FastBuilderBehaviorTest {
         assertNotNull(regularTurnAction.getChosenCard());
     }
 
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    @Test
     void playTurnTest_TakeGoldAfterEight() {
         FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         Player player = new Player(fastBuilderBehavior);
@@ -152,8 +150,7 @@ class FastBuilderBehaviorTest {
 
     }
 
-    @ParameterizedTest
-    @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
+    @Test
     void playTurnTest_BuildAffordableDistrict() {
         FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         Player player = new Player(fastBuilderBehavior);
