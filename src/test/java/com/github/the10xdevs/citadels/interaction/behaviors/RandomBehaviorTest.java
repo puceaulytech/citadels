@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
+import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
@@ -107,7 +108,7 @@ class RandomBehaviorTest {
     }
 
     @Test
-    void use_AssassinKillsMagician_ShouldSetKilledRoleToMagician() throws IllegalActionException {
+    void use_AssassinKillsMagician_ShouldSetKilledRoleToMagician() throws IllegalActionException, DuplicatedDistrictException {
         // Arrange
         Behavior testBehavior = new TestBehaviorForAssassin(Role.MAGICIEN);
 

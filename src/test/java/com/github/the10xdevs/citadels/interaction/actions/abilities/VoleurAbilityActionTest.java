@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.interaction.actions.abilities;
 
+import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VoleurAbilityActionTest {
     @Test
-    void use() throws IllegalActionException {
+    void use() throws IllegalActionException, DuplicatedDistrictException {
         Behavior testBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
