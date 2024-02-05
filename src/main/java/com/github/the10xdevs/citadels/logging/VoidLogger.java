@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.logging;
 
+import com.github.the10xdevs.citadels.gamestate.Leaderboard;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -23,12 +24,12 @@ public class VoidLogger implements Logger {
     }
 
     @Override
-    public void logWinners(List<Player> players, Player firstPlayerToFinish) {
+    public void logWinners(Leaderboard leaderboard) {
         // Do nothing
     }
 
     @Override
     public void logError(Throwable error) {
-        // Do nothing??
+        error.printStackTrace();
     }
 }

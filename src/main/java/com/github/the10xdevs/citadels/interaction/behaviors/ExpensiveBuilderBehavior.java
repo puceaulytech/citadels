@@ -76,7 +76,7 @@ public class ExpensiveBuilderBehavior implements Behavior {
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
-        if (markedDistrict != null) {
+        if (markedDistrict != null && self.getHand().contains(markedDistrict)) {
             // Try to build our marked district
             if (self.getGold() >= markedDistrict.getCost()) {
                 action.buildDistrict(markedDistrict);

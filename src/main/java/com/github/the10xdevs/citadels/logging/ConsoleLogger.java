@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.logging;
 
+import com.github.the10xdevs.citadels.gamestate.Leaderboard;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -138,10 +139,10 @@ public class ConsoleLogger implements Logger {
     }
 
     @Override
-    public void logWinners(List<Player> players, Player firstPlayerToFinish) {
+    public void logWinners(Leaderboard leaderboard) {
         this.println("\n------ Podium ------");
         int rank = 1;
-        for (Player player : players) {
+        for (Leaderboard.Entry entry : leaderboard.getEntries()) {
             if (this.supportsColor) {
                 if (rank == 1) {
                     this.print(ANSI_GOLD);
@@ -153,16 +154,16 @@ public class ConsoleLogger implements Logger {
             }
 
             this.print("-> ");
-            this.print(player.getBehavior().getName());
+            this.print(entry.getPlayer().getBehavior().getName());
             this.print(" avec ");
-            this.printInt(player.getScore(player == firstPlayerToFinish));
+            this.printInt(entry.getScore());
             this.println(" points");
 
             if (rank <= 3 && this.supportsColor) {
                 this.print(ANSI_RESET);
             }
 
-            for (District district : player.getCity()) {
+            for (District district : entry.getPlayer().getCity()) {
                 this.print("  - ");
                 this.printColorized(district);
                 this.println();
