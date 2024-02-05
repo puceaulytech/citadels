@@ -14,7 +14,7 @@ public class BulkRunner {
     private final Map<Behavior, Result> scores = new HashMap<>();
     private final int iterations;
 
-    public BulkRunner(int iterations,List<Behavior> behaviors) {
+    public BulkRunner(int iterations, List<Behavior> behaviors) {
         this.iterations = iterations;
 
         for (Behavior b : behaviors) {
