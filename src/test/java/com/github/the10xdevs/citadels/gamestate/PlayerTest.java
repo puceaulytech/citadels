@@ -84,4 +84,5 @@ class PlayerTest {
         assertEquals(c, first.getHand().get(0));
         assertEquals(d, first.getHand().get(1));
     }
+
 }
