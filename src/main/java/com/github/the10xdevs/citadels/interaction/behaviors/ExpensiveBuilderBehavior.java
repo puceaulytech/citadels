@@ -28,12 +28,27 @@ public class ExpensiveBuilderBehavior implements Behavior {
     );
     private static final int GOOD_DISTRICT_THRESHOLD = 4;
     private District markedDistrict;
+    /**
+     * Returns the most important role from the available roles.
+     *
+     * @param availableRoles the roles available to be picked
+     * @return the most important role, if any
+     */
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
         return ExpensiveBuilderBehavior.rolesImportance.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
+    /**
+     * Picks the most important role from the available roles and discards the most important role if the game has two players.
+     *
+     * @param action the RoleTurnAction to be performed
+     * @param self the SelfPlayerView of the current player
+     * @param gameState the current state of the game
+     * @param availableRoles the roles available to be picked
+     * @throws IllegalActionException if an illegal action is performed
+     */
 
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
@@ -48,6 +63,16 @@ public class ExpensiveBuilderBehavior implements Behavior {
             action.discard(roleToDiscard);
         }
     }
+    /**
+     * Performs a turn action. The bot always takes gold if it has a district to build.
+     * Otherwise, it draws a card and chooses the best district.
+     * If it has the role thief, it steals from the king.
+     *
+     * @param action the RegularTurnAction to be performed
+     * @param self the SelfPlayerView of the current player
+     * @param game the current state of the game
+     * @throws IllegalActionException if an illegal action is performed
+     */
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {

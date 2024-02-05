@@ -12,12 +12,16 @@ import java.util.Optional;
 public class CondottiereAbilityAction extends AbilityAction {
     private PlayerView targetPlayer;
     private District targetDistrict;
+<<<<<<< HEAD
     /**
      * Constructs a CondottiereAbilityAction instance for the given current player and game.
      *
      * @param currentPlayer The player performing the ability action.
      * @param game           The current game state.
      */
+=======
+
+>>>>>>> 3dfa681456bec3cfe4faac1c528243e54e0b19b4
     public CondottiereAbilityAction(Player currentPlayer, Game game) {
         super(currentPlayer, game);
     }

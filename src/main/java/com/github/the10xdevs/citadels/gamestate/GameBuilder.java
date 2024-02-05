@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameBuilder {
-    private Logger logger = new ConsoleLogger();
     private final List<Behavior> behaviors = new ArrayList<>();
+    private Logger logger = new ConsoleLogger();
     private Deck<District> deck = new Deck<>(District.all());
 
-    private GameBuilder() {}
+    private GameBuilder() {
+    }
 
     public static GameBuilder create() {
         return new GameBuilder();
