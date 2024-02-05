@@ -10,7 +10,7 @@ import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
