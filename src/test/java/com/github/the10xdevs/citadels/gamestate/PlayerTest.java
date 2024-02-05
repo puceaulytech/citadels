@@ -89,8 +89,7 @@ class PlayerTest {
         assertEquals(d, first.getHand().get(1));
     }
 
-<<<<<<< HEAD
-=======
+
     @Test
     void incrementGoldIncreasesPlayerGold() {
         Player player = new Player(null);
@@ -135,5 +134,4 @@ class PlayerTest {
         assertEquals(4, player.getGold());
         assertEquals(Collections.emptyList(), player.getHand());
     }
->>>>>>> 3dfa681456bec3cfe4faac1c528243e54e0b19b4
 }
