@@ -30,11 +30,24 @@ public class FastBuilderBehavior implements Behavior {
     );
     private Role previousRole;
 
+    /**
+     * Returns the most important role from the available roles.
+     *
+     * @param availableRoles the roles available to be picked
+     * @return the most important role, if any
+     */
+
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
         return FastBuilderBehavior.rolesImportance.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
+    /**
+     * Returns the most important role from the available roles.
+     *
+     * @param availableRoles the roles available to be picked
+     * @return the most important role, if any
+     */
 
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
@@ -55,6 +68,15 @@ public class FastBuilderBehavior implements Behavior {
 
         this.previousRole = roleToPick;
     }
+    /**
+     * Performs a turn action. The bot always draws a card until its hand size reaches eight, then it always takes gold.
+     * It also tries to build the first district it can afford.
+     *
+     * @param action the RegularTurnAction to be performed
+     * @param self the SelfPlayerView of the current player
+     * @param game the current state of the game
+     * @throws IllegalActionException if an illegal action is performed
+     */
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
