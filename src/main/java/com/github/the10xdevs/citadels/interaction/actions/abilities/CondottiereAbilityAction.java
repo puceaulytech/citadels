@@ -12,6 +12,7 @@ import java.util.Optional;
 public class CondottiereAbilityAction extends AbilityAction {
     private PlayerView targetPlayer;
     private District targetDistrict;
+
     public CondottiereAbilityAction(Player currentPlayer, Game game) {
         super(currentPlayer, game);
     }
