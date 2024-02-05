@@ -7,6 +7,7 @@ import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.logging.ConsoleLogger;
+import com.github.the10xdevs.citadels.logging.Logger;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
@@ -18,7 +19,7 @@ import java.util.*;
 public class Game {
     private final List<Player> players = new ArrayList<>();
     private final Deck<District> deck;
-    private final ConsoleLogger logger = new ConsoleLogger();
+    private final Logger logger;
     private final Set<Role> rolesFacingUp = EnumSet.noneOf(Role.class);
     private int firstPlayerIndex = 0;
     private int turn = 1;
@@ -31,16 +32,13 @@ public class Game {
      *
      * @param behaviors The list of Behaviors
      */
-    public Game(List<Behavior> behaviors, Deck<District> deck) {
+    public Game(List<Behavior> behaviors, Deck<District> deck, Logger logger) {
         this.deck = deck;
+        this.logger = logger;
 
         for (Behavior behavior : behaviors) {
             players.add(new Player(behavior));
         }
-    }
-
-    public Game(List<Behavior> behaviors) {
-        this(behaviors, new Deck<>(District.all()));
     }
 
     /**

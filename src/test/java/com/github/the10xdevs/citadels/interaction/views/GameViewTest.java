@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.views;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class GameViewTest {
     @Test
     void cannotAddPlayer() {
-        GameView gameView = new GameView(new Game(List.of()));
+        GameView gameView = new GameView(GameBuilder.create().build());
         Player player = new Player(new FastBuilderBehavior());
         assertThrows(Exception.class, () -> gameView.getPlayers().add(new PlayerView(player)));
     }
