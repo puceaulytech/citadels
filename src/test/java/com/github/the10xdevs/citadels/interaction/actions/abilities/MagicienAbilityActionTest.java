@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.actions.abilities;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -37,7 +38,13 @@ class MagicienAbilityActionTest {
     District card1 = new District("Baraque de Logan", Category.MERVEILLE, 2);
     District card2 = new District("Baraque de Vahan", Category.MILITAIRE, 6);
     District card3 = new District("Baraque de Robin", Category.MERVEILLE, 5);
-    Game game = new Game(List.of(emptyBehavior, emptyBehavior), new Deck<>(List.of(card2, card3)));
+
+    Game game = GameBuilder.create()
+            .addBehavior(emptyBehavior)
+            .addBehavior(emptyBehavior)
+            .withDeck(new Deck<>(List.of(card2, card3)))
+            .build();
+
     Player target = game.getPlayers().get(0);
 
     @BeforeEach

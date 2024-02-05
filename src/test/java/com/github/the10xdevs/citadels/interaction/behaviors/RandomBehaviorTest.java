@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -32,6 +33,7 @@ class RandomBehaviorTest {
     RandomBehavior dummyBehavior = new RandomBehavior();
     PlayerView view = new PlayerView(new Player(dummyBehavior));
 
+
     @ParameterizedTest
     @MethodSource("com.github.the10xdevs.citadels.interaction.behaviors.BehaviorTestUtils#generateRoles")
     void pickRoleTest(Set<Role> availableRoles) {
@@ -55,9 +57,9 @@ class RandomBehaviorTest {
         Player dummyPlayer = new Player(dummyBehavior);
         dummyPlayer.setCurrentRole(Role.ARCHITECTE);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(new Game(List.of(dummyBehavior)), dummyPlayer, new Deck(List.of()));
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer, new Deck(List.of()));
         SelfPlayerView selfPlayerView = new SelfPlayerView(dummyPlayer);
-        GameView gameView = new GameView(new Game(List.of(dummyBehavior)));
+        GameView gameView = new GameView(GameBuilder.create().addBehavior(dummyBehavior).build());
 
         assertDoesNotThrow(() -> dummyBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
     }
@@ -69,7 +71,7 @@ class RandomBehaviorTest {
         Player dummyPlayer = new Player(dummyBehavior);
         dummyPlayer.setCurrentRole(Role.ASSASSIN);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(new Game(List.of(dummyBehavior)), dummyPlayer,
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer,
                 new Deck(Collections.unmodifiableCollection(List.of(new District("nobleDistrict", Category.NOBLE, 6),
                         new District("ReligiousDistrict", Category.RELIGIEUX, 8),
                         new District("a", Category.NOBLE, 1),
@@ -87,7 +89,7 @@ class RandomBehaviorTest {
                         new District("l", Category.RELIGIEUX, 11)))));
 
         SelfPlayerView selfPlayerView = new SelfPlayerView(dummyPlayer);
-        GameView gameView = new GameView(new Game(List.of(dummyBehavior)));
+        GameView gameView = new GameView(GameBuilder.create().addBehavior(dummyBehavior).build());
 
         assertDoesNotThrow(() -> dummyBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
         assertNotNull(regularTurnAction.getAbilityAction());
@@ -98,9 +100,9 @@ class RandomBehaviorTest {
         RandomBehavior dummyBehavior = new RandomBehavior();
         Player dummyPlayer = new Player(dummyBehavior);
         dummyPlayer.setCurrentRole(Role.VOLEUR);
-        RegularTurnAction regularTurnAction = new RegularTurnAction(new Game(List.of(dummyBehavior)), dummyPlayer, new Deck(List.of()));
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer, new Deck(List.of()));
         SelfPlayerView selfPlayerView = new SelfPlayerView(dummyPlayer);
-        GameView gameView = new GameView(new Game(List.of(dummyBehavior)));
+        GameView gameView = new GameView(GameBuilder.create().addBehavior(dummyBehavior).build());
 
         assertDoesNotThrow(() -> dummyBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
         assertNotNull(regularTurnAction.getAbilityAction());
@@ -111,7 +113,7 @@ class RandomBehaviorTest {
         // Arrange
         Behavior testBehavior = new TestBehaviorForAssassin(Role.MAGICIEN);
 
-        Game game = new Game(Collections.emptyList());
+        Game game = GameBuilder.create().build();
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.ASSASSIN);
         RegularTurnAction action = new RegularTurnAction(game, player, new Deck<>());
