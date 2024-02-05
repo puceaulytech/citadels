@@ -62,6 +62,7 @@ class DeckTest {
         assertNotNull(pair.first());
         assertTrue(pair.second().isEmpty());
     }
+
     @Test
     void shuffle() {
         Deck<District> deck = new Deck<>(List.of(

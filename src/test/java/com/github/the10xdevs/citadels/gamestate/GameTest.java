@@ -23,9 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        }
+
         @Override
-        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {}
+        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {
+        }
     };
 
     @Test

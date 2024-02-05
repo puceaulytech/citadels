@@ -28,6 +28,7 @@ class PairTest {
         assertFalse(test.contains(0));
         assertFalse(test.contains("test"));
     }
+
     @Test
     void testPairIsEmpty() {
         Pair<String, Integer> nonEmptyPair = new Pair<>("ZAK", 42);

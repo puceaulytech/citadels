@@ -197,7 +197,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void buildDistrict() throws IllegalActionException, DuplicatedDistrictException {
+    void buildDistrict() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {

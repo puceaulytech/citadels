@@ -1,9 +1,6 @@
 package com.github.the10xdevs.citadels.models;
 
-import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.CondottiereAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
-import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -23,10 +20,13 @@ class RoleTest {
             assertInstanceOf(MagicienAbilityAction.class, targetRole.getAbilityAction(null, null));
         } else if (targetRole == Role.CONDOTTIERE) {
             assertInstanceOf(CondottiereAbilityAction.class, targetRole.getAbilityAction(null, null));
+        } else if (targetRole == Role.ARCHITECTE) {
+            assertInstanceOf(ArchitecteAbilityAction.class, targetRole.getAbilityAction(null, null));
         } else {
             assertNull(targetRole.getAbilityAction(null, null));
         }
     }
+
     @Test
     void getTurnOrder() {
         assertEquals(1, Role.ASSASSIN.getTurnOrder());

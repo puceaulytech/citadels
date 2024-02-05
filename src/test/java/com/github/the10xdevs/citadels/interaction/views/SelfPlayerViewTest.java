@@ -17,6 +17,7 @@ class SelfPlayerViewTest {
         SelfPlayerView playerView = new SelfPlayerView(new Player(new FastBuilderBehavior()));
         assertThrows(Exception.class, () -> playerView.getHand().add(new District("de", Category.NOBLE, 10)));
     }
+
     @Test
     void getCurrentRole() {
         Player player = new Player(new FastBuilderBehavior());

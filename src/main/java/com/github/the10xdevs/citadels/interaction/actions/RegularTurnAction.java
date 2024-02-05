@@ -1,6 +1,5 @@
 package com.github.the10xdevs.citadels.interaction.actions;
 
-import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
@@ -105,23 +104,11 @@ public class RegularTurnAction {
      * @throws IllegalActionException If the action was invalid
      */
     public void buildDistrict(District district) throws IllegalActionException {
-        if (district == null)
-            throw new IllegalActionException("Cannot build a district that is null");
-        if (!currentPlayer.getHand().contains(district))
-            throw new IllegalActionException("Cannot build a district that is not in hand");
-        if (currentPlayer.getGold() < district.getCost())
-            throw new IllegalActionException("Cannot build district without enough gold");
         if (this.builtDistrict != null)
             throw new IllegalActionException("Cannot build multiple districts in one turn");
-        this.builtDistrict = district;
 
-        currentPlayer.incrementGold(-builtDistrict.getCost());
-        currentPlayer.getHand().remove(builtDistrict);
-        try {
-            currentPlayer.getCity().addDistrict(builtDistrict);
-        } catch (DuplicatedDistrictException e) {
-            throw new IllegalActionException("Cannot build the same district twice", e);
-        }
+        this.currentPlayer.buildDistrict(district);
+        this.builtDistrict = district;
     }
 
     /**

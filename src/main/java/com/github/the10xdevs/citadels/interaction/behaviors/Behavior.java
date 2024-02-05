@@ -1,6 +1,5 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
-import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -25,8 +24,6 @@ public interface Behavior {
     void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException;
 
 
-
-
     /**
      * Play a regular turn
      * <br>
@@ -37,7 +34,7 @@ public interface Behavior {
      * @param self      A view of the current player
      * @param gameState A view of the entire game state
      */
-    void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException, DuplicatedDistrictException;
+    void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException;
 
     /**
      * Get the name of the behavior

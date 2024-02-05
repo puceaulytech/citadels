@@ -26,8 +26,8 @@ public abstract class AbilityAction {
         if (this.game == null) throw new IllegalStateException("Cannot find player when game is null");
 
         return this.game.getPlayers()
-               .stream()
-               .filter(targetPlayerView::represents)
-               .findFirst();
+                .stream()
+                .filter(targetPlayerView::represents)
+                .findFirst();
     }
 }

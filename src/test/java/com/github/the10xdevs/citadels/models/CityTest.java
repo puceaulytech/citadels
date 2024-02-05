@@ -1,10 +1,7 @@
 package com.github.the10xdevs.citadels.models;
 
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
-
 import org.junit.jupiter.api.Test;
-
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
