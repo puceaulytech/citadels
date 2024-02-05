@@ -25,8 +25,8 @@ class GameViewTest {
 
     @Test
     void getDeckSizeException() {
-
-        GameView gameView = new GameView(new Game(List.of(new FastBuilderBehavior())));
+        Game game = GameBuilder.create().addBehavior(new FastBuilderBehavior()).build();
+        GameView gameView = new GameView(game);
         assertEquals(65, gameView.getDeckSize());
 
 
@@ -42,7 +42,7 @@ class GameViewTest {
 
 
         FastBuilderBehavior behavior = new FastBuilderBehavior();
-        RegularTurnAction action = new RegularTurnAction(new Game(List.of(behavior)), player, deck);
+        RegularTurnAction action = new RegularTurnAction(game, player, deck);
 
         try {
 
@@ -55,7 +55,7 @@ class GameViewTest {
 
     @Test
     void getRolesFacingUpException() {
-        GameView gameView = new GameView(new Game(List.of()));
+        GameView gameView = new GameView(GameBuilder.create().build());
         assertEquals(0, gameView.getRolesFacingUp().size());
     }
 }
