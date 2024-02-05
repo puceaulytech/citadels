@@ -4,6 +4,7 @@ import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
+import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
@@ -45,6 +46,10 @@ public class CondottiereAbilityAction extends AbilityAction {
             throw new IllegalActionException("Cannot destroy district: target player has 8 districts");
         if (!player.get().getCity().getDistricts().remove(targetDistrict))
             throw new IllegalActionException("Cannot destroy district: district not in target player's city");
+
+        District dungeon = new District("Donjon", Category.MERVEILLE, 3);
+        if (dungeon.equals(targetDistrict))
+            throw new IllegalActionException("Cannot destroy the dungeon");
 
         this.currentPlayer.incrementGold(-destroyCost);
     }

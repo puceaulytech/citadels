@@ -91,6 +91,7 @@ public class RandomBehavior implements Behavior {
                 if (targetPlayer != null) {
                     List<District> targetDistricts = targetPlayer.getCity().getDistricts()
                             .stream()
+                            .filter(district -> !district.getName().equals("Donjon"))
                             .filter(district -> district.getCost() - 1 <= self.getGold())
                             .toList();
 
