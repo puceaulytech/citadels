@@ -18,8 +18,6 @@ import java.util.Set;
  * A bot that tries to build as fast as possible
  */
 public class FastBuilderBehavior implements Behavior {
-    private Role previousRole;
-
     private static final List<Role> rolesImportance = List.of(
             Role.ROI,
             Role.CONDOTTIERE,
@@ -30,6 +28,7 @@ public class FastBuilderBehavior implements Behavior {
             Role.MAGICIEN,
             Role.ARCHITECTE
     );
+    private Role previousRole;
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
         return FastBuilderBehavior.rolesImportance.stream()

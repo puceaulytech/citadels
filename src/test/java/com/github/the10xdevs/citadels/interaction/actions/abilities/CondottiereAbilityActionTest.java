@@ -14,7 +14,6 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,9 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class CondottiereAbilityActionTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        }
+
         @Override
-        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {}
+        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {
+        }
     };
 
     District targetDistrict = new District("Baraque à Logan", Category.MERVEILLE, 7);
@@ -144,7 +146,8 @@ class CondottiereAbilityActionTest {
     void destroyInvalidPlayer() {
         Behavior badBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            }
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {

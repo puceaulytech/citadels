@@ -71,6 +71,7 @@ public enum Role {
             case VOLEUR -> new VoleurAbilityAction(game);
             case MAGICIEN -> new MagicienAbilityAction(currentPlayer, game);
             case CONDOTTIERE -> new CondottiereAbilityAction(currentPlayer, game);
+            case ARCHITECTE -> new ArchitecteAbilityAction(currentPlayer, game);
             default -> null;
         };
     }

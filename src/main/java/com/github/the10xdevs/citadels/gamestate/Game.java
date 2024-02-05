@@ -19,14 +19,12 @@ public class Game {
     private final List<Player> players = new ArrayList<>();
     private final Deck<District> deck;
     private final ConsoleLogger logger = new ConsoleLogger();
+    private final Set<Role> rolesFacingUp = EnumSet.noneOf(Role.class);
     private int firstPlayerIndex = 0;
     private int turn = 1;
     private int currentTurnOrder;
-
     private Role killedRole;
     private Role stolenRole;
-
-    private final Set<Role> rolesFacingUp = EnumSet.noneOf(Role.class);
 
     /**
      * Constructs a Game with a list of Behaviors that will battle against each other

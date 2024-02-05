@@ -7,23 +7,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class PlayerViewTest {
 
     @Test
     void getGold() {
-        Player player = mock(Player.class);
-        when(player.getGold()).thenReturn(10);
+        Player player = new Player(null);
+
+        player.setGold(10); // Set the gold value
 
         PlayerView playerView = new PlayerView(player);
 
         assertEquals(10, playerView.getGold());
     }
-
-
-
-
 
     @Test
     void represents() {
@@ -41,6 +37,7 @@ class PlayerViewTest {
         assertFalse(playerView2.represents(player1));
         assertTrue(playerView2.represents(player2));
     }
+
     @Test
     void roleHidden() {
         Player p = new Player(null);

@@ -25,9 +25,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class MagicienAbilityActionTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        }
+
         @Override
-        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {}
+        public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) {
+        }
     };
 
     District card0 = new District("Baraque de Chardinoob", Category.MILITAIRE, 2);
@@ -48,7 +51,8 @@ class MagicienAbilityActionTest {
     void testExchangeHandWith() {
         Behavior swapper = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            }
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
@@ -72,7 +76,8 @@ class MagicienAbilityActionTest {
     void testExchangeWithNonExistingPlayer() {
         Behavior swapper = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            }
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
@@ -92,7 +97,8 @@ class MagicienAbilityActionTest {
     void testDiscardAndDraw() {
         Behavior discarder = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {}
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            }
 
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {

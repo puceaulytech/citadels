@@ -1,5 +1,7 @@
 package com.github.the10xdevs.citadels.gamestate;
 
+import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
+import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.City;
@@ -86,6 +88,23 @@ public class Player {
      */
     public City getCity() {
         return city;
+    }
+
+    public void buildDistrict(District district) throws IllegalActionException {
+        if (district == null)
+            throw new IllegalActionException("Cannot build a district that is null");
+        if (!this.getHand().contains(district))
+            throw new IllegalActionException("Cannot build a district that is not in hand");
+        if (this.getGold() < district.getCost())
+            throw new IllegalActionException("Cannot build district without enough gold");
+
+        this.incrementGold(-district.getCost());
+        this.getHand().remove(district);
+        try {
+            this.getCity().addDistrict(district);
+        } catch (DuplicatedDistrictException e) {
+            throw new IllegalActionException("Cannot build the same district twice", e);
+        }
     }
 
     /**

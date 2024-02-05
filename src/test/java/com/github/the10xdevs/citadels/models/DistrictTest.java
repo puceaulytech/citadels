@@ -2,8 +2,6 @@ package com.github.the10xdevs.citadels.models;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -35,6 +33,7 @@ class DistrictTest {
         String expectedString = "Baraque de Romain, Merveille, prix: 10, score : 10";
         assertEquals(expectedString, district.toString());
     }
+
     @Test
     void getCategory() {
         District district = new District("Test District", Category.MILITAIRE, 5, 8);
