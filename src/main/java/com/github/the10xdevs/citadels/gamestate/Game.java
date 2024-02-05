@@ -7,6 +7,7 @@ import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.logging.Logger;
+import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
@@ -179,6 +180,12 @@ public class Game {
                 // Reward the player with gold (you can adjust the amount as needed)
                 goldReward += 2; // For example, reward 2 gold for each matching district
             }
+        }
+
+        // Check for School of Magic
+        District schoolOfMagic = new District("Ecole de magie", Category.MERVEILLE, 6);
+        if (player.getCurrentRole().getCategory() != null && player.getCity().getDistricts().contains(schoolOfMagic)) {
+            goldReward += 2;
         }
 
         return goldReward;
