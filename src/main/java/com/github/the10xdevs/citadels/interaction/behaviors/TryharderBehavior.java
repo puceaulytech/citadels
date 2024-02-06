@@ -33,7 +33,7 @@ public class TryharderBehavior implements Behavior {
     );
 
     private static final int TURN_THRESHOLD = 3;
-    private static final int GOLD_THRESHOLD = 10;
+    private static final int GOLD_THRESHOLD = 5;
     private static final int SCORE_THRESHOLD = 4;
 
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles, List<Role> wantedRoles) {
@@ -98,7 +98,7 @@ public class TryharderBehavior implements Behavior {
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
         int currentScoreThreshold = self.getCity().getDistricts().size() >= 4 ? TryharderBehavior.SCORE_THRESHOLD : TryharderBehavior.SCORE_THRESHOLD / 2;
 
-        if (self.getCurrentRole() == Role.MARCHAND || self.getGold() < TryharderBehavior.GOLD_THRESHOLD / 2) {
+        if (self.getGold() < TryharderBehavior.GOLD_THRESHOLD) {
             action.takeGold();
         }
 
