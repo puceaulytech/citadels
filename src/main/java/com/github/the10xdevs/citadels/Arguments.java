@@ -8,4 +8,7 @@ public class Arguments {
 
     @Parameter(names = "--demo")
     public boolean demo;
+
+    @Parameter(names = "--csv")
+    public boolean csv;
 }

@@ -8,6 +8,7 @@ import com.github.the10xdevs.citadels.interaction.behaviors.ExpensiveBuilderBeha
 import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
 import com.github.the10xdevs.citadels.interaction.behaviors.RandomBehavior;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -41,6 +42,23 @@ public class Main {
 
             secondBulkRunner.run();
             secondBulkRunner.printStats();
+        }
+
+        if (arguments.csv) {
+            BulkRunner bulkRunner = new BulkRunner(1000, List.of(
+                    new ExpensiveBuilderBehavior(),
+                    new FastBuilderBehavior(),
+                    new RandomBehavior(),
+                    new RandomBehavior()
+            ));
+
+            bulkRunner.run();
+            try {
+                bulkRunner.writeToCSV();
+            } catch (IOException e) {
+                System.out.println("Error encountered when writing to CSV file");
+                e.printStackTrace();
+            }
         }
 
         if (arguments.demo) {
