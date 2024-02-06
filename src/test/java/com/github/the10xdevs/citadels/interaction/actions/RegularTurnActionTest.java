@@ -3,6 +3,8 @@ package com.github.the10xdevs.citadels.interaction.actions;
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
+import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
@@ -11,6 +13,7 @@ import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RegularTurnActionTest {
     District a = new District("Testing", Category.MARCHAND, 1);
     District b = new District("Another testing", Category.MARCHAND, 1);
+    GameBuilder gameBuilder;
 
     private Player createFakePlayer(Behavior behavior) {
         Player fake = new Player(behavior);
@@ -36,6 +40,11 @@ class RegularTurnActionTest {
         fake.getHand().add(a);
         fake.getHand().add(b);
         return fake;
+    }
+
+    @BeforeEach
+    void initGameBuilder() {
+        gameBuilder = GameBuilder.create();
     }
 
     @Test
@@ -52,7 +61,7 @@ class RegularTurnActionTest {
         };
 
         Player goldPicker = createFakePlayer(goldPickerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, goldPicker, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), goldPicker);
 
         goldPickerBehavior.playTurn(action, new SelfPlayerView(goldPicker), null);
 
@@ -74,7 +83,7 @@ class RegularTurnActionTest {
         };
 
         Player goldPicker = createFakePlayer(goldPickerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, goldPicker, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), goldPicker);
 
         assertThrows(IllegalActionException.class, () -> goldPickerBehavior.playTurn(action, null, null));
     }
@@ -94,7 +103,7 @@ class RegularTurnActionTest {
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck<>(List.of(a, b)));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>(List.of(a, b))).build(), cardDrawer);
         cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null);
         assertEquals(a, action.getChosenCard());
         assertEquals(b, action.getDiscardedCard().orElseThrow());
@@ -116,7 +125,7 @@ class RegularTurnActionTest {
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck<>(List.of(a, b)));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>(List.of(a, b))).build(), cardDrawer);
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null));
     }
 
@@ -134,7 +143,7 @@ class RegularTurnActionTest {
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), cardDrawer);
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null));
     }
 
@@ -154,7 +163,7 @@ class RegularTurnActionTest {
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck<>(List.of(a, b)));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>(List.of(a, b))).build(), cardDrawer);
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null));
     }
 
@@ -173,7 +182,7 @@ class RegularTurnActionTest {
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck<>(List.of(a, b)));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>(List.of(a, b))).build(), cardDrawer);
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null));
     }
 
@@ -192,7 +201,7 @@ class RegularTurnActionTest {
         };
 
         Player cardDrawer = createFakePlayer(cardDrawerBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, cardDrawer, new Deck<>(List.of(a)));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>(List.of(a))).build(), cardDrawer);
         assertThrows(IllegalActionException.class, () -> cardDrawerBehavior.playTurn(action, new SelfPlayerView(cardDrawer), null));
     }
 
@@ -210,7 +219,7 @@ class RegularTurnActionTest {
         };
 
         Player districtBuilder = createRichPlayer(districtBuilderBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, districtBuilder, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
         districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null);
         assertEquals(a, action.getBuiltDistrict());
     }
@@ -230,7 +239,7 @@ class RegularTurnActionTest {
         };
 
         Player districtBuilder = createRichPlayer(districtBuilderBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, districtBuilder, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
         assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null));
     }
 
@@ -248,7 +257,7 @@ class RegularTurnActionTest {
         };
 
         Player districtBuilder = createRichPlayer(districtBuilderBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, districtBuilder, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
         assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null));
     }
 
@@ -267,7 +276,7 @@ class RegularTurnActionTest {
 
         Player districtBuilder = createRichPlayer(districtBuilderBehavior);
         districtBuilder.setGold(0);
-        RegularTurnAction action = new RegularTurnAction(null, districtBuilder, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
         assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null));
     }
 
@@ -285,7 +294,7 @@ class RegularTurnActionTest {
         };
 
         Player districtBuilder = createRichPlayer(districtBuilderBehavior);
-        RegularTurnAction action = new RegularTurnAction(null, districtBuilder, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
         assertThrows(IllegalActionException.class, () -> districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null));
     }
 }

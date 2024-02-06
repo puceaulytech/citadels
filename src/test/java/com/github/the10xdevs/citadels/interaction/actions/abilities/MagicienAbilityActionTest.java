@@ -70,7 +70,7 @@ class MagicienAbilityActionTest {
 
         Player swapperPlayer = new Player(swapper);
         swapperPlayer.setCurrentRole(Role.MAGICIEN);
-        RegularTurnAction action = new RegularTurnAction(game, swapperPlayer, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(game, swapperPlayer);
 
         assertDoesNotThrow(() -> swapper.playTurn(action, new SelfPlayerView(swapperPlayer), new GameView(game)));
         MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
@@ -95,7 +95,7 @@ class MagicienAbilityActionTest {
 
         Player swapperPlayer = new Player(swapper);
         swapperPlayer.setCurrentRole(Role.MAGICIEN);
-        RegularTurnAction action = new RegularTurnAction(game, swapperPlayer, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(game, swapperPlayer);
 
         assertThrows(IllegalActionException.class, () -> swapper.playTurn(action, new SelfPlayerView(swapperPlayer), new GameView(game)));
     }
@@ -118,7 +118,7 @@ class MagicienAbilityActionTest {
         discarderPlayer.setCurrentRole(Role.MAGICIEN);
         discarderPlayer.getHand().add(card0);
         discarderPlayer.getHand().add(card1);
-        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer, game.getDeck());
+        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer);
 
         assertDoesNotThrow(() -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
         assertTrue(discarderPlayer.getHand().contains(card2));
@@ -142,7 +142,7 @@ class MagicienAbilityActionTest {
         Player discarderPlayer = new Player(discarder);
         discarderPlayer.setCurrentRole(Role.MAGICIEN);
 
-        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer);
         assertThrows(IllegalActionException.class, () -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
     }
 }

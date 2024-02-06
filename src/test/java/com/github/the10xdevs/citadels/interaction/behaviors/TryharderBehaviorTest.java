@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 class TryharderBehaviorTest {
     TryharderBehavior behavior = new TryharderBehavior();
-    Game game = GameBuilder.create().build();
+    GameBuilder gameBuilder;
     @Mock
     GameView state = mock(GameView.class);
 
@@ -53,6 +53,7 @@ class TryharderBehaviorTest {
         testPlayer = new Player(behavior);
         selfTestPlayer = new SelfPlayerView(testPlayer);
         testView = new PlayerView(testPlayer);
+        gameBuilder = GameBuilder.create();
 
         when(state.getTurn()).thenReturn(1);
         when(state.getPlayers()).thenReturn(List.of(testView, testView));
@@ -78,7 +79,7 @@ class TryharderBehaviorTest {
     void playTurnTest(Role role) {
         Deck<District> deck = new Deck<>(List.of(house, yacht));
         testPlayer.setCurrentRole(role);
-        RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(deck).build(), testPlayer);
         assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, state));
     }
 
@@ -106,7 +107,7 @@ class TryharderBehaviorTest {
         testPlayer.setCurrentRole(Role.ASSASSIN);
         testPlayer.setGold(10);
         Deck<District> deck = new Deck<>(List.of(shirt, yacht));
-        RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(deck).build(), testPlayer);
         behavior.playTurn(action, selfTestPlayer, state);
 
         assertEquals(shirt, action.getChosenCard());

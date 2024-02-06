@@ -34,12 +34,12 @@ class AssassinAbilityActionTest {
             }
         };
 
-        Game game = GameBuilder.create().build();
+        Game game = GameBuilder.create().withDeck(new Deck<>()).build();
 
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.ASSASSIN);
 
-        RegularTurnAction action = new RegularTurnAction(game, player, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(game, player);
         player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(game));
 
         AssassinAbilityAction assassinAction = (AssassinAbilityAction) action.getAbilityAction();

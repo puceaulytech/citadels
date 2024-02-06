@@ -226,7 +226,7 @@ public class Game {
             this.currentTurnOrder = player.getCurrentRole().getTurnOrder();
 
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
-            RegularTurnAction action = new RegularTurnAction(this, player, deck);
+            RegularTurnAction action = new RegularTurnAction(this, player);
 
             try {
                 player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
