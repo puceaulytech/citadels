@@ -14,17 +14,16 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VoleurAbilityActionTest {
+
     @Test
     void use() throws IllegalActionException {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
             }
 
@@ -35,12 +34,12 @@ class VoleurAbilityActionTest {
             }
         };
 
-        Game game = GameBuilder.create().build();
+        Game game = GameBuilder.create().withDeck(new Deck<>()).build();
 
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.VOLEUR);
 
-        RegularTurnAction action = new RegularTurnAction(game, player, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(game, player);
         player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(game));
 
         VoleurAbilityAction voleurAction = (VoleurAbilityAction) action.getAbilityAction();
@@ -52,7 +51,7 @@ class VoleurAbilityActionTest {
     void stealFromAssassin() {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
             }
 
@@ -66,7 +65,8 @@ class VoleurAbilityActionTest {
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.VOLEUR);
 
-        RegularTurnAction action = new RegularTurnAction(null, player, new Deck<>());
+        Game game = GameBuilder.create().withDeck(new Deck<>()).build();
+        RegularTurnAction action = new RegularTurnAction(game, player);
         assertThrows(IllegalActionException.class, () -> player.getBehavior().playTurn(action, new SelfPlayerView(player), null));
     }
 
@@ -101,7 +101,7 @@ class VoleurAbilityActionTest {
     }
 
     @Test
-    void stealFromThrowsExceptionWhenStealingFromKilledRole() throws IllegalActionException {
+    void stealFromThrowsExceptionWhenStealingFromKilledRole() {
         FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
 
@@ -110,4 +110,3 @@ class VoleurAbilityActionTest {
         assertThrows(IllegalActionException.class, () -> action.stealFrom(Role.EVEQUE));
     }
 }
-

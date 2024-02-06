@@ -34,16 +34,17 @@ class CityTest {
 
     @Test
     void iterator() throws DuplicatedDistrictException {
-
         City city = new City();
         District district1 = new District("District1", Category.MERVEILLE, 3);
         District district2 = new District("District2", Category.NOBLE, 4);
         city.addDistrict(district1);
         city.addDistrict(district2);
 
-
-        for (District district : city) {
-            System.out.println(district);
+        int iterationCount = 0;
+        for (District ignored : city) {
+            iterationCount++;
         }
+
+        assertEquals(2, iterationCount);
     }
 }

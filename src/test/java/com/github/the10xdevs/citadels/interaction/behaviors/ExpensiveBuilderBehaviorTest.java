@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 class ExpensiveBuilderBehaviorTest {
     ExpensiveBuilderBehavior behavior = new ExpensiveBuilderBehavior();
-    Game game = GameBuilder.create().build();
+    GameBuilder gameBuilder;
     @Mock
     GameView state = mock(GameView.class);
 
@@ -44,6 +44,8 @@ class ExpensiveBuilderBehaviorTest {
         testView = new PlayerView(testPlayer);
         testPlayer.setCurrentRole(Role.ARCHITECTE);
 
+        gameBuilder = GameBuilder.create();
+
         when(state.getPlayers()).thenReturn(List.of(testView, testView));
     }
 
@@ -54,7 +56,7 @@ class ExpensiveBuilderBehaviorTest {
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, state, availableRoles));
+        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -65,7 +67,8 @@ class ExpensiveBuilderBehaviorTest {
     @Test
     void testPlayTurn() {
         Deck<District> deck = new Deck<>(List.of(new District("nobleDistrict", Category.NOBLE, 6), new District("ReligiousDistrict", Category.RELIGIEUX, 8)));
-        RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
+        Game game = gameBuilder.withDeck(deck).build();
+        RegularTurnAction action = new RegularTurnAction(game, testPlayer);
         assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, new GameView(game)));
     }
 
@@ -78,15 +81,16 @@ class ExpensiveBuilderBehaviorTest {
         District best = new District("ReligiousDistrict", Category.RELIGIEUX, 8);
         testPlayer.getHand().addAll(List.of(notGoodEnough, goodButNotBest, best));
         testPlayer.incrementGold(10);
+        Game game = gameBuilder.withDeck(deck).build();
 
         // he should mark a district for the next turn
-        RegularTurnAction action = new RegularTurnAction(game, testPlayer, deck);
+        RegularTurnAction action = new RegularTurnAction(game, testPlayer);
         behavior.playTurn(action, selfTestPlayer, new GameView(game));
         assertEquals(RegularTurnAction.BasicAction.GOLD, action.getBasicAction());
         assertNull(action.getBuiltDistrict());
 
         // he should build the district with the highest score
-        action = new RegularTurnAction(game, testPlayer, deck);
+        action = new RegularTurnAction(game, testPlayer);
         behavior.playTurn(action, selfTestPlayer, new GameView(game));
         assertEquals(best, action.getBuiltDistrict());
     }

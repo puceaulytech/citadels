@@ -12,20 +12,18 @@ import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.logging.VoidLogger;
 import com.github.the10xdevs.citadels.models.District;
-import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
         }
 
         @Override
@@ -59,32 +57,32 @@ class GameTest {
         assertTrue(game.isGameOver());
     }
 
-        @Test
-        void shouldConstructWithMessageOnly() {
-            IllegalActionException exception = new IllegalActionException("Test message");
-            assertEquals("Test message", exception.getMessage());
-            assertNull(exception.getCause());
-        }
+    @Test
+    void shouldConstructWithMessageOnly() {
+        IllegalActionException exception = new IllegalActionException("Test message");
+        assertEquals("Test message", exception.getMessage());
+        assertNull(exception.getCause());
+    }
 
-        @Test
-        void shouldConstructWithMessageAndCause() {
-            Throwable cause = new RuntimeException("Test cause");
-            IllegalActionException exception = new IllegalActionException("Test message", cause);
-            assertEquals("Test message", exception.getMessage());
-            assertEquals(cause, exception.getCause());
-        }
+    @Test
+    void shouldConstructWithMessageAndCause() {
+        Throwable cause = new RuntimeException("Test cause");
+        IllegalActionException exception = new IllegalActionException("Test message", cause);
+        assertEquals("Test message", exception.getMessage());
+        assertEquals(cause, exception.getCause());
+    }
 
-        @Test
-        void shouldConstructWithNullMessage() {
-            IllegalActionException exception = new IllegalActionException(null);
-            assertNull(exception.getMessage());
-            assertNull(exception.getCause());
-        }
+    @Test
+    void shouldConstructWithNullMessage() {
+        IllegalActionException exception = new IllegalActionException(null);
+        assertNull(exception.getMessage());
+        assertNull(exception.getCause());
+    }
 
-        @Test
-        void shouldConstructWithNullCause() {
-            IllegalActionException exception = new IllegalActionException("Test message", null);
-            assertEquals("Test message", exception.getMessage());
-            assertNull(exception.getCause());
-        }
+    @Test
+    void shouldConstructWithNullCause() {
+        IllegalActionException exception = new IllegalActionException("Test message", null);
+        assertEquals("Test message", exception.getMessage());
+        assertNull(exception.getCause());
+    }
 }

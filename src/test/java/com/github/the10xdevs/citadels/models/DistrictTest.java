@@ -2,8 +2,7 @@ package com.github.the10xdevs.citadels.models;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DistrictTest {
     @SuppressWarnings({"EqualsWithItself", "AssertBetweenInconvertibleTypes"})
@@ -19,8 +18,8 @@ class DistrictTest {
         assertNotEquals(romain, logan);
         assertNotEquals(vahan, logan);
         assertNotEquals(4, vahan);
-        assertNotEquals(romain, null);
-        assertNotEquals(romain, "Baraque de Romain");
+        assertNotNull(romain);
+        assertNotEquals("Baraque de Romain", romain);
 
         // Test hashCode
         assertEquals(romain.hashCode(), otherRomain.hashCode());

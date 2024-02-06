@@ -15,16 +15,15 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CondottiereAbilityActionTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
         }
 
         @Override
@@ -36,7 +35,7 @@ class CondottiereAbilityActionTest {
 
     Behavior testBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
         }
 
@@ -47,7 +46,12 @@ class CondottiereAbilityActionTest {
         }
     };
 
-    Game game = GameBuilder.create().addBehavior(emptyBehavior).addBehavior(testBehavior).build();
+    Game game;
+
+    @BeforeEach
+    void initGame() {
+        game = GameBuilder.create().addBehavior(emptyBehavior).addBehavior(testBehavior).withDeck(new Deck<>()).build();
+    }
 
     @Test
     void use() throws IllegalActionException, DuplicatedDistrictException {
@@ -61,7 +65,7 @@ class CondottiereAbilityActionTest {
         opponent.setCurrentRole(Role.ROI);
         opponent.getCity().addDistrict(targetDistrict);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
 
         testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game));
 
@@ -84,7 +88,7 @@ class CondottiereAbilityActionTest {
         opponent.setCurrentRole(Role.EVEQUE);
         opponent.getCity().addDistrict(targetDistrict);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -101,7 +105,7 @@ class CondottiereAbilityActionTest {
         opponent.setCurrentRole(Role.ROI);
         opponent.getCity().addDistrict(targetDistrict);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -121,7 +125,7 @@ class CondottiereAbilityActionTest {
             opponent.getCity().addDistrict(new District("Fake n" + i, Category.RELIGIEUX, 2));
         }
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -137,7 +141,7 @@ class CondottiereAbilityActionTest {
         Player opponent = game.getPlayers().get(1);
         opponent.setCurrentRole(Role.ROI);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
 
         assertThrows(IllegalActionException.class, () -> testBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
@@ -146,7 +150,7 @@ class CondottiereAbilityActionTest {
     void destroyInvalidPlayer() {
         Behavior badBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override
@@ -165,7 +169,7 @@ class CondottiereAbilityActionTest {
         Player opponent = game.getPlayers().get(1);
         opponent.setCurrentRole(Role.ROI);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer, new Deck<>());
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
 
         assertThrows(IllegalActionException.class, () -> badBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }

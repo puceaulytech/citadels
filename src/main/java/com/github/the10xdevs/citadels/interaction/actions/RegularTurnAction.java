@@ -31,13 +31,12 @@ public class RegularTurnAction {
      *
      * @param game          The current game
      * @param currentPlayer The current player
-     * @param deck          The deck of the game
      */
-    public RegularTurnAction(Game game, Player currentPlayer, Deck<District> deck) {
+    public RegularTurnAction(Game game, Player currentPlayer) {
         this.currentPlayer = currentPlayer;
-        this.deck = deck;
+        this.deck = game.getDeck();
         this.abilityAction = currentPlayer.getCurrentRole().getAbilityAction(currentPlayer, game);
-        this.cardsToDraw = deck.peekFirstTwo();
+        this.cardsToDraw = this.deck.peekFirstTwo();
     }
 
     /**

@@ -5,9 +5,6 @@ import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
-import com.github.the10xdevs.citadels.models.Role;
-
-import java.util.Set;
 
 /**
  * Playing interface
@@ -18,10 +15,9 @@ public interface Behavior {
     /**
      * Pick a role from available roles
      *
-     * @param action         The action
-     * @param availableRoles Available roles
+     * @param action The action
      */
-    void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException;
+    void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException;
 
 
     /**

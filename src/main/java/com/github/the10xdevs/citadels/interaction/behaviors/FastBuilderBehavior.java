@@ -36,22 +36,15 @@ public class FastBuilderBehavior implements Behavior {
      * @param availableRoles the roles available to be picked
      * @return the most important role, if any
      */
-
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
         return FastBuilderBehavior.rolesImportance.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
-    /**
-     * Returns the most important role from the available roles.
-     *
-     * @param availableRoles the roles available to be picked
-     * @return the most important role, if any
-     */
 
     @Override
-    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
-        Set<Role> roles = EnumSet.copyOf(availableRoles);
+    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+        Set<Role> roles = EnumSet.copyOf(action.getAvailableRoles());
         if (this.previousRole != null)
             roles.remove(this.previousRole);
 
@@ -60,7 +53,7 @@ public class FastBuilderBehavior implements Behavior {
         roles.remove(roleToPick);
 
         if (gameState.getPlayers().size() == 2) {
-            if (availableRoles.contains(this.previousRole))
+            if (action.getAvailableRoles().contains(this.previousRole))
                 roles.add(this.previousRole);
             Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
             action.discard(roleToDiscard);
@@ -68,13 +61,14 @@ public class FastBuilderBehavior implements Behavior {
 
         this.previousRole = roleToPick;
     }
+
     /**
      * Performs a turn action. The bot always draws a card until its hand size reaches eight, then it always takes gold.
      * It also tries to build the first district it can afford.
      *
      * @param action the RegularTurnAction to be performed
-     * @param self the SelfPlayerView of the current player
-     * @param game the current state of the game
+     * @param self   the SelfPlayerView of the current player
+     * @param game   the current state of the game
      * @throws IllegalActionException if an illegal action is performed
      */
 

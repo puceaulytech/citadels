@@ -12,26 +12,23 @@ import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
-import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArchitecteAbilityActionTest {
 
     private Player currentPlayer;
-    private Game game;
     private ArchitecteAbilityAction architecteAction;
 
     @BeforeEach
     void setUp() {
         Behavior emptyBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override
@@ -40,7 +37,7 @@ class ArchitecteAbilityActionTest {
         };
 
         currentPlayer = new Player(null);
-        game = GameBuilder.create().addBehavior(emptyBehavior).addBehavior(new RandomBehavior()).build();
+        Game game = GameBuilder.create().addBehavior(emptyBehavior).addBehavior(new RandomBehavior()).build();
         architecteAction = new ArchitecteAbilityAction(currentPlayer, game);
     }
 

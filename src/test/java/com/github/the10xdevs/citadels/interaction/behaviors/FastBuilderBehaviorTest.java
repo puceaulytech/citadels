@@ -1,7 +1,6 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
-import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
@@ -10,8 +9,6 @@ import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
-import com.github.the10xdevs.citadels.models.Category;
-import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,61 +26,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class FastBuilderBehaviorTest {
+    Game game;
     @Mock
     GameView state = mock(GameView.class);
     FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
-    PlayerView view = new PlayerView(new Player(fastBuilderBehavior));
-
-    private static RegularTurnAction getRegularTurnAction(FastBuilderBehavior fastBuilderBehavior) throws IllegalActionException {
-        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
-        Player player = new Player(fastBuilderBehavior);
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, player, new Deck(List.of(
-                new District("nobleDistrict", Category.NOBLE, 6),
-                new District("ReligiousDistrict", Category.RELIGIEUX, 8),
-                new District("a", Category.NOBLE, 1),
-                new District("b", Category.RELIGIEUX, 2),
-                new District("c", Category.MARCHAND, 3),
-                new District("d", Category.MERVEILLE, 4), new District("e", Category.MILITAIRE, 5)
-        )));
-        player.setCurrentRole(Role.ARCHITECTE);
-        try {
-            regularTurnAction.takeGold();
-        } catch (IllegalActionException e) {
-            throw new RuntimeException(e);
-        }
-
-        return regularTurnAction;
-
-    }
+    Player player;
+    PlayerView view;
 
     @BeforeEach
     void initPlayer() {
         Behavior fastBuilderBehavior = new FastBuilderBehavior();
-        Player p = new Player(fastBuilderBehavior);
-        p.setCurrentRole(Role.ARCHITECTE);
-        p.swapHandWith(new Player(new Behavior() {
-            @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
+        player = new Player(fastBuilderBehavior);
+        view = new PlayerView(player);
 
-            }
-
-            @Override
-            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-
-            }
-        }));
-
-        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
-        RegularTurnAction action = new RegularTurnAction(game, p, new Deck(List.of(
-                new District("nobleDistrict", Category.NOBLE, 6),
-                new District("ReligiousDistrict", Category.RELIGIEUX, 8),
-                new District("a", Category.NOBLE, 1),
-                new District("b", Category.RELIGIEUX, 2),
-                new District("c", Category.MARCHAND, 3),
-                new District("d", Category.MERVEILLE, 4), new District("e", Category.MILITAIRE, 5)
-        )));
-
-
+        game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
     }
 
     @ParameterizedTest
@@ -94,7 +50,7 @@ class FastBuilderBehaviorTest {
 
         // Call pickRole method
         when(state.getPlayers()).thenReturn(List.of(view, view));
-        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, null, state, availableRoles));
+        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, new SelfPlayerView(player), state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -104,94 +60,58 @@ class FastBuilderBehaviorTest {
 
     @Test
     void playTurnTest_DrawCardUntilEight() {
-        FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
-        Player pl = new Player(fastBuilderBehavior);
-        pl.setGold(8);
-        pl.setCurrentRole(Role.MAGICIEN);
+        player.setGold(8);
+        player.setCurrentRole(Role.MAGICIEN);
 
-        SelfPlayerView selfPlayerView = new SelfPlayerView(pl);
-        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
+        SelfPlayerView selfPlayerView = new SelfPlayerView(player);
         GameView gameView = new GameView(game);
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, pl, new Deck(List.of(
-                new District("nobleDistrict", Category.NOBLE, 6),
-                new District("ReligiousDistrict", Category.RELIGIEUX, 8),
-                new District("a", Category.NOBLE, 1),
-                new District("b", Category.RELIGIEUX, 2),
-                new District("c", Category.MARCHAND, 3),
-                new District("d", Category.MERVEILLE, 4),
-                new District("e", Category.MILITAIRE, 5)
-        )));
 
-        assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
-        assertNotNull(regularTurnAction.getChosenCard());
+        RegularTurnAction action = new RegularTurnAction(game, player);
+        assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(action, selfPlayerView, gameView));
+        assertNotNull(action.getChosenCard());
     }
 
     @Test
     void playTurnTest_TakeGoldAfterEight() {
-        FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
-        Player player = new Player(fastBuilderBehavior);
         player.setGold(8);
         player.setCurrentRole(Role.ASSASSIN);
-        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
 
-
-        RegularTurnAction regularTurnAction = new RegularTurnAction(game, player, new Deck(List.of(
-                new District("nobleDistrict", Category.NOBLE, 6),
-                new District("ReligiousDistrict", Category.RELIGIEUX, 8),
-                new District("a", Category.NOBLE, 1),
-                new District("b", Category.RELIGIEUX, 2),
-                new District("c", Category.MARCHAND, 3),
-                new District("d", Category.MERVEILLE, 4),
-                new District("e", Category.MILITAIRE, 5)
-        )));
-        SelfPlayerView selfPlayerView = new SelfPlayerView(game.getPlayers().get(0));
+        SelfPlayerView selfPlayerView = new SelfPlayerView(player);
         GameView gameView = new GameView(game);
 
-        assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
-
+        RegularTurnAction action = new RegularTurnAction(game, player);
+        assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(action, selfPlayerView, gameView));
     }
 
     @Test
     void playTurnTest_BuildAffordableDistrict() {
-        FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
-        Player player = new Player(fastBuilderBehavior);
         player.setCurrentRole(Role.ARCHITECTE);
         player.setGold(8);
-        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(fastBuilderBehavior).build(),
-                player, new Deck(List.of(
-                new District("nobleDistrict", Category.NOBLE, 6),
-                new District("ReligiousDistrict", Category.RELIGIEUX, 8),
-                new District("a", Category.NOBLE, 1),
-                new District("b", Category.RELIGIEUX, 2),
-                new District("c", Category.MARCHAND, 3),
-                new District("d", Category.MERVEILLE, 4),
-                new District("e", Category.MILITAIRE, 5)
-        )));
         SelfPlayerView selfPlayerView = new SelfPlayerView(player);
         GameView gameView = new GameView(game);
 
-
-        assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(regularTurnAction, selfPlayerView, gameView));
-        assertNotNull(regularTurnAction.getBuiltDistrict());
+        RegularTurnAction action = new RegularTurnAction(game, player);
+        assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(action, selfPlayerView, gameView));
+        assertNotNull(action.getBuiltDistrict());
     }
 
     @Test
     void pickRoleTest() {
-        FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         RoleTurnAction roleTurnAction = new RoleTurnAction(EnumSet.allOf(Role.class));
-        SelfPlayerView selfPlayerView = new SelfPlayerView(new Player(fastBuilderBehavior));
-        GameView gameView = new GameView(GameBuilder.create().addBehavior(fastBuilderBehavior).build());
+        SelfPlayerView selfPlayerView = new SelfPlayerView(player);
+
+        GameView gameView = new GameView(game);
+
         try {
             roleTurnAction.discard(Role.MAGICIEN);
         } catch (IllegalActionException e) {
             throw new RuntimeException(e);
         }
-        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, selfPlayerView, gameView, EnumSet.allOf(Role.class)));
+
+        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, selfPlayerView, gameView));
         assertNotNull(roleTurnAction.getPickedRole());
         assertNotNull(roleTurnAction.getDiscardedRole());
         assertNotEquals(roleTurnAction.getPickedRole(), roleTurnAction.getDiscardedRole());
     }
-
 }

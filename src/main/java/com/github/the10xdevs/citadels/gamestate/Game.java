@@ -43,7 +43,7 @@ public class Game {
     /**
      * Starts the game
      */
-    public void start() {
+    public Leaderboard start() {
         this.deck.shuffle();
 
         // Give four cards and two gold to each player
@@ -75,9 +75,10 @@ public class Game {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Game is finished but no player has eight built districts"));
 
-        // At the end of the game, sort players by their score (sum of all their district's cost)
-        this.players.sort(Comparator.comparingInt((Player player) -> player.getScore(player == firstPlayerToFinish)).reversed());
-        this.logger.logWinners(this.players, firstPlayerToFinish);
+        Leaderboard leaderboard = new Leaderboard(this.players, firstPlayerToFinish);
+        this.logger.logWinners(leaderboard);
+
+        return leaderboard;
     }
 
     /**
@@ -143,10 +144,10 @@ public class Game {
             if (i == 6) {
                 availableRoles.add(roleFacingDown);
             }
-            RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
+            RoleTurnAction roleTurnAction = new RoleTurnAction(availableRoles);
 
             try {
-                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(availableRoles));
+                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this));
             } catch (Exception e) {
                 throw new IllegalActionException("Player failed to pick role", e);
             }
@@ -222,16 +223,16 @@ public class Game {
             int goldReward = this.checkMatchingDistricts(player);
             player.incrementGold(goldReward);
 
+            this.currentTurnOrder = player.getCurrentRole().getTurnOrder();
+
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
-            RegularTurnAction action = new RegularTurnAction(this, player, deck);
+            RegularTurnAction action = new RegularTurnAction(this, player);
 
             try {
                 player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
             } catch (Exception e) {
                 throw new IllegalActionException("Player failed to play turn", e);
             }
-
-            this.currentTurnOrder = player.getCurrentRole().getTurnOrder();
 
             this.logger.logRegularTurnAction(player, action);
         }

@@ -42,7 +42,7 @@ class RandomBehaviorTest {
 
         // Call pickRole method
         when(state.getPlayers()).thenReturn(List.of(view, view));
-        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, state, availableRoles));
+        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -57,7 +57,7 @@ class RandomBehaviorTest {
         Player dummyPlayer = new Player(dummyBehavior);
         dummyPlayer.setCurrentRole(Role.ARCHITECTE);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer, new Deck(List.of()));
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer);
         SelfPlayerView selfPlayerView = new SelfPlayerView(dummyPlayer);
         GameView gameView = new GameView(GameBuilder.create().addBehavior(dummyBehavior).build());
 
@@ -71,14 +71,13 @@ class RandomBehaviorTest {
         Player dummyPlayer = new Player(dummyBehavior);
         dummyPlayer.setCurrentRole(Role.ASSASSIN);
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer,
-                new Deck(Collections.unmodifiableCollection(List.of(new District("nobleDistrict", Category.NOBLE, 6),
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).withDeck(
+                new Deck<>(List.of(new District("nobleDistrict", Category.NOBLE, 6),
                         new District("ReligiousDistrict", Category.RELIGIEUX, 8),
                         new District("a", Category.NOBLE, 1),
                         new District("b", Category.RELIGIEUX, 2),
                         new District("c", Category.MARCHAND, 3),
                         new District("d", Category.MERVEILLE, 4),
-
                         new District("e", Category.MILITAIRE, 5),
                         new District("f", Category.NOBLE, 6),
                         new District("g", Category.MILITAIRE, 2),
@@ -86,7 +85,7 @@ class RandomBehaviorTest {
                         new District("i", Category.NOBLE, 9),
                         new District("j", Category.RELIGIEUX, 8),
                         new District("k", Category.NOBLE, 10),
-                        new District("l", Category.RELIGIEUX, 11)))));
+                        new District("l", Category.RELIGIEUX, 11)))).build(), dummyPlayer);
 
         SelfPlayerView selfPlayerView = new SelfPlayerView(dummyPlayer);
         GameView gameView = new GameView(GameBuilder.create().addBehavior(dummyBehavior).build());
@@ -100,7 +99,7 @@ class RandomBehaviorTest {
         RandomBehavior dummyBehavior = new RandomBehavior();
         Player dummyPlayer = new Player(dummyBehavior);
         dummyPlayer.setCurrentRole(Role.VOLEUR);
-        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer, new Deck(List.of()));
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(dummyBehavior).build(), dummyPlayer);
         SelfPlayerView selfPlayerView = new SelfPlayerView(dummyPlayer);
         GameView gameView = new GameView(GameBuilder.create().addBehavior(dummyBehavior).build());
 
@@ -116,7 +115,7 @@ class RandomBehaviorTest {
         Game game = GameBuilder.create().build();
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.ASSASSIN);
-        RegularTurnAction action = new RegularTurnAction(game, player, new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(game, player);
 
         // Act
         player.getBehavior().playTurn(action, new SelfPlayerView(player), new GameView(game));
@@ -134,7 +133,7 @@ class RandomBehaviorTest {
         }
 
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
         }
 
@@ -144,6 +143,4 @@ class RandomBehaviorTest {
             assassinAction.kill(roleToKill);
         }
     }
-
-
 }

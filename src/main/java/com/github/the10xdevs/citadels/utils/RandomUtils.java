@@ -15,12 +15,13 @@ public class RandomUtils {
     RandomUtils() {
         throw new IllegalStateException("Utility class");
     }
+
     /**
      * Chooses a random element from a collection.
      *
      * @param randomGenerator the random number generator to use
-     * @param collection the collection to choose from
-     * @param <T> the type of elements in the collection
+     * @param collection      the collection to choose from
+     * @param <T>             the type of elements in the collection
      * @return a randomly chosen element from the collection, or null if the collection is empty
      * @throws IllegalStateException if the random position generated is out of bounds
      */
