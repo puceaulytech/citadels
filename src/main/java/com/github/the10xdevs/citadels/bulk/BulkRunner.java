@@ -10,6 +10,7 @@ import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import dnl.utils.text.table.TextTable;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,15 +19,17 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class BulkRunner {
-    private final Map<Behavior, BulkResult> scores = new HashMap<>();
-    private final int iterations;
+    private final Map<String, BulkResult> scores = new HashMap<>();
+    private final List<Behavior> behaviors;
+    private int iterations;
     private final String[] headers = {"Behavior", "Wins", "Loses", "%", "Average score"};
 
     public BulkRunner(int iterations, List<Behavior> behaviors) {
         this.iterations = iterations;
+        this.behaviors = behaviors;
 
         for (Behavior b : behaviors) {
-            this.scores.put(b, new BulkResult());
+            this.scores.put(b.getName(), new BulkResult());
         }
     }
 
@@ -35,7 +38,7 @@ public class BulkRunner {
             GameBuilder gameBuilder = GameBuilder.create()
                     .withLogger(new VoidLogger());
 
-            for (Behavior behavior : this.scores.keySet()) {
+            for (Behavior behavior : this.behaviors) {
                 gameBuilder.addBehavior(behavior);
             }
 
@@ -45,7 +48,7 @@ public class BulkRunner {
 
             for (int j = 0; j < leaderboard.getEntries().size(); j++) {
                 Leaderboard.Entry entry = leaderboard.getEntries().get(j);
-                BulkResult bulkRunnerResult = this.scores.get(entry.getPlayer().getBehavior());
+                BulkResult bulkRunnerResult = this.scores.get(entry.getPlayer().getBehavior().getName());
 
                 if (j == 0) {
                     bulkRunnerResult.addWin();
@@ -68,17 +71,17 @@ public class BulkRunner {
     private String[][] getRawStats() {
         String[][] data = new String[this.scores.size()][this.headers.length];
 
-        List<Map.Entry<Behavior, BulkResult>> sortedEntries = this.scores.entrySet()
+        List<Map.Entry<String, BulkResult>> sortedEntries = this.scores.entrySet()
                 .stream()
-                .sorted(Comparator.comparingInt((Map.Entry<Behavior, BulkResult> e) -> e.getValue().getWins()).reversed())
+                .sorted(Comparator.comparingInt((Map.Entry<String, BulkResult> e) -> e.getValue().getWins()).reversed())
                 .toList();
 
         int i = 0;
-        for (Map.Entry<Behavior, BulkResult> entry : sortedEntries) {
-            Behavior behavior = entry.getKey();
+        for (Map.Entry<String, BulkResult> entry : sortedEntries) {
+            String behavior = entry.getKey();
             BulkResult bulkResult = entry.getValue();
 
-            data[i][0] = behavior.getName();
+            data[i][0] = behavior;
             data[i][1] = String.valueOf(bulkResult.getWins());
             data[i][2] = String.valueOf(bulkResult.getLoses());
             data[i][3] = String.valueOf(bulkResult.getWinPercentage(this.iterations));
@@ -88,15 +91,35 @@ public class BulkRunner {
         return data;
     }
 
-    public void writeToCSV() throws IOException, CsvException {
-        Path filePath = Paths.get("stats", "gamestats.csv");
-
-        CSVReader reader = new CSVReader(new FileReader(filePath.toFile()));
+    private void mergeExistingCSV(File csvFile) throws IOException, CsvException {
+        CSVReader reader = new CSVReader(new FileReader(csvFile));
         List<String[]> allRows = reader.readAll();
+        List<String[]> dataRows = allRows.subList(1, allRows.size());
+
+        int previousGameCount = Integer.parseInt(dataRows.get(0)[1]) + Integer.parseInt(dataRows.get(0)[2]);
+        this.iterations += previousGameCount;
+
+        for (String[] dataRow : dataRows) {
+            String behaviorName = dataRow[0];
+            BulkResult bulkResult = this.scores.get(behaviorName);
+
+            bulkResult.addWin(Integer.parseInt(dataRow[1]));
+            bulkResult.addLoss(Integer.parseInt(dataRow[2]));
+            bulkResult.setAverageScore((bulkResult.getAverageScore() + Double.parseDouble(dataRow[4])) / 2);
+        }
 
         reader.close();
+    }
 
-        CSVWriter writer = new CSVWriter(new FileWriter(filePath.toFile()));
+    public void writeToCSV() throws CsvException, IOException {
+        Path filePath = Paths.get("stats", "gamestats.csv");
+        File csvFile = filePath.toFile();
+
+        if (csvFile.exists() && !csvFile.isDirectory()) {
+            this.mergeExistingCSV(csvFile);
+        }
+
+        CSVWriter writer = new CSVWriter(new FileWriter(csvFile));
         String[][] data = this.getRawStats();
 
         writer.writeNext(this.headers, false);
