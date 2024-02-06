@@ -22,6 +22,16 @@ import java.util.*;
 public class RandomBehavior implements Behavior {
     private final Random randomGenerator = new Random();
 
+    /**
+     * Picks a random role from the available roles and discards a random role if the game has two players.
+     *
+     * @param action the RoleTurnAction to be performed
+     * @param self the SelfPlayerView of the current player
+     * @param gameState the current state of the game
+     * @param availableRoles the roles available to be picked
+     * @throws IllegalActionException if an illegal action is performed
+     */
+
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
         Set<Role> roles = EnumSet.copyOf(availableRoles);
@@ -33,6 +43,15 @@ public class RandomBehavior implements Behavior {
             action.discard(RandomUtils.chooseFrom(this.randomGenerator, roles));
         }
     }
+
+    /**
+     * Performs a random turn action. The bot may choose to use its role ability, take gold, draw cards, or build a district.
+     *
+     * @param action the RegularTurnAction to be performed
+     * @param self the SelfPlayerView of the current player
+     * @param gameState the current state of the game
+     * @throws IllegalActionException if an illegal action is performed
+     */
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {

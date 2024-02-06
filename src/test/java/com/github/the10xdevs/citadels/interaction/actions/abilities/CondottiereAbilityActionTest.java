@@ -4,6 +4,7 @@ import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -16,7 +17,6 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +47,7 @@ class CondottiereAbilityActionTest {
         }
     };
 
-    Game game = new Game(List.of(emptyBehavior, testBehavior));
+    Game game = GameBuilder.create().addBehavior(emptyBehavior).addBehavior(testBehavior).build();
 
     @Test
     void use() throws IllegalActionException, DuplicatedDistrictException {

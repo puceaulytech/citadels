@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.logging;
 
+import com.github.the10xdevs.citadels.gamestate.Leaderboard;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -14,7 +15,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
-public class ConsoleLogger {
+public class ConsoleLogger implements Logger {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -35,11 +36,7 @@ public class ConsoleLogger {
         this.supportsColor = !System.getProperty("os.name").toLowerCase().contains("win");
     }
 
-    /**
-     * Log the start of a turn
-     *
-     * @param turn The turn number
-     */
+    @Override
     public void logTurnStart(int turn) {
         this.println();
         this.print("------ Tour n°");
@@ -49,13 +46,7 @@ public class ConsoleLogger {
         this.flush();
     }
 
-    /**
-     * Log a role choosing action
-     *
-     * @param index  The index of the player
-     * @param player The player
-     * @param action The action made by the player
-     */
+    @Override
     public void logRoleTurnAction(int index, Player player, RoleTurnAction action) {
         this.println();
         this.print("--- Joueur n°");
@@ -107,12 +98,7 @@ public class ConsoleLogger {
         }
     }
 
-    /**
-     * Log a regular turn action
-     *
-     * @param player The player that made the action
-     * @param action The action made by the player
-     */
+    @Override
     public void logRegularTurnAction(Player player, RegularTurnAction action) {
         this.println();
         this.print("--- Joueur ayant le rôle ");
@@ -152,15 +138,11 @@ public class ConsoleLogger {
         this.flush();
     }
 
-    /**
-     * Log winners of the game
-     *
-     * @param players All the players
-     */
-    public void logWinners(List<Player> players, Player firstPlayerToFinish) {
+    @Override
+    public void logWinners(Leaderboard leaderboard) {
         this.println("\n------ Podium ------");
         int rank = 1;
-        for (Player player : players) {
+        for (Leaderboard.Entry entry : leaderboard.getEntries()) {
             if (this.supportsColor) {
                 if (rank == 1) {
                     this.print(ANSI_GOLD);
@@ -172,16 +154,16 @@ public class ConsoleLogger {
             }
 
             this.print("-> ");
-            this.print(player.getBehavior().getName());
+            this.print(entry.getPlayer().getBehavior().getName());
             this.print(" avec ");
-            this.printInt(player.getScore(player == firstPlayerToFinish));
+            this.printInt(entry.getScore());
             this.println(" points");
 
             if (rank <= 3 && this.supportsColor) {
                 this.print(ANSI_RESET);
             }
 
-            for (District district : player.getCity()) {
+            for (District district : entry.getPlayer().getCity()) {
                 this.print("  - ");
                 this.printColorized(district);
                 this.println();
@@ -193,11 +175,7 @@ public class ConsoleLogger {
         }
     }
 
-    /**
-     * Log if an error occurs during the game
-     *
-     * @param error Caught error to be logged
-     */
+    @Override
     public void logError(Throwable error) {
         this.println();
         this.println("------ " + ANSI_RED + "Error" + ANSI_RESET + " ------");

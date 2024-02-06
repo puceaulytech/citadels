@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class PlayerViewTest {
 
@@ -54,5 +55,13 @@ class PlayerViewTest {
 
         PlayerView view = new PlayerView(p, true);
         assertEquals(Role.ROI, view.getCurrentRole());
+    }
+    @Test
+    void getName() {
+        Player player = mock(Player.class);
+        when(player.getName()).thenReturn("Zak laachiri");
+        PlayerView playerView = new PlayerView(player);
+
+        assertEquals("Zak laachiri", playerView.getName());
     }
 }

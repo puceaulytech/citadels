@@ -97,4 +97,5 @@ class RoleTurnActionTest {
 
         assertThrows(IllegalActionException.class, () -> testBehavior.pickRole(action, null, null, availableRoles));
     }
+
 }

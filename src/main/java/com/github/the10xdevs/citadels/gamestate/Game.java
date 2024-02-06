@@ -6,7 +6,7 @@ import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
-import com.github.the10xdevs.citadels.logging.ConsoleLogger;
+import com.github.the10xdevs.citadels.logging.Logger;
 import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
@@ -18,7 +18,7 @@ import java.util.*;
 public class Game {
     private final List<Player> players = new ArrayList<>();
     private final Deck<District> deck;
-    private final ConsoleLogger logger = new ConsoleLogger();
+    private final Logger logger;
     private final Set<Role> rolesFacingUp = EnumSet.noneOf(Role.class);
     private int firstPlayerIndex = 0;
     private int turn = 1;
@@ -31,22 +31,19 @@ public class Game {
      *
      * @param behaviors The list of Behaviors
      */
-    public Game(List<Behavior> behaviors, Deck<District> deck) {
+    public Game(List<Behavior> behaviors, Deck<District> deck, Logger logger) {
         this.deck = deck;
+        this.logger = logger;
 
         for (Behavior behavior : behaviors) {
             players.add(new Player(behavior));
         }
     }
 
-    public Game(List<Behavior> behaviors) {
-        this(behaviors, new Deck<>(District.all()));
-    }
-
     /**
      * Starts the game
      */
-    public void start() {
+    public Leaderboard start() {
         this.deck.shuffle();
 
         // Give four cards and two gold to each player
@@ -78,9 +75,10 @@ public class Game {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Game is finished but no player has eight built districts"));
 
-        // At the end of the game, sort players by their score (sum of all their district's cost)
-        this.players.sort(Comparator.comparingInt((Player player) -> player.getScore(player == firstPlayerToFinish)).reversed());
-        this.logger.logWinners(this.players, firstPlayerToFinish);
+        Leaderboard leaderboard = new Leaderboard(this.players, firstPlayerToFinish);
+        this.logger.logWinners(leaderboard);
+
+        return leaderboard;
     }
 
     /**
@@ -225,6 +223,8 @@ public class Game {
             int goldReward = this.checkMatchingDistricts(player);
             player.incrementGold(goldReward);
 
+            this.currentTurnOrder = player.getCurrentRole().getTurnOrder();
+
             SelfPlayerView currentPlayerView = new SelfPlayerView(player);
             RegularTurnAction action = new RegularTurnAction(this, player, deck);
 
@@ -233,8 +233,6 @@ public class Game {
             } catch (Exception e) {
                 throw new IllegalActionException("Player failed to play turn", e);
             }
-
-            this.currentTurnOrder = player.getCurrentRole().getTurnOrder();
 
             this.logger.logRegularTurnAction(player, action);
         }

@@ -12,9 +12,19 @@ import java.util.Optional;
 public class CondottiereAbilityAction extends AbilityAction {
     private PlayerView targetPlayer;
     private District targetDistrict;
+
+
     public CondottiereAbilityAction(Player currentPlayer, Game game) {
         super(currentPlayer, game);
     }
+
+    /**
+     * Destroys the target district belonging to the specified player.
+     *
+     * @param targetPlayer   The target player whose district will be destroyed.
+     * @param targetDistrict The target district to be destroyed.
+     * @throws IllegalActionException If the destruction action is not allowed.
+     */
 
     public void destroy(PlayerView targetPlayer, District targetDistrict) throws IllegalActionException {
         this.targetPlayer = targetPlayer;
@@ -39,9 +49,22 @@ public class CondottiereAbilityAction extends AbilityAction {
         this.currentPlayer.incrementGold(-destroyCost);
     }
 
+    /**
+     * Gets the target player whose district will be destroyed.
+     *
+     * @return The target player.
+     */
+
+
     public PlayerView getTargetPlayer() {
         return targetPlayer;
     }
+
+    /**
+     * Gets the target district to be destroyed.
+     *
+     * @return The target district.
+     */
 
     public District getTargetDistrict() {
         return targetDistrict;

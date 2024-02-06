@@ -1,11 +1,15 @@
 package com.github.the10xdevs.citadels.gamestate;
 
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
+import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PlayerTest {
 
@@ -83,5 +87,51 @@ class PlayerTest {
 
         assertEquals(c, first.getHand().get(0));
         assertEquals(d, first.getHand().get(1));
+    }
+
+
+    @Test
+    void incrementGoldIncreasesPlayerGold() {
+        Player player = new Player(null);
+        player.incrementGold(5);
+        assertEquals(5, player.getGold());
+    }
+
+    @Test
+    void buildDistrictThrowsExceptionWhenDistrictIsNull() {
+        Player player = new Player(null);
+        assertThrows(IllegalActionException.class, () -> {
+            player.buildDistrict(null);
+        });
+    }
+
+    @Test
+    void buildDistrictThrowsExceptionWhenDistrictIsNotInHand() {
+        Player player = new Player(null);
+        District district = new District("Baraque 1", Category.MERVEILLE, 1);
+        assertThrows(IllegalActionException.class, () -> {
+            player.buildDistrict(district);
+        });
+    }
+
+    @Test
+    void buildDistrictThrowsExceptionWhenNotEnoughGold() {
+        Player player = new Player(null);
+        District district = new District("Baraque 1", Category.MERVEILLE, 5);
+        player.getHand().add(district);
+        assertThrows(IllegalActionException.class, () -> {
+            player.buildDistrict(district);
+        });
+    }
+
+    @Test
+    void buildDistrictDecreasesGoldAndRemovesDistrictFromHand() throws IllegalActionException {
+        Player player = new Player(null);
+        District district = new District("Baraque 1", Category.MERVEILLE, 1);
+        player.getHand().add(district);
+        player.setGold(5);
+        player.buildDistrict(district);
+        assertEquals(4, player.getGold());
+        assertEquals(Collections.emptyList(), player.getHand());
     }
 }

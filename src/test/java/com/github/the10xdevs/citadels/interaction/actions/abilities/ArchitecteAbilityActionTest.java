@@ -2,6 +2,7 @@ package com.github.the10xdevs.citadels.interaction.actions.abilities;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -39,7 +40,7 @@ class ArchitecteAbilityActionTest {
         };
 
         currentPlayer = new Player(null);
-        game = new Game(List.of(emptyBehavior, new RandomBehavior()));
+        game = GameBuilder.create().addBehavior(emptyBehavior).addBehavior(new RandomBehavior()).build();
         architecteAction = new ArchitecteAbilityAction(currentPlayer, game);
     }
 

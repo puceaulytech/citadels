@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -34,7 +35,7 @@ class FastBuilderBehaviorTest {
     PlayerView view = new PlayerView(new Player(fastBuilderBehavior));
 
     private static RegularTurnAction getRegularTurnAction(FastBuilderBehavior fastBuilderBehavior) throws IllegalActionException {
-        Game game = new Game(List.of(fastBuilderBehavior));
+        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
         Player player = new Player(fastBuilderBehavior);
         RegularTurnAction regularTurnAction = new RegularTurnAction(game, player, new Deck(List.of(
                 new District("nobleDistrict", Category.NOBLE, 6),
@@ -72,7 +73,7 @@ class FastBuilderBehaviorTest {
             }
         }));
 
-        Game game = new Game(List.of(fastBuilderBehavior));
+        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
         RegularTurnAction action = new RegularTurnAction(game, p, new Deck(List.of(
                 new District("nobleDistrict", Category.NOBLE, 6),
                 new District("ReligiousDistrict", Category.RELIGIEUX, 8),
@@ -109,7 +110,7 @@ class FastBuilderBehaviorTest {
         pl.setCurrentRole(Role.MAGICIEN);
 
         SelfPlayerView selfPlayerView = new SelfPlayerView(pl);
-        Game game = new Game(List.of(fastBuilderBehavior));
+        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
         GameView gameView = new GameView(game);
         RegularTurnAction regularTurnAction = new RegularTurnAction(game, pl, new Deck(List.of(
                 new District("nobleDistrict", Category.NOBLE, 6),
@@ -131,7 +132,7 @@ class FastBuilderBehaviorTest {
         Player player = new Player(fastBuilderBehavior);
         player.setGold(8);
         player.setCurrentRole(Role.ASSASSIN);
-        Game game = new Game(List.of(fastBuilderBehavior));
+        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
 
 
         RegularTurnAction regularTurnAction = new RegularTurnAction(game, player, new Deck(List.of(
@@ -156,9 +157,9 @@ class FastBuilderBehaviorTest {
         Player player = new Player(fastBuilderBehavior);
         player.setCurrentRole(Role.ARCHITECTE);
         player.setGold(8);
-        Game game = new Game(List.of(fastBuilderBehavior));
+        Game game = GameBuilder.create().addBehavior(fastBuilderBehavior).build();
 
-        RegularTurnAction regularTurnAction = new RegularTurnAction(new Game(List.of(fastBuilderBehavior)),
+        RegularTurnAction regularTurnAction = new RegularTurnAction(GameBuilder.create().addBehavior(fastBuilderBehavior).build(),
                 player, new Deck(List.of(
                 new District("nobleDistrict", Category.NOBLE, 6),
                 new District("ReligiousDistrict", Category.RELIGIEUX, 8),
@@ -181,7 +182,7 @@ class FastBuilderBehaviorTest {
         FastBuilderBehavior fastBuilderBehavior = new FastBuilderBehavior();
         RoleTurnAction roleTurnAction = new RoleTurnAction(EnumSet.allOf(Role.class));
         SelfPlayerView selfPlayerView = new SelfPlayerView(new Player(fastBuilderBehavior));
-        GameView gameView = new GameView(new Game(List.of(fastBuilderBehavior)));
+        GameView gameView = new GameView(GameBuilder.create().addBehavior(fastBuilderBehavior).build());
         try {
             roleTurnAction.discard(Role.MAGICIEN);
         } catch (IllegalActionException e) {

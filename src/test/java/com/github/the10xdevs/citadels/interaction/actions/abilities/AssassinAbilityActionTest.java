@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.actions.abilities;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -33,7 +34,7 @@ class AssassinAbilityActionTest {
             }
         };
 
-        Game game = new Game(List.of());
+        Game game = GameBuilder.create().build();
 
         Player player = new Player(testBehavior);
         player.setCurrentRole(Role.ASSASSIN);

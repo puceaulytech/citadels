@@ -4,6 +4,7 @@ import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
+import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 class TryharderBehaviorTest {
     TryharderBehavior behavior = new TryharderBehavior();
-    Game game = new Game(List.of());
+    Game game = GameBuilder.create().build();
     @Mock
     GameView state = mock(GameView.class);
 

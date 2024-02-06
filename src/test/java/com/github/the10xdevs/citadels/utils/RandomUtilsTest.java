@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.utils;
 
+import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -23,4 +24,6 @@ class RandomUtilsTest {
 
         assertTrue(integers.contains(element));
     }
+
+
 }
