@@ -5,8 +5,6 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 
-import java.util.List;
-
 public interface Logger {
     /**
      * Log the start of a turn

@@ -11,11 +11,12 @@ import java.util.Optional;
 
 public class MagicienAbilityAction extends AbilityAction {
     private PlayerView exchangedPlayer;
+
     /**
      * Constructor for MagicienAbilityAction.
      *
      * @param currentPlayer the current player
-     * @param game the current game state
+     * @param game          the current game state
      */
 
     public MagicienAbilityAction(Player currentPlayer, Game game) {
@@ -39,6 +40,7 @@ public class MagicienAbilityAction extends AbilityAction {
 
         this.currentPlayer.swapHandWith(player.get());
     }
+
     /**
      * Discards the specified cards from the current player's hand and draws the same number of cards from the deck.
      *
@@ -58,6 +60,7 @@ public class MagicienAbilityAction extends AbilityAction {
             this.currentPlayer.getHand().add(this.game.getDeck().drawCard());
         }
     }
+
     /**
      * Returns the player with whom the current player exchanged hands.
      *

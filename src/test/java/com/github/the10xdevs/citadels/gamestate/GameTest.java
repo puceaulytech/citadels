@@ -59,32 +59,32 @@ class GameTest {
         assertTrue(game.isGameOver());
     }
 
-        @Test
-        void shouldConstructWithMessageOnly() {
-            IllegalActionException exception = new IllegalActionException("Test message");
-            assertEquals("Test message", exception.getMessage());
-            assertNull(exception.getCause());
-        }
+    @Test
+    void shouldConstructWithMessageOnly() {
+        IllegalActionException exception = new IllegalActionException("Test message");
+        assertEquals("Test message", exception.getMessage());
+        assertNull(exception.getCause());
+    }
 
-        @Test
-        void shouldConstructWithMessageAndCause() {
-            Throwable cause = new RuntimeException("Test cause");
-            IllegalActionException exception = new IllegalActionException("Test message", cause);
-            assertEquals("Test message", exception.getMessage());
-            assertEquals(cause, exception.getCause());
-        }
+    @Test
+    void shouldConstructWithMessageAndCause() {
+        Throwable cause = new RuntimeException("Test cause");
+        IllegalActionException exception = new IllegalActionException("Test message", cause);
+        assertEquals("Test message", exception.getMessage());
+        assertEquals(cause, exception.getCause());
+    }
 
-        @Test
-        void shouldConstructWithNullMessage() {
-            IllegalActionException exception = new IllegalActionException(null);
-            assertNull(exception.getMessage());
-            assertNull(exception.getCause());
-        }
+    @Test
+    void shouldConstructWithNullMessage() {
+        IllegalActionException exception = new IllegalActionException(null);
+        assertNull(exception.getMessage());
+        assertNull(exception.getCause());
+    }
 
-        @Test
-        void shouldConstructWithNullCause() {
-            IllegalActionException exception = new IllegalActionException("Test message", null);
-            assertEquals("Test message", exception.getMessage());
-            assertNull(exception.getCause());
-        }
+    @Test
+    void shouldConstructWithNullCause() {
+        IllegalActionException exception = new IllegalActionException("Test message", null);
+        assertEquals("Test message", exception.getMessage());
+        assertNull(exception.getCause());
+    }
 }

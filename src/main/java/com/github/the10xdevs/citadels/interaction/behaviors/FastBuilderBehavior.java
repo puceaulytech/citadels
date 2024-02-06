@@ -42,6 +42,7 @@ public class FastBuilderBehavior implements Behavior {
                 .filter(availableRoles::contains)
                 .findFirst();
     }
+
     /**
      * Returns the most important role from the available roles.
      *
@@ -68,13 +69,14 @@ public class FastBuilderBehavior implements Behavior {
 
         this.previousRole = roleToPick;
     }
+
     /**
      * Performs a turn action. The bot always draws a card until its hand size reaches eight, then it always takes gold.
      * It also tries to build the first district it can afford.
      *
      * @param action the RegularTurnAction to be performed
-     * @param self the SelfPlayerView of the current player
-     * @param game the current state of the game
+     * @param self   the SelfPlayerView of the current player
+     * @param game   the current state of the game
      * @throws IllegalActionException if an illegal action is performed
      */
 

@@ -18,7 +18,7 @@ public class ArchitecteAbilityAction extends AbilityAction {
      * Constructs an ArchitecteAbilityAction instance for the given current player and game.
      *
      * @param currentPlayer The player performing the ability action.
-     * @param game           The current game state.
+     * @param game          The current game state.
      */
 
     public ArchitecteAbilityAction(Player currentPlayer, Game game) {

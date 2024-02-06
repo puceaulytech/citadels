@@ -56,6 +56,7 @@ class PlayerViewTest {
         PlayerView view = new PlayerView(p, true);
         assertEquals(Role.ROI, view.getCurrentRole());
     }
+
     @Test
     void getName() {
         Player player = mock(Player.class);

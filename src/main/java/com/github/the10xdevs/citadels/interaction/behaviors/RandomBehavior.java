@@ -25,9 +25,9 @@ public class RandomBehavior implements Behavior {
     /**
      * Picks a random role from the available roles and discards a random role if the game has two players.
      *
-     * @param action the RoleTurnAction to be performed
-     * @param self the SelfPlayerView of the current player
-     * @param gameState the current state of the game
+     * @param action         the RoleTurnAction to be performed
+     * @param self           the SelfPlayerView of the current player
+     * @param gameState      the current state of the game
      * @param availableRoles the roles available to be picked
      * @throws IllegalActionException if an illegal action is performed
      */
@@ -47,8 +47,8 @@ public class RandomBehavior implements Behavior {
     /**
      * Performs a random turn action. The bot may choose to use its role ability, take gold, draw cards, or build a district.
      *
-     * @param action the RegularTurnAction to be performed
-     * @param self the SelfPlayerView of the current player
+     * @param action    the RegularTurnAction to be performed
+     * @param self      the SelfPlayerView of the current player
      * @param gameState the current state of the game
      * @throws IllegalActionException if an illegal action is performed
      */

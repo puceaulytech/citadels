@@ -12,7 +12,6 @@ import com.github.the10xdevs.citadels.models.Role;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Optional;
 
 public class ConsoleLogger implements Logger {

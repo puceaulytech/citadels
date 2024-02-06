@@ -1,7 +1,6 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
-import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
@@ -10,8 +9,6 @@ import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
-import com.github.the10xdevs.citadels.models.Category;
-import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

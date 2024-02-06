@@ -23,6 +23,10 @@ public class BulkResult {
         return this.averageScore;
     }
 
+    public void setAverageScore(double amount) {
+        this.averageScore = amount;
+    }
+
     public void addWin() {
         this.wins++;
     }
@@ -41,10 +45,6 @@ public class BulkResult {
 
     public void incrementAverageScore(double amount) {
         this.averageScore += amount;
-    }
-
-    public void setAverageScore(double amount) {
-        this.averageScore = amount;
     }
 
     public double getWinPercentage(int iterations) {

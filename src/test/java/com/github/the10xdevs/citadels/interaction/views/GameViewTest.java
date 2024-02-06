@@ -6,8 +6,6 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
 import org.junit.jupiter.api.Test;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

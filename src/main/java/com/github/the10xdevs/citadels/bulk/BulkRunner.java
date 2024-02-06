@@ -21,8 +21,8 @@ import java.util.*;
 public class BulkRunner {
     private final Map<String, BulkResult> scores = new HashMap<>();
     private final List<Behavior> behaviors;
-    private int iterations;
     private final String[] headers = {"Behavior", "Wins", "Loses", "%", "Average score"};
+    private int iterations;
 
     public BulkRunner(int iterations, List<Behavior> behaviors) {
         this.iterations = iterations;

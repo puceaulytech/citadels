@@ -5,8 +5,6 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 
-import java.util.List;
-
 public class VoidLogger implements Logger {
     @Override
     public void logTurnStart(int turn) {
