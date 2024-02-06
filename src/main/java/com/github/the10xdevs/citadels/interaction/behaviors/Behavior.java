@@ -38,6 +38,12 @@ public interface Behavior {
      * @return The name of the behavior
      */
     default String getName() {
-        return this.getClass().getSimpleName();
+        String fullClassName = this.getClass().getSimpleName();
+
+        if (fullClassName.endsWith("Behavior")) {
+            return fullClassName.substring(0, fullClassName.indexOf("Behavior"));
+        }
+
+        return fullClassName;
     }
 }
