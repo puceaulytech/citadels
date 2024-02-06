@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.actions;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.models.Role;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -66,5 +67,9 @@ public class RoleTurnAction {
      */
     public Role getDiscardedRole() {
         return discardedRole;
+    }
+
+    public Set<Role> getAvailableRoles() {
+        return Collections.unmodifiableSet(this.availableRoles);
     }
 }

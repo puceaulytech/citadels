@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -50,7 +49,7 @@ class RegularTurnActionTest {
     void takeGold() throws IllegalActionException, DuplicatedDistrictException {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -71,7 +70,7 @@ class RegularTurnActionTest {
     void takeTooMuchGold() {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -91,7 +90,7 @@ class RegularTurnActionTest {
     void drawCards() throws IllegalActionException, DuplicatedDistrictException {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -112,7 +111,7 @@ class RegularTurnActionTest {
     void drawCardsAfterGold() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -132,7 +131,7 @@ class RegularTurnActionTest {
     void drawCardsInEmptyDeck() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -150,7 +149,7 @@ class RegularTurnActionTest {
     void chooseTwice() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -170,7 +169,7 @@ class RegularTurnActionTest {
     void chooseInvalid() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -189,7 +188,7 @@ class RegularTurnActionTest {
     void chooseNull() {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -208,7 +207,7 @@ class RegularTurnActionTest {
     void buildDistrict() throws IllegalActionException {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -227,7 +226,7 @@ class RegularTurnActionTest {
     void buildTwoDistricts() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -246,7 +245,7 @@ class RegularTurnActionTest {
     void buildInvalidDistrict() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -264,7 +263,7 @@ class RegularTurnActionTest {
     void buildDistrictWithoutEnoughGold() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override
@@ -283,7 +282,7 @@ class RegularTurnActionTest {
     void buildNullDistrict() {
         Behavior districtBuilderBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
             }
 
             @Override

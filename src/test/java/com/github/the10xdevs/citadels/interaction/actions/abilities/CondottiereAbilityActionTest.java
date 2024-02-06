@@ -18,14 +18,12 @@ import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CondottiereAbilityActionTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
         }
 
         @Override
@@ -37,7 +35,7 @@ class CondottiereAbilityActionTest {
 
     Behavior testBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
         }
 
@@ -152,7 +150,7 @@ class CondottiereAbilityActionTest {
     void destroyInvalidPlayer() {
         Behavior badBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override

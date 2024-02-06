@@ -45,16 +45,15 @@ public class ExpensiveBuilderBehavior implements Behavior {
     /**
      * Picks the most important role from the available roles and discards the most important role if the game has two players.
      *
-     * @param action         the RoleTurnAction to be performed
-     * @param self           the SelfPlayerView of the current player
-     * @param gameState      the current state of the game
-     * @param availableRoles the roles available to be picked
+     * @param action    the RoleTurnAction to be performed
+     * @param self      the SelfPlayerView of the current player
+     * @param gameState the current state of the game
      * @throws IllegalActionException if an illegal action is performed
      */
 
     @Override
-    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
-        Set<Role> roles = EnumSet.copyOf(availableRoles);
+    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+        Set<Role> roles = EnumSet.copyOf(action.getAvailableRoles());
 
         Role roleToPick = ExpensiveBuilderBehavior.getMostImportantRole(roles).orElseThrow();
         action.pick(roleToPick);

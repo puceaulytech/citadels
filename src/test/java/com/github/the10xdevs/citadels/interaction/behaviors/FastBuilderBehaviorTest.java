@@ -50,7 +50,7 @@ class FastBuilderBehaviorTest {
 
         // Call pickRole method
         when(state.getPlayers()).thenReturn(List.of(view, view));
-        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, new SelfPlayerView(player), state, availableRoles));
+        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, new SelfPlayerView(player), state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -109,7 +109,7 @@ class FastBuilderBehaviorTest {
             throw new RuntimeException(e);
         }
 
-        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, selfPlayerView, gameView, EnumSet.allOf(Role.class)));
+        assertDoesNotThrow(() -> fastBuilderBehavior.pickRole(roleTurnAction, selfPlayerView, gameView));
         assertNotNull(roleTurnAction.getPickedRole());
         assertNotNull(roleTurnAction.getDiscardedRole());
         assertNotEquals(roleTurnAction.getPickedRole(), roleTurnAction.getDiscardedRole());

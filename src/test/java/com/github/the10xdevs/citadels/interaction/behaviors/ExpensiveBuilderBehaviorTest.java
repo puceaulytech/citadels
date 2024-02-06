@@ -56,7 +56,7 @@ class ExpensiveBuilderBehaviorTest {
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, state, availableRoles));
+        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, null, state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));

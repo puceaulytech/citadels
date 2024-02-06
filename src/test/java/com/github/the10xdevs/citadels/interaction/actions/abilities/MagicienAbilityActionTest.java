@@ -19,14 +19,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MagicienAbilityActionTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
         }
 
         @Override
@@ -58,7 +57,7 @@ class MagicienAbilityActionTest {
     void testExchangeHandWith() {
         Behavior swapper = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override
@@ -83,7 +82,7 @@ class MagicienAbilityActionTest {
     void testExchangeWithNonExistingPlayer() {
         Behavior swapper = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override
@@ -104,7 +103,7 @@ class MagicienAbilityActionTest {
     void testDiscardAndDraw() {
         Behavior discarder = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override
@@ -129,7 +128,7 @@ class MagicienAbilityActionTest {
     void testIllegalDiscardAndDraw() {
         Behavior discarder = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
             }
 
             @Override

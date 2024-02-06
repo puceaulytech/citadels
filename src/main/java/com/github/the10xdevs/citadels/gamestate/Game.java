@@ -144,10 +144,10 @@ public class Game {
             if (i == 6) {
                 availableRoles.add(roleFacingDown);
             }
-            RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
+            RoleTurnAction roleTurnAction = new RoleTurnAction(availableRoles);
 
             try {
-                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this), Collections.unmodifiableSet(availableRoles));
+                player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this));
             } catch (Exception e) {
                 throw new IllegalActionException("Player failed to pick role", e);
             }

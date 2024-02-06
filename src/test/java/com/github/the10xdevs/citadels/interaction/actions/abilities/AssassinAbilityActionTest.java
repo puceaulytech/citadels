@@ -13,8 +13,6 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AssassinAbilityActionTest {
@@ -22,7 +20,7 @@ class AssassinAbilityActionTest {
     void use() throws IllegalActionException {
         Behavior testBehavior = new Behavior() {
             @Override
-            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
             }
 

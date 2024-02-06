@@ -57,8 +57,8 @@ public class TryharderBehavior implements Behavior {
     }
 
     @Override
-    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
-        Set<Role> roles = EnumSet.copyOf(availableRoles);
+    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+        Set<Role> roles = EnumSet.copyOf(action.getAvailableRoles());
 
         Optional<Role> role;
         if (gameState.getTurn() < TryharderBehavior.TURN_THRESHOLD) {
@@ -67,7 +67,7 @@ public class TryharderBehavior implements Behavior {
                 action.pick(role.get());
                 roles.remove(role.get());
             }
-        } else if (self.getGold() >= TryharderBehavior.GOLD_THRESHOLD && availableRoles.contains(Role.ARCHITECTE)) {
+        } else if (self.getGold() >= TryharderBehavior.GOLD_THRESHOLD && roles.contains(Role.ARCHITECTE)) {
             action.pick(Role.ARCHITECTE);
             roles.remove(Role.ARCHITECTE);
         }

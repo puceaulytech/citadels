@@ -36,23 +36,15 @@ public class FastBuilderBehavior implements Behavior {
      * @param availableRoles the roles available to be picked
      * @return the most important role, if any
      */
-
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles) {
         return FastBuilderBehavior.rolesImportance.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
 
-    /**
-     * Returns the most important role from the available roles.
-     *
-     * @param availableRoles the roles available to be picked
-     * @return the most important role, if any
-     */
-
     @Override
-    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) throws IllegalActionException {
-        Set<Role> roles = EnumSet.copyOf(availableRoles);
+    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+        Set<Role> roles = EnumSet.copyOf(action.getAvailableRoles());
         if (this.previousRole != null)
             roles.remove(this.previousRole);
 
@@ -61,7 +53,7 @@ public class FastBuilderBehavior implements Behavior {
         roles.remove(roleToPick);
 
         if (gameState.getPlayers().size() == 2) {
-            if (availableRoles.contains(this.previousRole))
+            if (action.getAvailableRoles().contains(this.previousRole))
                 roles.add(this.previousRole);
             Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();
             action.discard(roleToDiscard);

@@ -42,7 +42,7 @@ class RandomBehaviorTest {
 
         // Call pickRole method
         when(state.getPlayers()).thenReturn(List.of(view, view));
-        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, state, availableRoles));
+        assertDoesNotThrow(() -> dummyBehavior.pickRole(roleTurnAction, null, state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -133,7 +133,7 @@ class RandomBehaviorTest {
         }
 
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
 
         }
 

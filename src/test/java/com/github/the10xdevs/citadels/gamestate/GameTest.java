@@ -12,20 +12,18 @@ import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.logging.VoidLogger;
 import com.github.the10xdevs.citadels.models.District;
-import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     Behavior emptyBehavior = new Behavior() {
         @Override
-        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState, Set<Role> availableRoles) {
+        public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
         }
 
         @Override

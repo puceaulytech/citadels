@@ -65,7 +65,7 @@ class TryharderBehaviorTest {
         RoleTurnAction roleTurnAction = new RoleTurnAction(Collections.unmodifiableSet(availableRoles));
 
         // Call pickRole method
-        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, selfTestPlayer, state, availableRoles));
+        assertDoesNotThrow(() -> behavior.pickRole(roleTurnAction, selfTestPlayer, state));
 
         // Check if the picked and discarded roles are valid
         assertTrue(availableRoles.contains(roleTurnAction.getPickedRole()));
@@ -92,7 +92,7 @@ class TryharderBehaviorTest {
 
         Set<Role> roles = EnumSet.of(Role.ASSASSIN, Role.CONDOTTIERE, Role.ROI);
         RoleTurnAction action = new RoleTurnAction(roles);
-        behavior.pickRole(action, selfTestPlayer, state, roles);
+        behavior.pickRole(action, selfTestPlayer, state);
         assertEquals(Role.CONDOTTIERE, action.getPickedRole());
     }
 
