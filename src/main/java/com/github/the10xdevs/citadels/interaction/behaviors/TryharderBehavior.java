@@ -120,11 +120,12 @@ public class TryharderBehavior implements Behavior {
         if (action.getBasicAction() != RegularTurnAction.BasicAction.GOLD && action.canDraw()) {
             Pair<District, Optional<District>> cards = action.drawCards();
 
-            if (cards.second().isPresent())
+            Optional<District> second = cards.second();
+            if (second.isPresent())
                 action.chooseCard(
-                        TryharderBehavior.compareCard(cards.first(), cards.second().get(), self, gameState.getTurn()) > 0
+                        TryharderBehavior.compareCard(cards.first(), second.get(), self, gameState.getTurn()) > 0
                                 ? cards.first()
-                                : cards.second().get()
+                                : second.get()
                 );
             else
                 action.chooseCard(cards.first());
