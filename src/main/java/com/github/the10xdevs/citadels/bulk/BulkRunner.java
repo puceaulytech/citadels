@@ -5,20 +5,22 @@ import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Leaderboard;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.logging.VoidLogger;
+import dnl.utils.text.table.TextTable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BulkRunner {
-    private final Map<Behavior, Result> scores = new HashMap<>();
+    private final Map<Behavior, BulkResult> scores = new HashMap<>();
     private final int iterations;
+    private final String[] headers = {"Behavior", "Wins", "Loses", "%", "Average score"};
 
     public BulkRunner(int iterations, List<Behavior> behaviors) {
         this.iterations = iterations;
 
         for (Behavior b : behaviors) {
-            this.scores.put(b, new Result());
+            this.scores.put(b, new BulkResult());
         }
     }
 
@@ -37,7 +39,7 @@ public class BulkRunner {
 
             for (int j = 0; j < leaderboard.getEntries().size(); j++) {
                 Leaderboard.Entry entry = leaderboard.getEntries().get(j);
-                Result bulkRunnerResult = this.scores.get(entry.getPlayer().getBehavior());
+                BulkResult bulkRunnerResult = this.scores.get(entry.getPlayer().getBehavior());
 
                 if (j == 0) {
                     bulkRunnerResult.addWin();
@@ -51,50 +53,27 @@ public class BulkRunner {
     }
 
     public void printStats() {
-        for (Map.Entry<Behavior, Result> entry : this.scores.entrySet()) {
-            Behavior behavior = entry.getKey();
-            Result result = entry.getValue();
+        Object[][] data = getRawStats();
 
-            double winPercentage = (result.getWins() * 100.0) / this.iterations;
-
-            System.out.format("%s - W/L %d/%d %.2f%% - avg %.1f\n", behavior.getName(), result.getWins(), result.getLoses(), winPercentage, result.getAverageScore());
-        }
+        TextTable tt = new TextTable(headers, data);
+        tt.printTable();
     }
 
+    private Object[][] getRawStats() {
+        Object[][] data = new Object[this.scores.size()][this.headers.length];
 
-    public static class Result {
-        private int wins;
-        private int loses;
-        private double averageScore;
+        int i = 0;
+        for (Map.Entry<Behavior, BulkResult> entry : this.scores.entrySet()) {
+            Behavior behavior = entry.getKey();
+            BulkResult bulkResult = entry.getValue();
 
-        public Result() {
-            this.wins = 0;
-            this.loses = 0;
-            this.averageScore = 0;
+            data[i][0] = behavior.getName();
+            data[i][1] = bulkResult.getWins();
+            data[i][2] = bulkResult.getLoses();
+            data[i][3] = bulkResult.getWinPercentage(this.iterations);
+            data[i][4] = String.format("%.2f", bulkResult.getAverageScore());
+            i++;
         }
-
-        public int getWins() {
-            return this.wins;
-        }
-
-        public int getLoses() {
-            return this.loses;
-        }
-
-        public double getAverageScore() {
-            return this.averageScore;
-        }
-
-        public void addWin() {
-            this.wins++;
-        }
-
-        public void addLoss() {
-            this.loses++;
-        }
-
-        public void incrementAverageScore(double amount) {
-            this.averageScore += amount;
-        }
+        return data;
     }
 }
