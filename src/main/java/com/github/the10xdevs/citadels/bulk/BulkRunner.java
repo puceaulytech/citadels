@@ -92,23 +92,22 @@ public class BulkRunner {
     }
 
     private void mergeExistingCSV(File csvFile) throws IOException, CsvException {
-        CSVReader reader = new CSVReader(new FileReader(csvFile));
-        List<String[]> allRows = reader.readAll();
-        List<String[]> dataRows = allRows.subList(1, allRows.size());
+        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
+            List<String[]> allRows = reader.readAll();
+            List<String[]> dataRows = allRows.subList(1, allRows.size());
 
-        int previousGameCount = Integer.parseInt(dataRows.get(0)[1]) + Integer.parseInt(dataRows.get(0)[2]);
-        this.iterations += previousGameCount;
+            int previousGameCount = Integer.parseInt(dataRows.get(0)[1]) + Integer.parseInt(dataRows.get(0)[2]);
+            this.iterations += previousGameCount;
 
-        for (String[] dataRow : dataRows) {
-            String behaviorName = dataRow[0];
-            BulkResult bulkResult = this.scores.get(behaviorName);
+            for (String[] dataRow : dataRows) {
+                String behaviorName = dataRow[0];
+                BulkResult bulkResult = this.scores.get(behaviorName);
 
-            bulkResult.addWin(Integer.parseInt(dataRow[1]));
-            bulkResult.addLoss(Integer.parseInt(dataRow[2]));
-            bulkResult.setAverageScore((bulkResult.getAverageScore() + Double.parseDouble(dataRow[4])) / 2);
+                bulkResult.addWin(Integer.parseInt(dataRow[1]));
+                bulkResult.addLoss(Integer.parseInt(dataRow[2]));
+                bulkResult.setAverageScore((bulkResult.getAverageScore() + Double.parseDouble(dataRow[4])) / 2);
+            }
         }
-
-        reader.close();
     }
 
     public void writeToCSV() throws CsvException, IOException {
