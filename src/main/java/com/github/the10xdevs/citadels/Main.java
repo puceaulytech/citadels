@@ -4,12 +4,11 @@ import com.beust.jcommander.JCommander;
 import com.github.the10xdevs.citadels.bulk.BulkRunner;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
-import com.github.the10xdevs.citadels.interaction.behaviors.DummyBehavior;
 import com.github.the10xdevs.citadels.interaction.behaviors.ExpensiveBuilderBehavior;
 import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
 import com.github.the10xdevs.citadels.interaction.behaviors.RandomBehavior;
+import com.github.the10xdevs.citadels.interaction.behaviors.TryharderBehavior;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -23,10 +22,10 @@ public class Main {
 
         if (arguments.twoThousand) {
             BulkRunner firstBulkRunner = new BulkRunner(1000, List.of(
-                    new ExpensiveBuilderBehavior(),
-                    new FastBuilderBehavior(),
                     new RandomBehavior(),
-                    new DummyBehavior()
+                    new TryharderBehavior(),
+                    new ExpensiveBuilderBehavior(),
+                    new FastBuilderBehavior()
             ));
 
             firstBulkRunner.run();
@@ -47,10 +46,10 @@ public class Main {
 
         if (arguments.csv) {
             BulkRunner bulkRunner = new BulkRunner(1000, List.of(
-                    new ExpensiveBuilderBehavior(),
-                    new FastBuilderBehavior(),
                     new RandomBehavior(),
-                    new DummyBehavior()
+                    new TryharderBehavior(),
+                    new ExpensiveBuilderBehavior(),
+                    new FastBuilderBehavior()
             ));
 
             bulkRunner.run();
@@ -65,7 +64,7 @@ public class Main {
         if (arguments.demo) {
             Game game = GameBuilder.create()
                     .addBehavior(new RandomBehavior())
-                    .addBehavior(new RandomBehavior())
+                    .addBehavior(new TryharderBehavior())
                     .addBehavior(new ExpensiveBuilderBehavior())
                     .addBehavior(new FastBuilderBehavior())
                     .build();

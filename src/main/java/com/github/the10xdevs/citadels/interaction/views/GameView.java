@@ -75,4 +75,8 @@ public final class GameView {
     public Optional<Role> getKilledRole() {
         return this.game.getKilledRole();
     }
+
+    public int getTurn() {
+        return this.game.getTurn();
+    }
 }
