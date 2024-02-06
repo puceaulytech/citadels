@@ -5,17 +5,17 @@ import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Leaderboard;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.logging.VoidLogger;
+import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
 import dnl.utils.text.table.TextTable;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BulkRunner {
     private final Map<Behavior, BulkResult> scores = new HashMap<>();
@@ -68,8 +68,13 @@ public class BulkRunner {
     private String[][] getRawStats() {
         String[][] data = new String[this.scores.size()][this.headers.length];
 
+        List<Map.Entry<Behavior, BulkResult>> sortedEntries = this.scores.entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt((Map.Entry<Behavior, BulkResult> e) -> e.getValue().getWins()).reversed())
+                .toList();
+
         int i = 0;
-        for (Map.Entry<Behavior, BulkResult> entry : this.scores.entrySet()) {
+        for (Map.Entry<Behavior, BulkResult> entry : sortedEntries) {
             Behavior behavior = entry.getKey();
             BulkResult bulkResult = entry.getValue();
 
@@ -83,8 +88,13 @@ public class BulkRunner {
         return data;
     }
 
-    public void writeToCSV() throws IOException {
+    public void writeToCSV() throws IOException, CsvException {
         Path filePath = Paths.get("stats", "gamestats.csv");
+
+        CSVReader reader = new CSVReader(new FileReader(filePath.toFile()));
+        List<String[]> allRows = reader.readAll();
+
+        reader.close();
 
         CSVWriter writer = new CSVWriter(new FileWriter(filePath.toFile()));
         String[][] data = this.getRawStats();
