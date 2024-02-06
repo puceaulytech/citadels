@@ -117,6 +117,11 @@ public class BulkRunner {
 
         if (csvFile.exists() && !csvFile.isDirectory()) {
             this.mergeExistingCSV(csvFile);
+        } else {
+            File statDir = Paths.get("stats").toFile();
+            if (!statDir.exists() && !statDir.mkdir()) {
+                return;
+            }
         }
 
         CSVWriter writer = new CSVWriter(new FileWriter(csvFile));
