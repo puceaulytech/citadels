@@ -1,5 +1,6 @@
 package com.github.the10xdevs.citadels.logging;
 
+import com.github.the10xdevs.citadels.gamestate.Leaderboard;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
@@ -34,9 +35,9 @@ public interface Logger {
     /**
      * Log winners of the game
      *
-     * @param players All the players
+     * @param leaderboard The leaderboard
      */
-    void logWinners(List<Player> players, Player firstPlayerToFinish);
+    void logWinners(Leaderboard leaderboard);
 
     /**
      * Log if an error occurs during the game
