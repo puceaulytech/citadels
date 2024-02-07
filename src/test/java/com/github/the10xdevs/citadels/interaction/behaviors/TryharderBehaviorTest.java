@@ -54,7 +54,7 @@ class TryharderBehaviorTest {
     void initPlayerAndMock() {
         testPlayer = new Player(behavior);
         selfTestPlayer = new SelfPlayerView(testPlayer);
-        testView = new PlayerView(testPlayer);
+        testView = new PlayerView(new Player(null));
         gameBuilder = GameBuilder.create();
 
         // Fake an early game and a game with two players
