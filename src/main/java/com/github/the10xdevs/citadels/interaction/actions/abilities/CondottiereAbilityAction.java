@@ -44,14 +44,14 @@ public class CondottiereAbilityAction extends AbilityAction {
             throw new IllegalActionException(String.format("Cannot destroy district: need %d but have %d", destroyCost, this.currentPlayer.getGold()));
         if (player.get().getCity().getSize() == 8)
             throw new IllegalActionException("Cannot destroy district: target player has 8 districts");
-        if (!player.get().getCity().getDistricts().remove(targetDistrict))
-            throw new IllegalActionException("Cannot destroy district: district not in target player's city");
-
         District dungeon = new District("Donjon", Category.MERVEILLE, 3);
         if (dungeon.equals(targetDistrict))
             throw new IllegalActionException("Cannot destroy the dungeon");
+        if (!player.get().getCity().getDistricts().remove(targetDistrict))
+            throw new IllegalActionException("Cannot destroy district: district not in target player's city");
 
         this.currentPlayer.incrementGold(-destroyCost);
+        this.game.getDeck().enqueueCard(targetDistrict);
     }
 
     /**
