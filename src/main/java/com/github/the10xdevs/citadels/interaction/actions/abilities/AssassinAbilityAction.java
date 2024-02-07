@@ -31,4 +31,5 @@ public class AssassinAbilityAction extends AbilityAction {
     public Role getKilledRole() {
         return this.killedRole;
     }
+
 }

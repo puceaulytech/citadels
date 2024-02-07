@@ -29,12 +29,41 @@ public class RichardBehavior extends FastBuilderBehavior {
                     .max(Comparator.comparingInt(PlayerView::getScore))
                     .orElseThrow();
 
-            if (self.equals(winningPlayer)) {
+            if (self.equals(winningPlayer) || condottiereTakenByPotentialWinner(gameState)) {
+
                 AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
                 abilityAction.kill(Role.CONDOTTIERE);
+            }
+            else if (voleurTakenByPotentialWinner(gameState) || shouldKillVoleurForEnrichment(self)) {
+                AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
+                abilityAction.kill(Role.VOLEUR);
             }
         }
 
         super.playTurn(action, self, gameState);
     }
+    private boolean condottiereTakenByPotentialWinner(GameView gameState) {
+        PlayerView condottierePlayer = getRolePlayer(gameState, Role.CONDOTTIERE);
+        return condottierePlayer != null && condottierePlayer.getCity().getDistricts().size() == 8;
+    }
+
+    private boolean voleurTakenByPotentialWinner(GameView gameState) {
+        PlayerView voleurPlayer = getRolePlayer(gameState, Role.VOLEUR);
+        return voleurPlayer != null && voleurPlayer.getCity().getDistricts().size() == 8;
+    }
+
+    private PlayerView getRolePlayer(GameView gameState, Role role) {
+        return gameState.getPlayers()
+                .stream()
+                .filter(player -> player.getCurrentRole() == role)
+                .findFirst()
+                .orElseThrow();
+    }
+    private boolean shouldKillVoleurForEnrichment(SelfPlayerView self) {
+        int playerGold = self.getGold();
+        int maxAllowedGold = 10;
+        return playerGold > maxAllowedGold;
+    }
+    
+
 }
