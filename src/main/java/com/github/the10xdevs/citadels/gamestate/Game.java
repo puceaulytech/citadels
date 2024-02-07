@@ -150,18 +150,18 @@ public class Game {
             try {
                 player.getBehavior().pickRole(roleTurnAction, new SelfPlayerView(player), new GameView(this));
             } catch (Exception e) {
-                throw new IllegalActionException("Player failed to pick role", e);
+                throw new IllegalActionException(String.format("Player %s failed to pick role", player.getName()), e);
             }
 
             if (roleTurnAction.getPickedRole() == null)
-                throw new IllegalActionException("Player did not pick a role");
+                throw new IllegalActionException(String.format("Player %s did not pick a role", player.getName()));
 
             this.logger.logRoleTurnAction(i, player, roleTurnAction);
 
             player.setCurrentRole(roleTurnAction.getPickedRole());
             if (this.players.size() == 2) {
                 if (roleTurnAction.getDiscardedRole() == null)
-                    throw new IllegalActionException("Player did not discard a role");
+                    throw new IllegalActionException(String.format("Player %s did not discard a role", player.getName()));
 
                 roles.remove(roleTurnAction.getDiscardedRole());
             }
@@ -245,7 +245,7 @@ public class Game {
             try {
                 player.getBehavior().playTurn(action, currentPlayerView, new GameView(this));
             } catch (Exception e) {
-                throw new IllegalActionException("Player failed to play turn", e);
+                throw new IllegalActionException(String.format("Player %s failed to play turn", player.getName()), e);
             }
 
             this.logger.logRegularTurnAction(player, action);

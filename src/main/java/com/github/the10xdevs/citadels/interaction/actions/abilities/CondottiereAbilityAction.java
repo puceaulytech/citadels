@@ -36,7 +36,7 @@ public class CondottiereAbilityAction extends AbilityAction {
         if (player.isEmpty())
             throw new IllegalActionException("Provided player view does not refer to an existing player");
         if (player.get().getCurrentRole() == Role.EVEQUE)
-            throw new IllegalActionException("Cannot destroy district own by the Eveque");
+            throw new IllegalActionException("Cannot destroy district owned by the Bishop");
 
         int destroyCost = targetDistrict.getCost() - 1;
 
