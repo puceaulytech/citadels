@@ -26,13 +26,14 @@ public class RichardBehavior extends FastBuilderBehavior {
                     .findAny();
 
             if (futureArchitectePlayer.isPresent()) {
-                action.pick(Role.ASSASSIN);
                 this.needsToKillArchitecture = true;
+                action.pick(Role.ASSASSIN);
+                return;
             }
-        } else {
-            super.pickRole(action, self, gameState);
-            this.needsToKillArchitecture = false;
         }
+
+        super.pickRole(action, self, gameState);
+        this.needsToKillArchitecture = false;
     }
 
     @Override

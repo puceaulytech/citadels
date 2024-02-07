@@ -153,11 +153,18 @@ public class Game {
                 throw new IllegalActionException("Player failed to pick role", e);
             }
 
+            if (roleTurnAction.getPickedRole() == null)
+                throw new IllegalActionException("Player did not pick a role");
+
             this.logger.logRoleTurnAction(i, player, roleTurnAction);
 
             player.setCurrentRole(roleTurnAction.getPickedRole());
-            if (this.players.size() == 2)
+            if (this.players.size() == 2) {
+                if (roleTurnAction.getDiscardedRole() == null)
+                    throw new IllegalActionException("Player did not discard a role");
+
                 roles.remove(roleTurnAction.getDiscardedRole());
+            }
             roles.remove(roleTurnAction.getPickedRole()); // if the 7th player chose the card facing down nothing happens here
         }
     }
