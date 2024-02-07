@@ -91,6 +91,7 @@ public class RandomBehavior implements Behavior {
                 if (targetPlayer != null) {
                     List<District> targetDistricts = targetPlayer.getCity().getDistricts()
                             .stream()
+                            .filter(district -> !district.getName().equals("Donjon"))
                             .filter(district -> district.getCost() - 1 <= self.getGold())
                             .toList();
 
@@ -110,7 +111,8 @@ public class RandomBehavior implements Behavior {
             Pair<District, Optional<District>> cards = action.drawCards();
 
             // pick a random card between the two options
-            action.chooseCard(cards.second().isEmpty() || this.randomGenerator.nextBoolean() ? cards.first() : cards.second().get());
+            Optional<District> second = cards.second();
+            action.chooseCard(second.isEmpty() || this.randomGenerator.nextBoolean() ? cards.first() : second.get());
         }
 
         // randomly choose to build a random affordable district
