@@ -36,17 +36,38 @@ public class TryharderBehavior implements Behavior {
     private static final int GOLD_THRESHOLD = 5;
     private static final int SCORE_THRESHOLD = 4;
 
+    /**
+     * This method returns the most important role from a set of available roles.
+     * The importance of a role is determined by its position in the list of wanted roles.
+     * @param availableRoles The set of available roles.
+     * @param wantedRoles The list of wanted roles, ordered by importance.
+     * @return The most important role from the set of available roles.
+     */
     private static Optional<Role> getMostImportantRole(Set<Role> availableRoles, List<Role> wantedRoles) {
         return wantedRoles.stream()
                 .filter(availableRoles::contains)
                 .findFirst();
     }
+    /**
+     * This method returns the number of built districts of a certain category.
+     * @param category The category of the districts.
+     * @param self The view of the player.
+     * @return The number of built districts of the given category.
+     */
 
     private static int getNumberOfBuiltDistrictByCategory(Category category, SelfPlayerView self) {
         return (int) self.getCity().getDistricts().stream()
                 .filter(district -> district.getCategory().equals(category))
                 .count();
     }
+    /**
+     * This method compares two districts based on their scores and categories.
+     * @param d1 The first district.
+     * @param d2 The second district.
+     * @param self The view of the player.
+     * @param turn The current turn.
+     * @return The difference between the scores of the two districts.
+     */
 
     private static int compareCard(District d1, District d2, SelfPlayerView self, int turn) {
         int scoreD1 = TryharderBehavior.getNumberOfBuiltDistrictByCategory(d1.getCategory(), self) == 0 ? 1 : 0;
@@ -55,6 +76,13 @@ public class TryharderBehavior implements Behavior {
             return d1.getScore() - d2.getScore();
         return scoreD1 + scoreD2;
     }
+    /**
+     * This method defines how the player picks a role during their role turn.
+     * @param action The role turn action.
+     * @param self The view of the player.
+     * @param gameState The state of the game.
+     * @throws IllegalActionException If the action is illegal.
+     */
 
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
@@ -93,6 +121,14 @@ public class TryharderBehavior implements Behavior {
             action.discard(roleToDiscard);
         }
     }
+
+    /**
+     * This method defines how the player plays their regular turn.
+     * @param action The regular turn action.
+     * @param self The view of the player.
+     * @param gameState The state of the game.
+     * @throws IllegalActionException If the action is illegal.
+     */
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
