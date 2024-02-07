@@ -2,17 +2,14 @@ package com.github.the10xdevs.citadels.gamestate;
 
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
-import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 class PlayerTest {
 
@@ -137,5 +134,4 @@ class PlayerTest {
         assertEquals(4, player.getGold());
         assertEquals(Collections.emptyList(), player.getHand());
     }
-
 }

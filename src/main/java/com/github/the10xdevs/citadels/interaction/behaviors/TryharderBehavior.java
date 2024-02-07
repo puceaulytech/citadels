@@ -38,7 +38,7 @@ public class TryharderBehavior implements Behavior {
 
     // Some constants to dictate the way it plays
     private static final int TURN_THRESHOLD = 3;
-    public static final int GOLD_THRESHOLD = 5;
+    private static final int GOLD_THRESHOLD = 5;
     private static final int SCORE_THRESHOLD = 4;
 
     // Counter of turns spent without building any district

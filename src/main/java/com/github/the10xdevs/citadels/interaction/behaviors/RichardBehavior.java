@@ -62,12 +62,11 @@ public class RichardBehavior extends FastBuilderBehavior {
                         .max(Comparator.comparingInt(PlayerView::getScore))
                         .orElseThrow();
 
-                if (self.equals(winningPlayer) ) {
+                if (self.equals(winningPlayer)) {
                     abilityAction.kill(Role.CONDOTTIERE);
                 }
             }
-        }
-        else if(self.getCurrentRole()==Role.ARCHITECTE){
+        } else if (self.getCurrentRole() == Role.ARCHITECTE) {
             int totalCost = calculateTotalConstructionCost(action.getBuiltDistrict());
             if (totalCost >= 6) {
                 //  construire pas les quartiers si le coût total est de 6 pièces d'or ou plus
@@ -75,13 +74,10 @@ public class RichardBehavior extends FastBuilderBehavior {
             }
 
         }
-
-
         super.playTurn(action, self, gameState);
     }
     private int calculateTotalConstructionCost(District districtToBuild) {
         return districtToBuild.getCost();
     }
-
 }
 
