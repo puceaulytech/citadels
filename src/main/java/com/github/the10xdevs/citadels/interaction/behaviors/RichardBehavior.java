@@ -13,29 +13,44 @@ import java.util.Comparator;
 import java.util.Optional;
 
 public class RichardBehavior extends FastBuilderBehavior {
-    private static final int RICH_THRESHOLD = 10;
+    private boolean needsToKillArchitecture = false;
 
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-        // TODO: richard magic tricks
-        
-        super.pickRole(action, self, gameState);
+        if (action.getAvailableRoles().contains(Role.ASSASSIN)) {
+            Optional<PlayerView> futureArchitectePlayer = gameState.getPlayers()
+                    .stream()
+                    .filter(player -> player.getGold() >= 4)
+                    .filter(player -> player.getHandSize() >= 1)
+                    .filter(player -> player.getCity().getDistricts().size() >= 5)
+                    .findAny();
+
+            if (futureArchitectePlayer.isPresent()) {
+                action.pick(Role.ASSASSIN);
+                this.needsToKillArchitecture = true;
+            }
+        } else {
+            super.pickRole(action, self, gameState);
+            this.needsToKillArchitecture = false;
+        }
     }
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
         if (self.getCurrentRole() == Role.ASSASSIN) {
-            PlayerView winningPlayer = gameState.getPlayers()
-                    .stream()
-                    .max(Comparator.comparingInt(PlayerView::getScore))
-                    .orElseThrow();
+            AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
 
-            if (self.equals(winningPlayer) || this.roleTakenByPotentialWinner(Role.CONDOTTIERE, gameState)) {
-                AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
-                abilityAction.kill(Role.CONDOTTIERE);
-            } else if (this.roleTakenByPotentialWinner(Role.VOLEUR, gameState) || self.getGold() > RICH_THRESHOLD) {
-                AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
-                abilityAction.kill(Role.VOLEUR);
+            if (this.needsToKillArchitecture) {
+                abilityAction.kill(Role.ARCHITECTE);
+            } else {
+                PlayerView winningPlayer = gameState.getPlayers()
+                        .stream()
+                        .max(Comparator.comparingInt(PlayerView::getScore))
+                        .orElseThrow();
+
+                if (self.equals(winningPlayer)) {
+                    abilityAction.kill(Role.CONDOTTIERE);
+                }
             }
         }
 

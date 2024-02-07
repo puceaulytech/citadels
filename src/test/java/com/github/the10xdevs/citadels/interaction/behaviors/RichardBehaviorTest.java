@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.EnumSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,35 +53,34 @@ class RichardBehaviorTest {
         assertEquals(Role.CONDOTTIERE, abilityAction.getKilledRole());
 
     }
+
     @Test
-    void doNotKillIfRoleIsNotAssassin() throws DuplicatedDistrictException, IllegalActionException {
+    void killArchitectIfAPlayerIsTooAdvanced() throws DuplicatedDistrictException, IllegalActionException {
         Game game = GameBuilder.create()
                 .addBehavior(emptyBehavior)
                 .addBehavior(richardBehavior)
                 .build();
 
+        Player enemy = game.getPlayers().get(0);
         Player richard = game.getPlayers().get(1);
-        // Choisir un rôle autre que ASSASSIN
 
-        richard.setCurrentRole(Role.MAGICIEN);
+        enemy.setGold(10);
+        enemy.getHand().add(new District("Stuff", Category.MILITAIRE, 5));
+        for (int i = 0; i < 6; i++) {
+            enemy.getCity().addDistrict(new District("Les Templiers v" + i, Category.NOBLE, i + 1));
+        }
 
-        Player fictiveWinner = game.getPlayers().get(0);
-        fictiveWinner.getCity().addDistrict(new District("Victory District", Category.NOBLE, 5));
+        RoleTurnAction roleTurnAction = new RoleTurnAction(EnumSet.allOf(Role.class));
+        richardBehavior.pickRole(roleTurnAction, new SelfPlayerView(richard), new GameView(game));
+
+        assertEquals(Role.ASSASSIN, roleTurnAction.getPickedRole());
+
+        richard.setCurrentRole(Role.ASSASSIN);
 
         RegularTurnAction regularTurnAction = new RegularTurnAction(game, richard);
         richardBehavior.playTurn(regularTurnAction, new SelfPlayerView(richard), new GameView(game));
 
-        if (regularTurnAction.getAbilityAction() instanceof AssassinAbilityAction) {
-            AssassinAbilityAction abilityAction = (AssassinAbilityAction) regularTurnAction.getAbilityAction();
-            assertNull(abilityAction.getKilledRole());
-        }
+        AssassinAbilityAction abilityAction = (AssassinAbilityAction) regularTurnAction.getAbilityAction();
+        assertEquals(Role.ARCHITECTE, abilityAction.getKilledRole());
     }
-
-
-
-
-
-
-
-
 }
