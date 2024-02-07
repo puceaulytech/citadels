@@ -6,6 +6,7 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.models.District;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,11 +53,14 @@ public class MagicienAbilityAction extends AbilityAction {
         if (cards.stream().anyMatch(card -> !this.currentPlayer.getHand().contains(card)))
             throw new IllegalActionException("Some provided cards are not in the player's hand");
 
-        for (District district : cards) {
+        // cards can be the whole hand of the player, so make a copy to avoid iterating the list while remove elements from it
+        List<District> copy = List.copyOf(cards);
+        for (District district : copy) {
+            this.currentPlayer.getHand().remove(district);
             this.game.getDeck().enqueueCard(district);
         }
 
-        for (int i = 0; i < cards.size(); i++) {
+        for (int i = 0; i < copy.size(); i++) {
             this.currentPlayer.getHand().add(this.game.getDeck().drawCard());
         }
     }

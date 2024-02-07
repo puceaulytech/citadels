@@ -17,7 +17,6 @@ import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,8 +73,10 @@ class MagicienAbilityActionTest {
         assertDoesNotThrow(() -> swapper.playTurn(action, new SelfPlayerView(swapperPlayer), new GameView(game)));
         MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
         assertTrue(abilityAction.getExchangedPlayer().represents(target));
-        assertEquals(card0, swapperPlayer.getHand().get(0));
-        assertEquals(card1, swapperPlayer.getHand().get(1));
+        assertTrue(swapperPlayer.getHand().contains(card0));
+        assertTrue(swapperPlayer.getHand().contains(card1));
+        assertFalse(target.getHand().contains(card0));
+        assertFalse(target.getHand().contains(card1));
     }
 
     @Test
@@ -109,7 +110,7 @@ class MagicienAbilityActionTest {
             @Override
             public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
                 MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
-                abilityAction.discardAndDraw(new ArrayList<>(self.getHand()));
+                abilityAction.discardAndDraw(self.getHand());
             }
         };
 
@@ -122,6 +123,13 @@ class MagicienAbilityActionTest {
         assertDoesNotThrow(() -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
         assertTrue(discarderPlayer.getHand().contains(card2));
         assertTrue(discarderPlayer.getHand().contains(card3));
+        assertFalse(discarderPlayer.getHand().contains(card0));
+        assertFalse(discarderPlayer.getHand().contains(card1));
+
+        assertTrue(game.getDeck().getElements().contains(card0));
+        assertTrue(game.getDeck().getElements().contains(card1));
+        assertFalse(game.getDeck().getElements().contains(card2));
+        assertFalse(game.getDeck().getElements().contains(card3));
     }
 
     @Test
@@ -143,5 +151,29 @@ class MagicienAbilityActionTest {
 
         RegularTurnAction action = new RegularTurnAction(game, discarderPlayer);
         assertThrows(IllegalActionException.class, () -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
+    }
+
+    @Test
+    void testDiscardAndDrawInEmptyDeck() {
+        Behavior discarder = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                MagicienAbilityAction abilityAction = (MagicienAbilityAction) action.getAbilityAction();
+                abilityAction.discardAndDraw(self.getHand());
+            }
+        };
+        Player discarderPlayer = new Player(discarder);
+        discarderPlayer.setCurrentRole(Role.MAGICIEN);
+        discarderPlayer.getHand().add(card0);
+        discarderPlayer.getHand().add(card1);
+
+        Game game = GameBuilder.create().withDeck(new Deck<>()).build();
+
+        RegularTurnAction action = new RegularTurnAction(game, discarderPlayer);
+        assertDoesNotThrow(() -> discarder.playTurn(action, new SelfPlayerView(discarderPlayer), new GameView(game)));
     }
 }
