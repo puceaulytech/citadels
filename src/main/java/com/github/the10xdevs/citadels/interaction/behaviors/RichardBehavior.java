@@ -10,8 +10,11 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 public class RichardBehavior extends FastBuilderBehavior {
+    private static final int RICH_THRESHOLD = 10;
+
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
         // TODO: richard magic tricks
@@ -22,19 +25,15 @@ public class RichardBehavior extends FastBuilderBehavior {
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
         if (self.getCurrentRole() == Role.ASSASSIN) {
-            // If we are leading, kill the warlord
-
             PlayerView winningPlayer = gameState.getPlayers()
                     .stream()
                     .max(Comparator.comparingInt(PlayerView::getScore))
                     .orElseThrow();
 
-            if (self.equals(winningPlayer) || condottiereTakenByPotentialWinner(gameState)) {
-
+            if (self.equals(winningPlayer) || this.roleTakenByPotentialWinner(Role.CONDOTTIERE, gameState)) {
                 AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
                 abilityAction.kill(Role.CONDOTTIERE);
-            }
-            else if (voleurTakenByPotentialWinner(gameState) || shouldKillVoleurForEnrichment(self)) {
+            } else if (this.roleTakenByPotentialWinner(Role.VOLEUR, gameState) || self.getGold() > RICH_THRESHOLD) {
                 AssassinAbilityAction abilityAction = (AssassinAbilityAction) action.getAbilityAction();
                 abilityAction.kill(Role.VOLEUR);
             }
@@ -42,28 +41,16 @@ public class RichardBehavior extends FastBuilderBehavior {
 
         super.playTurn(action, self, gameState);
     }
-    private boolean condottiereTakenByPotentialWinner(GameView gameState) {
-        PlayerView condottierePlayer = getRolePlayer(gameState, Role.CONDOTTIERE);
-        return condottierePlayer != null && condottierePlayer.getCity().getDistricts().size() == 8;
+
+    private boolean roleTakenByPotentialWinner(Role targetRole, GameView gameState) {
+        Optional<PlayerView> playerHavingRole = this.getPlayerWithRole(gameState, targetRole);
+        return playerHavingRole.isPresent() && playerHavingRole.get().getCity().getDistricts().size() == 7;
     }
 
-    private boolean voleurTakenByPotentialWinner(GameView gameState) {
-        PlayerView voleurPlayer = getRolePlayer(gameState, Role.VOLEUR);
-        return voleurPlayer != null && voleurPlayer.getCity().getDistricts().size() == 8;
-    }
-
-    private PlayerView getRolePlayer(GameView gameState, Role role) {
+    private Optional<PlayerView> getPlayerWithRole(GameView gameState, Role role) {
         return gameState.getPlayers()
                 .stream()
                 .filter(player -> player.getCurrentRole() == role)
-                .findFirst()
-                .orElseThrow();
+                .findFirst();
     }
-    private boolean shouldKillVoleurForEnrichment(SelfPlayerView self) {
-        int playerGold = self.getGold();
-        int maxAllowedGold = 10;
-        return playerGold > maxAllowedGold;
-    }
-    
-
 }
