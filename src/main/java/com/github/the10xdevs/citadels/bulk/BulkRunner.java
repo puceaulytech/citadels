@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class BulkRunner {
-    private final Map<String, BulkResult> scores = new HashMap<>();
+    private final Map<Behavior, BulkResult> scores = new HashMap<>();
     private final List<Behavior> behaviors;
     private final String[] headers = {"Behavior", "Wins", "Loses", "%", "Average score"};
     private int iterations;
@@ -29,7 +29,7 @@ public class BulkRunner {
         this.behaviors = behaviors;
 
         for (Behavior b : behaviors) {
-            this.scores.put(b.getName(), new BulkResult());
+            this.scores.put(b, new BulkResult());
         }
     }
 
@@ -48,7 +48,7 @@ public class BulkRunner {
 
             for (int j = 0; j < leaderboard.getEntries().size(); j++) {
                 Leaderboard.Entry entry = leaderboard.getEntries().get(j);
-                BulkResult bulkRunnerResult = this.scores.get(entry.getPlayer().getBehavior().getName());
+                BulkResult bulkRunnerResult = this.scores.get(entry.getPlayer().getBehavior());
 
                 if (j == 0) {
                     bulkRunnerResult.addWin();
@@ -71,17 +71,17 @@ public class BulkRunner {
     private String[][] getRawStats() {
         String[][] data = new String[this.scores.size()][this.headers.length];
 
-        List<Map.Entry<String, BulkResult>> sortedEntries = this.scores.entrySet()
+        List<Map.Entry<Behavior, BulkResult>> sortedEntries = this.scores.entrySet()
                 .stream()
-                .sorted(Comparator.comparingInt((Map.Entry<String, BulkResult> e) -> e.getValue().getWins()).reversed())
+                .sorted(Comparator.comparingInt((Map.Entry<Behavior, BulkResult> e) -> e.getValue().getWins()).reversed())
                 .toList();
 
         int i = 0;
-        for (Map.Entry<String, BulkResult> entry : sortedEntries) {
-            String behavior = entry.getKey();
+        for (Map.Entry<Behavior, BulkResult> entry : sortedEntries) {
+            Behavior behavior = entry.getKey();
             BulkResult bulkResult = entry.getValue();
 
-            data[i][0] = behavior;
+            data[i][0] = behavior.getName();
             data[i][1] = String.valueOf(bulkResult.getWins());
             data[i][2] = String.valueOf(bulkResult.getLoses());
             data[i][3] = String.valueOf(bulkResult.getWinPercentage(this.iterations));
@@ -101,11 +101,18 @@ public class BulkRunner {
 
             for (String[] dataRow : dataRows) {
                 String behaviorName = dataRow[0];
-                BulkResult bulkResult = this.scores.get(behaviorName);
 
-                bulkResult.addWin(Integer.parseInt(dataRow[1]));
-                bulkResult.addLoss(Integer.parseInt(dataRow[2]));
-                bulkResult.setAverageScore((bulkResult.getAverageScore() + Double.parseDouble(dataRow[4])) / 2);
+                for (Map.Entry<Behavior, BulkResult> entry : this.scores.entrySet()) {
+                    if (entry.getKey().getName().equals(behaviorName)) {
+                        BulkResult bulkResult = entry.getValue();
+
+                        bulkResult.addWin(Integer.parseInt(dataRow[1]));
+                        bulkResult.addLoss(Integer.parseInt(dataRow[2]));
+                        bulkResult.setAverageScore((bulkResult.getAverageScore() + Double.parseDouble(dataRow[4])) / 2);
+
+                        break;
+                    }
+                }
             }
         }
     }
