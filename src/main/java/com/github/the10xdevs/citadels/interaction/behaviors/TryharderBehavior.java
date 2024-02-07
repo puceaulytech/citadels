@@ -4,8 +4,10 @@ import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
+import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Category;
 import com.github.the10xdevs.citadels.models.District;
@@ -26,10 +28,10 @@ public class TryharderBehavior implements Behavior {
             Role.ASSASSIN,
             Role.VOLEUR,
             Role.EVEQUE,
+            Role.MAGICIEN,
             Role.ARCHITECTE,
             Role.CONDOTTIERE,
-            Role.ROI,
-            Role.MAGICIEN
+            Role.ROI
     );
 
     private static final int TURN_THRESHOLD = 3;
@@ -196,11 +198,38 @@ public class TryharderBehavior implements Behavior {
                 ability.stealFrom(roleToSteal);
                 break;
             }
+            case MAGICIEN: {
+                TryharderBehavior.handleMagicianFengShui(action, self, gameState, currentScoreThreshold);
+                break;
+            }
             case ARCHITECTE: {
                 // TODO
                 break;
             }
             default:
+        }
+    }
+
+    private static void handleMagicianFengShui(RegularTurnAction action, SelfPlayerView self, GameView gameState, int currentScoreThreshold) throws IllegalActionException {
+        MagicienAbilityAction ability = (MagicienAbilityAction) action.getAbilityAction();
+        PlayerView playerWithMostCards = gameState.getPlayers().stream()
+                .filter(player -> !self.equals(player))
+                .max(Comparator.comparingInt(PlayerView::getHandSize))
+                .orElseThrow();
+        if (playerWithMostCards.getHandSize() > self.getHandSize() * 2)
+            ability.exchangeHandWith(playerWithMostCards);
+
+        else if (gameState.getDeckSize() > 0) {
+            double averageScoreInHand = (double) self.getHand().stream()
+                    .mapToInt(District::getScore)
+                    .count() / self.getHandSize();
+            if (averageScoreInHand < currentScoreThreshold) {
+                List<District> cardsToDiscard = self.getHand().stream()
+                        .sorted(Comparator.comparingInt(District::getScore).reversed())
+                        .limit(gameState.getDeckSize())
+                        .toList();
+                ability.discardAndDraw(cardsToDiscard);
+            }
         }
     }
 }
