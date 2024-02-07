@@ -3,10 +3,12 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
+import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -97,6 +99,28 @@ class TryharderBehaviorTest {
     }
 
     @Test
+    void pickCardWhenDeckHasOne() {
+        testPlayer.setCurrentRole(Role.ASSASSIN);
+        testPlayer.setGold(10);
+        Deck<District> deck = new Deck<>(List.of(yacht));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(deck).build(), testPlayer);
+
+        assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, state));
+        assertEquals(yacht, action.getChosenCard());
+    }
+
+    @Test
+    void pickCardByScore() throws IllegalActionException {
+        testPlayer.setCurrentRole(Role.ASSASSIN);
+        testPlayer.setGold(10);
+        Deck<District> deck = new Deck<>(List.of(shirt, yacht));
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(deck).build(), testPlayer);
+        behavior.playTurn(action, selfTestPlayer, state);
+
+        assertEquals(yacht, action.getChosenCard());
+    }
+
+    @Test
     void pickCardToHaveOneOfEachColor() throws DuplicatedDistrictException, IllegalActionException {
         testPlayer.getCity().addDistrict(house);
         testPlayer.getCity().addDistrict(car);
@@ -110,5 +134,56 @@ class TryharderBehaviorTest {
         behavior.playTurn(action, selfTestPlayer, state);
 
         assertEquals(shirt, action.getChosenCard());
+    }
+
+    @Test
+    void buildDistrictOfDifferentColors() throws DuplicatedDistrictException, IllegalActionException {
+        testPlayer.getCity().addDistrict(house);
+        testPlayer.getCity().addDistrict(car);
+        testPlayer.getCity().addDistrict(plane);
+        testPlayer.getHand().add(shirt);
+        testPlayer.getHand().add(yacht);
+
+        testPlayer.setCurrentRole(Role.ASSASSIN);
+        testPlayer.setGold(10);
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), testPlayer);
+        behavior.playTurn(action, selfTestPlayer, state);
+
+        assertEquals(shirt, action.getBuiltDistrict());
+    }
+
+    @Test
+    void killMerchantByDefault() throws IllegalActionException {
+        testPlayer.setCurrentRole(Role.ASSASSIN);
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), testPlayer);
+        behavior.playTurn(action, selfTestPlayer, state);
+
+        AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
+        assertEquals(Role.MARCHAND, ability.getKilledRole());
+    }
+
+    @Test
+    void killMagicianWhenMerchantIsFacedUp() throws IllegalActionException {
+        testPlayer.setCurrentRole(Role.ASSASSIN);
+        Game fake = mock(Game.class);
+        when(fake.getRolesFacingUp()).thenReturn(EnumSet.of(Role.MARCHAND));
+
+        when(fake.getDeck()).thenReturn(new Deck<>());
+        RegularTurnAction action = new RegularTurnAction(fake, testPlayer);
+        behavior.playTurn(action, selfTestPlayer, new GameView(fake));
+
+        AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
+        assertEquals(Role.MAGICIEN, ability.getKilledRole());
+    }
+
+    @Test
+    void chooseArchitectWhenRichAndLateGame() throws IllegalActionException {
+        when(state.getTurn()).thenReturn(20);
+        testPlayer.setGold(10);
+
+        RoleTurnAction roleTurnAction = new RoleTurnAction(EnumSet.allOf(Role.class));
+        behavior.pickRole(roleTurnAction, selfTestPlayer, state);
+
+        assertEquals(Role.ARCHITECTE, roleTurnAction.getPickedRole());
     }
 }
