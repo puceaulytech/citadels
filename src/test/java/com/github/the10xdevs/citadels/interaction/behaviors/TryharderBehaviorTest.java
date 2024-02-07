@@ -84,7 +84,9 @@ class TryharderBehaviorTest {
         Deck<District> deck = new Deck<>(List.of(house, yacht));
         testPlayer.setCurrentRole(role);
         RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(deck).build(), testPlayer);
+
         assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, state));
+
     }
 
     @Test

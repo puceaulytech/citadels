@@ -7,9 +7,11 @@ import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbil
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
+import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 public class RichardBehavior extends FastBuilderBehavior {
@@ -49,12 +51,25 @@ public class RichardBehavior extends FastBuilderBehavior {
                         .max(Comparator.comparingInt(PlayerView::getScore))
                         .orElseThrow();
 
-                if (self.equals(winningPlayer)) {
+                if (self.equals(winningPlayer) ) {
                     abilityAction.kill(Role.CONDOTTIERE);
                 }
             }
         }
+        else if(self.getCurrentRole()==Role.ARCHITECTE){
+            int totalCost = calculateTotalConstructionCost(action.getBuiltDistrict());
+            if (totalCost >= 6) {
+                //  construire pas les quartiers si le coût total est de 6 pièces d'or ou plus
+                return;
+            }
+
+        }
 
         super.playTurn(action, self, gameState);
     }
+    private int calculateTotalConstructionCost(District districtToBuild) {
+        return districtToBuild.getCost();
+    }
+
 }
+
