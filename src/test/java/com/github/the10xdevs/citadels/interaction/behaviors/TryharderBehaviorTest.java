@@ -9,6 +9,7 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -185,5 +186,45 @@ class TryharderBehaviorTest {
         behavior.pickRole(roleTurnAction, selfTestPlayer, state);
 
         assertEquals(Role.ARCHITECTE, roleTurnAction.getPickedRole());
+    }
+
+    @Test
+    void swapCardsWithPlayerThatHasTheMostCards() throws IllegalActionException {
+        Game game = gameBuilder.withDeck(new Deck<>()).addBehavior(null).addBehavior(null).build();
+        Player playerWith3Cards = game.getPlayers().get(0);
+        playerWith3Cards.getHand().add(house);
+        playerWith3Cards.getHand().add(yacht);
+        playerWith3Cards.getHand().add(car);
+        Player playerWith1Card = game.getPlayers().get(1);
+        playerWith1Card.getHand().add(glasses);
+
+        testPlayer.setCurrentRole(Role.MAGICIEN);
+        RegularTurnAction action = new RegularTurnAction(game, testPlayer);
+        behavior.playTurn(action, selfTestPlayer, new GameView(game));
+
+        MagicienAbilityAction ability = (MagicienAbilityAction) action.getAbilityAction();
+        assertTrue(ability.getExchangedPlayer().represents(playerWith3Cards));
+    }
+
+    @Test
+    void discardAndDrawWorstCards() throws IllegalActionException, DuplicatedDistrictException {
+        Game game = gameBuilder.withDeck(new Deck<>(List.of(plane, house))).addBehavior(null).build();
+
+        for (int i = 0; i < 4; i++)
+            testPlayer.getCity().addDistrict(new District("Building", Category.MARCHAND, i));
+        testPlayer.setCurrentRole(Role.MAGICIEN);
+        testPlayer.setGold(-100);
+        testPlayer.getHand().add(shirt);
+        testPlayer.getHand().add(glasses);
+        testPlayer.getHand().add(car);
+
+        RegularTurnAction action = new RegularTurnAction(game, testPlayer);
+        behavior.playTurn(action, selfTestPlayer, new GameView(game));
+
+        assertTrue(testPlayer.getHand().contains(car));
+        assertFalse(testPlayer.getHand().contains(glasses));
+        assertFalse(testPlayer.getHand().contains(shirt));
+        assertTrue(testPlayer.getHand().contains(plane));
+        assertTrue(testPlayer.getHand().contains(house));
     }
 }

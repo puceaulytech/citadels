@@ -222,10 +222,10 @@ public class TryharderBehavior implements Behavior {
         else if (gameState.getDeckSize() > 0) {
             double averageScoreInHand = (double) self.getHand().stream()
                     .mapToInt(District::getScore)
-                    .count() / self.getHandSize();
+                    .sum() / self.getHandSize();
             if (averageScoreInHand < currentScoreThreshold) {
                 List<District> cardsToDiscard = self.getHand().stream()
-                        .sorted(Comparator.comparingInt(District::getScore).reversed())
+                        .sorted(Comparator.comparingInt(District::getScore))
                         .limit(gameState.getDeckSize())
                         .toList();
                 ability.discardAndDraw(cardsToDiscard);
