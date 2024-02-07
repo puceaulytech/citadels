@@ -28,11 +28,6 @@ public class ConsoleLogger implements Logger {
     public static final String ANSI_BRONZE = "\u001B[38;2;106;56;5m";
 
     private final PrintWriter writer = new PrintWriter(new BufferedOutputStream(System.out));
-    private final boolean supportsColor;
-
-    public ConsoleLogger() {
-        this.supportsColor = !System.getProperty("os.name").toLowerCase().contains("win");
-    }
 
     @Override
     public void logTurnStart(int turn) {
@@ -141,14 +136,12 @@ public class ConsoleLogger implements Logger {
         writer.println("\n------ Podium ------");
         int rank = 1;
         for (Leaderboard.Entry entry : leaderboard.getEntries()) {
-            if (this.supportsColor) {
-                if (rank == 1) {
-                    writer.print(ANSI_GOLD);
-                } else if (rank == 2) {
-                    writer.print(ANSI_SILVER);
-                } else if (rank == 3) {
-                    writer.print(ANSI_BRONZE);
-                }
+            if (rank == 1) {
+                writer.print(ANSI_GOLD);
+            } else if (rank == 2) {
+                writer.print(ANSI_SILVER);
+            } else if (rank == 3) {
+                writer.print(ANSI_BRONZE);
             }
 
             writer.print("-> ");
@@ -157,7 +150,7 @@ public class ConsoleLogger implements Logger {
             writer.print(entry.getScore());
             writer.println(" points");
 
-            if (rank <= 3 && this.supportsColor) {
+            if (rank <= 3) {
                 writer.print(ANSI_RESET);
             }
 
@@ -184,12 +177,12 @@ public class ConsoleLogger implements Logger {
 
     private void printColorized(Role role) {
         Category category = role.getCategory();
-        if (category != null && this.supportsColor)
+        if (category != null)
             writer.print(role.getCategory().getANSIColorCode());
 
         writer.print(role);
 
-        if (category != null && this.supportsColor)
+        if (category != null)
             writer.print(ANSI_RESET);
     }
 
@@ -197,13 +190,11 @@ public class ConsoleLogger implements Logger {
         writer.print(district.getName());
         writer.print(", ");
 
-        if (this.supportsColor)
-            writer.print(district.getCategory().getANSIColorCode());
+        writer.print(district.getCategory().getANSIColorCode());
 
         writer.print(district.getCategory().toString());
 
-        if (this.supportsColor)
-            writer.print(ANSI_RESET);
+        writer.print(ANSI_RESET);
 
         writer.print(", prix: ");
         writer.print(district.getCost());
