@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > FastBuilderBehavior</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.interaction.behaviors</a>
+</div>
+
+<h1>Coverage Summary for Class: FastBuilderBehavior (com.github.the10xdevs.citadels.interaction.behaviors)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FastBuilderBehavior</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.6%
+  </span>
+  <span class="absValue">
+    (28/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.interaction.behaviors;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+&nbsp;import com.github.the10xdevs.citadels.interaction.views.GameView;
+&nbsp;import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
+&nbsp;import com.github.the10xdevs.citadels.models.District;
+&nbsp;import com.github.the10xdevs.citadels.models.Role;
+&nbsp;import com.github.the10xdevs.citadels.utils.Pair;
+&nbsp;
+&nbsp;import java.util.EnumSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * A bot that tries to build as fast as possible
+&nbsp; */
+<b class="fc">&nbsp;public class FastBuilderBehavior implements Behavior {</b>
+<b class="fc">&nbsp;    private static final List&lt;Role&gt; rolesImportance = List.of(</b>
+&nbsp;            Role.ROI,
+&nbsp;            Role.CONDOTTIERE,
+&nbsp;            Role.MARCHAND,
+&nbsp;            Role.EVEQUE,
+&nbsp;            Role.ASSASSIN,
+&nbsp;            Role.VOLEUR,
+&nbsp;            Role.MAGICIEN,
+&nbsp;            Role.ARCHITECTE
+&nbsp;    );
+&nbsp;    private Role previousRole;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the most important role from the available roles.
+&nbsp;     *
+&nbsp;     * @param availableRoles the roles available to be picked
+&nbsp;     * @return the most important role, if any
+&nbsp;     */
+&nbsp;    private static Optional&lt;Role&gt; getMostImportantRole(Set&lt;Role&gt; availableRoles) {
+<b class="fc">&nbsp;        return FastBuilderBehavior.rolesImportance.stream()</b>
+<b class="fc">&nbsp;                .filter(availableRoles::contains)</b>
+<b class="fc">&nbsp;                .findFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+<b class="fc">&nbsp;        Set&lt;Role&gt; roles = EnumSet.copyOf(action.getAvailableRoles());</b>
+<b class="fc">&nbsp;        if (this.previousRole != null)</b>
+<b class="fc">&nbsp;            roles.remove(this.previousRole);</b>
+&nbsp;
+<b class="fc">&nbsp;        Role roleToPick = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();</b>
+<b class="fc">&nbsp;        action.pick(roleToPick);</b>
+<b class="fc">&nbsp;        roles.remove(roleToPick);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (gameState.getPlayers().size() == 2) {</b>
+<b class="fc">&nbsp;            if (action.getAvailableRoles().contains(this.previousRole))</b>
+<b class="nc">&nbsp;                roles.add(this.previousRole);</b>
+<b class="fc">&nbsp;            Role roleToDiscard = FastBuilderBehavior.getMostImportantRole(roles).orElseThrow();</b>
+<b class="fc">&nbsp;            action.discard(roleToDiscard);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        this.previousRole = roleToPick;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Performs a turn action. The bot always draws a card until its hand size reaches eight, then it always takes gold.
+&nbsp;     * It also tries to build the first district it can afford.
+&nbsp;     *
+&nbsp;     * @param action the RegularTurnAction to be performed
+&nbsp;     * @param self   the SelfPlayerView of the current player
+&nbsp;     * @param game   the current state of the game
+&nbsp;     * @throws IllegalActionException if an illegal action is performed
+&nbsp;     */
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
+&nbsp;
+&nbsp;        // Always Draw a card until HandSize equals eight
+<b class="fc">&nbsp;        if (action.canDraw() &amp;&amp; self.getHandSize() &lt; 8) {</b>
+<b class="fc">&nbsp;            Pair&lt;District, Optional&lt;District&gt;&gt; cards = action.drawCards();</b>
+<b class="fc">&nbsp;            action.chooseCard(cards.first());</b>
+<b class="fc">&nbsp;        } else {</b>
+&nbsp;            // Always take gold after reaching eight card in hand
+<b class="fc">&nbsp;            action.takeGold();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Build the first district we can afford
+<b class="fc">&nbsp;        Optional&lt;District&gt; toBuild = self.getHand()</b>
+<b class="fc">&nbsp;                .stream()</b>
+<b class="fc">&nbsp;                .filter(district -&gt; !self.getCity().getDistricts().contains(district))</b>
+<b class="fc">&nbsp;                .filter(district -&gt; district.getCost() &lt;= self.getGold())</b>
+<b class="fc">&nbsp;                .findFirst();</b>
+<b class="fc">&nbsp;        if (toBuild.isPresent())</b>
+<b class="fc">&nbsp;            action.buildDistrict(toBuild.get());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

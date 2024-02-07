@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > RoleTurnAction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.interaction.actions</a>
+</div>
+
+<h1>Coverage Summary for Class: RoleTurnAction (com.github.the10xdevs.citadels.interaction.actions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RoleTurnAction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.3%
+  </span>
+  <span class="absValue">
+    (14/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.interaction.actions;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+&nbsp;import com.github.the10xdevs.citadels.models.Role;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * A class used by Behaviors to store their choices regarding roles
+&nbsp; *
+&nbsp; * @see com.github.the10xdevs.citadels.interaction.behaviors.Behavior
+&nbsp; */
+&nbsp;public class RoleTurnAction {
+&nbsp;    private final Set&lt;Role&gt; availableRoles;
+&nbsp;    private Role pickedRole;
+&nbsp;    private Role discardedRole;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a RoleTurnAction with a set of available roles to choose from
+&nbsp;     *
+&nbsp;     * @param availableRoles Set of available roles to choose from
+&nbsp;     */
+<b class="fc">&nbsp;    public RoleTurnAction(Set&lt;Role&gt; availableRoles) {</b>
+<b class="fc">&nbsp;        this.availableRoles = availableRoles;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Pick this role
+&nbsp;     *
+&nbsp;     * @param role The role to pick
+&nbsp;     */
+&nbsp;    public void pick(Role role) throws IllegalActionException {
+<b class="fc">&nbsp;        if (!availableRoles.contains(role))</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Cannot pick role that is not offered&quot;);</b>
+<b class="fc">&nbsp;        if (role.equals(discardedRole))</b>
+<b class="nc">&nbsp;            throw new IllegalActionException(&quot;Picked role is the same as discarded role&quot;);</b>
+<b class="fc">&nbsp;        this.pickedRole = role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Discard this role
+&nbsp;     *
+&nbsp;     * @param role The role to discard
+&nbsp;     */
+&nbsp;    public void discard(Role role) throws IllegalActionException {
+<b class="fc">&nbsp;        if (!availableRoles.contains(role))</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Cannot discard role that is not offered&quot;);</b>
+<b class="fc">&nbsp;        if (role.equals(pickedRole))</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Discarded role is the same as picked role&quot;);</b>
+<b class="fc">&nbsp;        this.discardedRole = role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the role chosen by the player among the available roles
+&nbsp;     *
+&nbsp;     * @return The role chosen by the player among the available roles
+&nbsp;     */
+&nbsp;    public Role getPickedRole() {
+<b class="fc">&nbsp;        return pickedRole;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the role discarded by the player among the available roles
+&nbsp;     *
+&nbsp;     * @return The role discarded by the player among the available roles
+&nbsp;     */
+&nbsp;    public Role getDiscardedRole() {
+<b class="fc">&nbsp;        return discardedRole;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Set&lt;Role&gt; getAvailableRoles() {
+<b class="fc">&nbsp;        return Collections.unmodifiableSet(this.availableRoles);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

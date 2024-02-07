@@ -1,0 +1,145 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > GameBuilder</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.gamestate</a>
+</div>
+
+<h1>Coverage Summary for Class: GameBuilder (com.github.the10xdevs.citadels.gamestate)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.gamestate;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
+&nbsp;import com.github.the10xdevs.citadels.logging.ConsoleLogger;
+&nbsp;import com.github.the10xdevs.citadels.logging.Logger;
+&nbsp;import com.github.the10xdevs.citadels.models.District;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class GameBuilder {
+<b class="fc">&nbsp;    private final List&lt;Behavior&gt; behaviors = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    private Logger logger = new ConsoleLogger();</b>
+<b class="fc">&nbsp;    private Deck&lt;District&gt; deck = new Deck&lt;&gt;(District.all());</b>
+&nbsp;
+<b class="fc">&nbsp;    private GameBuilder() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static GameBuilder create() {
+<b class="fc">&nbsp;        return new GameBuilder();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GameBuilder withLogger(Logger logger) {
+<b class="fc">&nbsp;        this.logger = logger;</b>
+<b class="fc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GameBuilder withDeck(Deck&lt;District&gt; deck) {
+<b class="fc">&nbsp;        this.deck = deck;</b>
+<b class="fc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public GameBuilder addBehavior(Behavior behavior) {
+<b class="fc">&nbsp;        this.behaviors.add(behavior);</b>
+<b class="fc">&nbsp;        return this;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Game build() {
+<b class="fc">&nbsp;        return new Game(this.behaviors, this.deck, this.logger);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

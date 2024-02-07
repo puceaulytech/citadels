@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ExpensiveBuilderBehavior</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.interaction.behaviors</a>
+</div>
+
+<h1>Coverage Summary for Class: ExpensiveBuilderBehavior (com.github.the10xdevs.citadels.interaction.behaviors)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExpensiveBuilderBehavior</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (37/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.interaction.behaviors;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
+&nbsp;import com.github.the10xdevs.citadels.interaction.views.GameView;
+&nbsp;import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
+&nbsp;import com.github.the10xdevs.citadels.models.District;
+&nbsp;import com.github.the10xdevs.citadels.models.Role;
+&nbsp;import com.github.the10xdevs.citadels.utils.Pair;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * A bot that tries to build expensive districts
+&nbsp; */
+<b class="fc">&nbsp;public class ExpensiveBuilderBehavior implements Behavior {</b>
+<b class="fc">&nbsp;    private static final List&lt;Role&gt; rolesImportance = List.of(</b>
+&nbsp;            Role.VOLEUR,
+&nbsp;            Role.ARCHITECTE,
+&nbsp;            Role.ROI,
+&nbsp;            Role.CONDOTTIERE,
+&nbsp;            Role.MARCHAND,
+&nbsp;            Role.EVEQUE,
+&nbsp;            Role.ASSASSIN,
+&nbsp;            Role.MAGICIEN
+&nbsp;    );
+&nbsp;    private static final int GOOD_DISTRICT_THRESHOLD = 4;
+&nbsp;    private District markedDistrict;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the most important role from the available roles.
+&nbsp;     *
+&nbsp;     * @param availableRoles the roles available to be picked
+&nbsp;     * @return the most important role, if any
+&nbsp;     */
+&nbsp;
+&nbsp;    private static Optional&lt;Role&gt; getMostImportantRole(Set&lt;Role&gt; availableRoles) {
+<b class="fc">&nbsp;        return ExpensiveBuilderBehavior.rolesImportance.stream()</b>
+<b class="fc">&nbsp;                .filter(availableRoles::contains)</b>
+<b class="fc">&nbsp;                .findFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Picks the most important role from the available roles and discards the most important role if the game has two players.
+&nbsp;     *
+&nbsp;     * @param action    the RoleTurnAction to be performed
+&nbsp;     * @param self      the SelfPlayerView of the current player
+&nbsp;     * @param gameState the current state of the game
+&nbsp;     * @throws IllegalActionException if an illegal action is performed
+&nbsp;     */
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+<b class="fc">&nbsp;        Set&lt;Role&gt; roles = EnumSet.copyOf(action.getAvailableRoles());</b>
+&nbsp;
+<b class="fc">&nbsp;        Role roleToPick = ExpensiveBuilderBehavior.getMostImportantRole(roles).orElseThrow();</b>
+<b class="fc">&nbsp;        action.pick(roleToPick);</b>
+<b class="fc">&nbsp;        roles.remove(roleToPick);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (gameState.getPlayers().size() == 2) {</b>
+<b class="fc">&nbsp;            Role roleToDiscard = ExpensiveBuilderBehavior.getMostImportantRole(roles).orElseThrow();</b>
+<b class="fc">&nbsp;            action.discard(roleToDiscard);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Performs a turn action. The bot always takes gold if it has a district to build.
+&nbsp;     * Otherwise, it draws a card and chooses the best district.
+&nbsp;     * If it has the role thief, it steals from the king.
+&nbsp;     *
+&nbsp;     * @param action the RegularTurnAction to be performed
+&nbsp;     * @param self   the SelfPlayerView of the current player
+&nbsp;     * @param game   the current state of the game
+&nbsp;     * @throws IllegalActionException if an illegal action is performed
+&nbsp;     */
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView game) throws IllegalActionException {
+<b class="fc">&nbsp;        if (markedDistrict != null &amp;&amp; self.getHand().contains(markedDistrict)) {</b>
+&nbsp;            // Try to build our marked district
+<b class="fc">&nbsp;            if (self.getGold() &gt;= markedDistrict.getCost()) {</b>
+<b class="fc">&nbsp;                action.buildDistrict(markedDistrict);</b>
+<b class="fc">&nbsp;                markedDistrict = null;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                action.takeGold();</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="fc">&nbsp;            Optional&lt;District&gt; bestDistrictInHand = self.getHand()</b>
+<b class="fc">&nbsp;                    .stream()</b>
+<b class="fc">&nbsp;                    .filter(district -&gt; district.getScore() &gt;= GOOD_DISTRICT_THRESHOLD)</b>
+<b class="fc">&nbsp;                    .filter(district -&gt; !self.getCity().getDistricts().contains(district))</b>
+<b class="fc">&nbsp;                    .max(Comparator.comparingInt(District::getScore));</b>
+&nbsp;
+&nbsp;            // Get the best good district in our hand
+<b class="fc">&nbsp;            if (bestDistrictInHand.isPresent()) {</b>
+&nbsp;                // Mark this district and try to build it the next turn
+<b class="fc">&nbsp;                this.markedDistrict = bestDistrictInHand.get();</b>
+<b class="fc">&nbsp;                action.takeGold();</b>
+<b class="fc">&nbsp;            } else if (action.canDraw()) {</b>
+&nbsp;                // Draw cards and choose the best district
+<b class="fc">&nbsp;                Pair&lt;District, Optional&lt;District&gt;&gt; cards = action.drawCards();</b>
+&nbsp;                District bestDistrict;
+&nbsp;
+<b class="fc">&nbsp;                District firstCard = cards.first();</b>
+<b class="fc">&nbsp;                Optional&lt;District&gt; secondCard = cards.second();</b>
+&nbsp;
+<b class="fc">&nbsp;                if (secondCard.isEmpty() || firstCard.getScore() &gt; secondCard.get().getScore()) {</b>
+<b class="fc">&nbsp;                    bestDistrict = cards.first();</b>
+&nbsp;                } else {
+<b class="fc">&nbsp;                    bestDistrict = secondCard.get();</b>
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                action.chooseCard(bestDistrict);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Optional&lt;Role&gt; killedRole = game.getKilledRole();</b>
+&nbsp;
+&nbsp;        // If it has role thief, steals from role king
+<b class="fc">&nbsp;        if (self.getCurrentRole() == Role.VOLEUR &amp;&amp; (killedRole.isEmpty() || killedRole.get() != Role.ROI)) {</b>
+<b class="fc">&nbsp;            VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();</b>
+<b class="fc">&nbsp;            ability.stealFrom(Role.ROI);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

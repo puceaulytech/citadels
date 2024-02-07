@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > City</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.models</a>
+</div>
+
+<h1>Coverage Summary for Class: City (com.github.the10xdevs.citadels.models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">City</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.models;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
+&nbsp;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;/**
+&nbsp; * A city of districts
+&nbsp; *
+&nbsp; * @see District
+&nbsp; */
+<b class="fc">&nbsp;public class City implements Iterable&lt;District&gt; {</b>
+<b class="fc">&nbsp;    private final Set&lt;District&gt; districts = new HashSet&lt;&gt;();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Add a new district to the city
+&nbsp;     *
+&nbsp;     * @param district The new district
+&nbsp;     * @throws DuplicatedDistrictException If the district is already in the city
+&nbsp;     */
+&nbsp;    public void addDistrict(District district) throws DuplicatedDistrictException {
+<b class="fc">&nbsp;        if (!this.districts.add(district))</b>
+<b class="fc">&nbsp;            throw new DuplicatedDistrictException(district);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a collection of all the districts in this City
+&nbsp;     *
+&nbsp;     * @return A collection of all the districts in this City
+&nbsp;     */
+&nbsp;    public Set&lt;District&gt; getDistricts() {
+<b class="fc">&nbsp;        return this.districts;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns how many districts have been built in this city
+&nbsp;     *
+&nbsp;     * @return How many districts have been built in this city
+&nbsp;     */
+&nbsp;    public int getSize() {
+<b class="fc">&nbsp;        return this.districts.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Iterator&lt;District&gt; iterator() {
+<b class="fc">&nbsp;        return this.districts.iterator();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

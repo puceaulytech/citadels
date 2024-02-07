@@ -1,0 +1,114 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Logger</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.logging</a>
+</div>
+
+<h1>Coverage Summary for Class: Logger (com.github.the10xdevs.citadels.logging)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Logger</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.logging;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.gamestate.Leaderboard;
+&nbsp;import com.github.the10xdevs.citadels.gamestate.Player;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
+&nbsp;import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+&nbsp;
+&nbsp;public interface Logger {
+&nbsp;    /**
+&nbsp;     * Log the start of a turn
+&nbsp;     *
+&nbsp;     * @param turn The turn number
+&nbsp;     */
+&nbsp;    void logTurnStart(int turn);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Log a role choosing action
+&nbsp;     *
+&nbsp;     * @param index  The index of the player
+&nbsp;     * @param player The player
+&nbsp;     * @param action The action made by the player
+&nbsp;     */
+&nbsp;    void logRoleTurnAction(int index, Player player, RoleTurnAction action);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Log a regular turn action
+&nbsp;     *
+&nbsp;     * @param player The player that made the action
+&nbsp;     * @param action The action made by the player
+&nbsp;     */
+&nbsp;    void logRegularTurnAction(Player player, RegularTurnAction action);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Log winners of the game
+&nbsp;     *
+&nbsp;     * @param leaderboard The leaderboard
+&nbsp;     */
+&nbsp;    void logWinners(Leaderboard leaderboard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Log if an error occurs during the game
+&nbsp;     *
+&nbsp;     * @param error Caught error to be logged
+&nbsp;     */
+&nbsp;    void logError(Throwable error);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

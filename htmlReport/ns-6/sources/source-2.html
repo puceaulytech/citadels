@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ArchitecteAbilityAction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.interaction.actions.abilities</a>
+</div>
+
+<h1>Coverage Summary for Class: ArchitecteAbilityAction (com.github.the10xdevs.citadels.interaction.actions.abilities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArchitecteAbilityAction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.interaction.actions.abilities;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+&nbsp;import com.github.the10xdevs.citadels.gamestate.Game;
+&nbsp;import com.github.the10xdevs.citadels.gamestate.Player;
+&nbsp;import com.github.the10xdevs.citadels.models.District;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class ArchitecteAbilityAction extends AbilityAction {
+<b class="fc">&nbsp;    private int maxDistricts = 3;</b>
+&nbsp;    /**
+&nbsp;     * A flag indicating whether the Architect has already drawn additional cards during the turn.
+&nbsp;     */
+<b class="fc">&nbsp;    private boolean hasDrawnCards = false;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs an ArchitecteAbilityAction instance for the given current player and game.
+&nbsp;     *
+&nbsp;     * @param currentPlayer The player performing the ability action.
+&nbsp;     * @param game          The current game state.
+&nbsp;     */
+&nbsp;
+&nbsp;    public ArchitecteAbilityAction(Player currentPlayer, Game game) {
+<b class="fc">&nbsp;        super(currentPlayer, game);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Draws additional cards for the Architect.
+&nbsp;     *
+&nbsp;     * @throws IllegalActionException If drawing additional cards is not allowed (can only be done once per turn).
+&nbsp;     */
+&nbsp;
+&nbsp;    public void drawAdditionalCards() throws IllegalActionException {
+<b class="fc">&nbsp;        if (hasDrawnCards)</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Architect can only draw additional cards once&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt;= 2; i++) {</b>
+<b class="fc">&nbsp;            this.currentPlayer.getHand().add(this.game.getDeck().drawCard());</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        this.hasDrawnCards = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Builds districts for the Architect in a single turn.
+&nbsp;     *
+&nbsp;     * @param districts The list of districts to build.
+&nbsp;     * @throws IllegalActionException If the number of districts to build exceeds the maximum allowed.
+&nbsp;     */
+&nbsp;
+&nbsp;
+&nbsp;    public void buildDistricts(List&lt;District&gt; districts) throws IllegalActionException {
+<b class="fc">&nbsp;        if (districts.size() &gt; this.maxDistricts) {</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Architecte can only build up to three districts in one turn&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (District district : districts) {</b>
+<b class="fc">&nbsp;            this.currentPlayer.buildDistrict(district);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        this.maxDistricts -= districts.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the remaining maximum number of districts the Architect can build in the current turn.
+&nbsp;     *
+&nbsp;     * @return The remaining maximum number of districts.
+&nbsp;     */
+&nbsp;    public int getRemainingMaxDistricts() {
+<b class="fc">&nbsp;        return this.maxDistricts;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

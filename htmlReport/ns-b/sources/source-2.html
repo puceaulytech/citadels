@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Pair</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.utils</a>
+</div>
+
+<h1>Coverage Summary for Class: Pair (com.github.the10xdevs.citadels.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Pair</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.utils;
+&nbsp;
+&nbsp;/**
+&nbsp; * A pair of two values
+&nbsp; *
+&nbsp; * @param &lt;A&gt; First value
+&nbsp; * @param &lt;B&gt; Second value
+&nbsp; */
+&nbsp;public class Pair&lt;A, B&gt; {
+&nbsp;    private final A first;
+&nbsp;    private final B second;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Construct a new pair with two initial values
+&nbsp;     *
+&nbsp;     * @param first  The first initial value
+&nbsp;     * @param second The second initial value
+&nbsp;     */
+<b class="fc">&nbsp;    public Pair(A first, B second) {</b>
+<b class="fc">&nbsp;        this.first = first;</b>
+<b class="fc">&nbsp;        this.second = second;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the first value
+&nbsp;     *
+&nbsp;     * @return The first value
+&nbsp;     */
+&nbsp;    public A first() {
+<b class="fc">&nbsp;        return this.first;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the second value
+&nbsp;     *
+&nbsp;     * @return The second value
+&nbsp;     */
+&nbsp;    public B second() {
+<b class="fc">&nbsp;        return this.second;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Invert the pair, putting the first value into the second, and vice-versa.
+&nbsp;     *
+&nbsp;     * @return The inverted pair
+&nbsp;     */
+&nbsp;    public Pair&lt;B, A&gt; invert() {
+<b class="fc">&nbsp;        return new Pair&lt;&gt;(this.second, this.first);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Check if the pair contains a specific object
+&nbsp;     *
+&nbsp;     * @param o The object to check
+&nbsp;     * @return true if the pair contains the object, otherwise false
+&nbsp;     */
+&nbsp;    public boolean contains(Object o) {
+<b class="fc">&nbsp;        return this.first.equals(o) || this.second.equals(o);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns true if the pair contains no elements
+&nbsp;     *
+&nbsp;     * @return true if the pair contains no elements
+&nbsp;     */
+&nbsp;    public boolean isEmpty() {
+<b class="fc">&nbsp;        return this.first == null &amp;&amp; this.second == null;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>

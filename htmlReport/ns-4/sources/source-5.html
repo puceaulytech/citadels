@@ -1,0 +1,271 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Player</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.github.the10xdevs.citadels.gamestate</a>
+</div>
+
+<h1>Coverage Summary for Class: Player (com.github.the10xdevs.citadels.gamestate)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Player</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (39/42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.github.the10xdevs.citadels.gamestate;
+&nbsp;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
+&nbsp;import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+&nbsp;import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
+&nbsp;import com.github.the10xdevs.citadels.models.Category;
+&nbsp;import com.github.the10xdevs.citadels.models.City;
+&nbsp;import com.github.the10xdevs.citadels.models.District;
+&nbsp;import com.github.the10xdevs.citadels.models.Role;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * A wrapper for all the player information
+&nbsp; * &lt;br&gt;
+&nbsp; * This class does not handle the decision-making and is supposed to be used by Game only
+&nbsp; */
+&nbsp;public class Player {
+&nbsp;    private final Behavior behavior;
+<b class="fc">&nbsp;    private final City city = new City();</b>
+<b class="fc">&nbsp;    private final List&lt;District&gt; hand = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    private int gold = 0;</b>
+&nbsp;    private Role currentRole;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a Player with a specific behavior
+&nbsp;     *
+&nbsp;     * @param behavior The player behavior for the decision-making
+&nbsp;     */
+<b class="fc">&nbsp;    public Player(Behavior behavior) {</b>
+<b class="fc">&nbsp;        this.behavior = behavior;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void swapHandWith(Player other) {
+<b class="fc">&nbsp;        List&lt;District&gt; thisHand = new ArrayList&lt;&gt;(this.hand);</b>
+<b class="fc">&nbsp;        List&lt;District&gt; otherHand = new ArrayList&lt;&gt;(other.hand);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.hand.clear();</b>
+<b class="fc">&nbsp;        other.hand.clear();</b>
+&nbsp;
+<b class="fc">&nbsp;        this.hand.addAll(otherHand);</b>
+<b class="fc">&nbsp;        other.hand.addAll(thisHand);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the player behavior
+&nbsp;     *
+&nbsp;     * @return The player behavior
+&nbsp;     */
+&nbsp;    public Behavior getBehavior() {
+<b class="fc">&nbsp;        return behavior;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the player&#39;s gold amount
+&nbsp;     *
+&nbsp;     * @return The player&#39;s gold amount
+&nbsp;     */
+&nbsp;    public int getGold() {
+<b class="fc">&nbsp;        return gold;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the player&#39;s gold amount
+&nbsp;     *
+&nbsp;     * @param gold The amount of gold to set
+&nbsp;     */
+&nbsp;    public void setGold(int gold) {
+<b class="fc">&nbsp;        this.gold = gold;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Increases the player&#39;s gold amount by a certain amount
+&nbsp;     *
+&nbsp;     * @param amount The amount of gold to add
+&nbsp;     */
+&nbsp;    public void incrementGold(int amount) {
+<b class="fc">&nbsp;        this.gold += amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the player&#39;s city
+&nbsp;     *
+&nbsp;     * @return The player&#39;s city
+&nbsp;     */
+&nbsp;    public City getCity() {
+<b class="fc">&nbsp;        return city;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void buildDistrict(District district) throws IllegalActionException {
+<b class="fc">&nbsp;        if (district == null)</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Cannot build a district that is null&quot;);</b>
+<b class="fc">&nbsp;        if (!this.getHand().contains(district))</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Cannot build a district that is not in hand&quot;);</b>
+<b class="fc">&nbsp;        if (this.getGold() &lt; district.getCost())</b>
+<b class="fc">&nbsp;            throw new IllegalActionException(&quot;Cannot build district without enough gold&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.incrementGold(-district.getCost());</b>
+<b class="fc">&nbsp;        this.getHand().remove(district);</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            this.getCity().addDistrict(district);</b>
+<b class="nc">&nbsp;        } catch (DuplicatedDistrictException e) {</b>
+<b class="nc">&nbsp;            throw new IllegalActionException(&quot;Cannot build the same district twice&quot;, e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Computes and returns the player&#39;s score according to its built districts
+&nbsp;     *
+&nbsp;     * @param wasFirstPlayer If the player was the first one to build 8 districts
+&nbsp;     * @return The player&#39;s score
+&nbsp;     */
+&nbsp;    public int getScore(boolean wasFirstPlayer) {
+&nbsp;        // Sum of the score of all the districts in the city
+<b class="fc">&nbsp;        int score = this.getCity().getDistricts().stream().mapToInt(District::getScore).sum();</b>
+&nbsp;
+&nbsp;        // If the player has a district of each category, he earns
+<b class="fc">&nbsp;        Set&lt;Category&gt; districtsCategories = this.getCity().getDistricts()</b>
+<b class="fc">&nbsp;                .stream()</b>
+<b class="fc">&nbsp;                .map(District::getCategory)</b>
+<b class="fc">&nbsp;                .collect(Collectors.toSet());</b>
+&nbsp;
+<b class="fc">&nbsp;        if (districtsCategories.size() == 5)</b>
+<b class="fc">&nbsp;            score += 3;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (this.getCity().getSize() == 8)</b>
+<b class="fc">&nbsp;            score += wasFirstPlayer ? 4 : 2;</b>
+&nbsp;
+<b class="fc">&nbsp;        return score;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the player&#39;s current chosen role
+&nbsp;     *
+&nbsp;     * @return The player&#39;s current chosen role
+&nbsp;     */
+&nbsp;    public Role getCurrentRole() {
+<b class="fc">&nbsp;        return currentRole;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the player&#39;s chosen role
+&nbsp;     *
+&nbsp;     * @param currentRole The player&#39;s chosen role
+&nbsp;     */
+&nbsp;    public void setCurrentRole(Role currentRole) {
+<b class="fc">&nbsp;        this.currentRole = currentRole;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the player&#39;s hand
+&nbsp;     *
+&nbsp;     * @return The player&#39;s hand
+&nbsp;     */
+&nbsp;    public List&lt;District&gt; getHand() {
+<b class="fc">&nbsp;        return this.hand;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName() {
+<b class="nc">&nbsp;        return this.behavior.getName();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-07 10:35</div>
+</div>
+</body>
+</html>
