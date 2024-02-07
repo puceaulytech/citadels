@@ -56,16 +56,4 @@ public class RichardBehavior extends FastBuilderBehavior {
 
         super.playTurn(action, self, gameState);
     }
-
-    private boolean roleTakenByPotentialWinner(Role targetRole, GameView gameState) {
-        Optional<PlayerView> playerHavingRole = this.getPlayerWithRole(gameState, targetRole);
-        return playerHavingRole.isPresent() && playerHavingRole.get().getCity().getDistricts().size() == 7;
-    }
-
-    private Optional<PlayerView> getPlayerWithRole(GameView gameState, Role role) {
-        return gameState.getPlayers()
-                .stream()
-                .filter(player -> player.getCurrentRole() == role)
-                .findFirst();
-    }
 }
