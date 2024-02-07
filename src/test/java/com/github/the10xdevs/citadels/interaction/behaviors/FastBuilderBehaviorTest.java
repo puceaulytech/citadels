@@ -1,6 +1,7 @@
 package com.github.the10xdevs.citadels.interaction.behaviors;
 
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
+import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
@@ -9,6 +10,8 @@ import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
+import com.github.the10xdevs.citadels.models.Category;
+import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,6 +71,7 @@ class FastBuilderBehaviorTest {
 
         RegularTurnAction action = new RegularTurnAction(game, player);
         assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(action, selfPlayerView, gameView));
+        assertEquals(RegularTurnAction.BasicAction.CARDS, action.getBasicAction());
         assertNotNull(action.getChosenCard());
     }
 
@@ -75,25 +79,33 @@ class FastBuilderBehaviorTest {
     void playTurnTest_TakeGoldAfterEight() {
         player.setGold(8);
         player.setCurrentRole(Role.ASSASSIN);
+        District district = new District("Kool district", Category.MERVEILLE, 2);
+        for (int i = 0; i < 8; i++) {
+            player.getHand().add(district);
+        }
 
         SelfPlayerView selfPlayerView = new SelfPlayerView(player);
         GameView gameView = new GameView(game);
 
         RegularTurnAction action = new RegularTurnAction(game, player);
         assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(action, selfPlayerView, gameView));
+        assertEquals(RegularTurnAction.BasicAction.GOLD, action.getBasicAction());
     }
 
     @Test
     void playTurnTest_BuildAffordableDistrict() {
         player.setCurrentRole(Role.ARCHITECTE);
         player.setGold(8);
+        District district = new District("Kool district", Category.MERVEILLE, 8);
+        player.getHand().add(district);
 
         SelfPlayerView selfPlayerView = new SelfPlayerView(player);
+        Game game = GameBuilder.create().withDeck(new Deck<>()).build();
         GameView gameView = new GameView(game);
 
         RegularTurnAction action = new RegularTurnAction(game, player);
         assertDoesNotThrow(() -> fastBuilderBehavior.playTurn(action, selfPlayerView, gameView));
-        assertNotNull(action.getBuiltDistrict());
+        assertEquals(district, action.getBuiltDistrict());
     }
 
     @Test
