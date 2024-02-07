@@ -11,31 +11,42 @@ import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 public class RichardBehavior extends FastBuilderBehavior {
     private boolean needsToKillArchitecture = false;
 
+   // the first player made an enlightened choice during role selection
+    private boolean isEnlightenedPlayer = false;
+
+
     @Override
     public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-        if (action.getAvailableRoles().contains(Role.ASSASSIN)) {
-            Optional<PlayerView> futureArchitectePlayer = gameState.getPlayers()
-                    .stream()
-                    .filter(player -> player.getGold() >= 4)
-                    .filter(player -> player.getHandSize() >= 1)
-                    .filter(player -> player.getCity().getDistricts().size() >= 5)
-                    .findAny();
+        if (!isEnlightenedPlayer) {
+            if (action.getAvailableRoles().contains(Role.ASSASSIN)) {
+                Optional<PlayerView> futureArchitectePlayer = gameState.getPlayers()
+                        .stream()
+                        .filter(player -> player.getGold() >= 4)
+                        .filter(player -> player.getHandSize() >= 1)
+                        .filter(player -> player.getCity().getDistricts().size() >= 5)
+                        .findAny();
 
-            if (futureArchitectePlayer.isPresent()) {
-                this.needsToKillArchitecture = true;
-                action.pick(Role.ASSASSIN);
-                return;
+                if (futureArchitectePlayer.isPresent()) {
+                    this.needsToKillArchitecture = true;
+                    action.pick(Role.ASSASSIN);
+                    return;
+                } else if (action.getAvailableRoles().contains(Role.ARCHITECTE)) {
+                    // Si l'Assassin n'est pas disponible, le premier joueur  prende l'Architecte
+                    action.pick(Role.ARCHITECTE);
+                    this.needsToKillArchitecture = true;
+                    isEnlightenedPlayer = true;
+                    return;
+                }
             }
-        }
 
-        super.pickRole(action, self, gameState);
-        this.needsToKillArchitecture = false;
+            super.pickRole(action, self, gameState);
+            this.needsToKillArchitecture = false;
+        }
     }
 
     @Override
@@ -64,6 +75,7 @@ public class RichardBehavior extends FastBuilderBehavior {
             }
 
         }
+
 
         super.playTurn(action, self, gameState);
     }
