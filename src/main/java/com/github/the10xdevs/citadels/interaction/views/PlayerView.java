@@ -3,6 +3,8 @@ package com.github.the10xdevs.citadels.interaction.views;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.models.Role;
 
+import java.util.Objects;
+
 /**
  * An immutable view of a Player
  *
@@ -19,6 +21,19 @@ public class PlayerView {
     public PlayerView(Player player, boolean roleKnownToAll) {
         this.player = player;
         this.roleKnownToAll = roleKnownToAll;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof PlayerView otherPlayerView) {
+            return otherPlayerView.represents(this.player);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     public int getGold() {
@@ -43,5 +58,9 @@ public class PlayerView {
 
     public Role getCurrentRole() {
         return this.roleKnownToAll ? this.player.getCurrentRole() : null;
+    }
+
+    public int getScore() {
+        return this.player.getScore(false);
     }
 }

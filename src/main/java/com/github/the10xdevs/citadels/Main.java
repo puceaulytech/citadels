@@ -4,10 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.github.the10xdevs.citadels.bulk.BulkRunner;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
-import com.github.the10xdevs.citadels.interaction.behaviors.ExpensiveBuilderBehavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.FastBuilderBehavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.RandomBehavior;
-import com.github.the10xdevs.citadels.interaction.behaviors.TryharderBehavior;
+import com.github.the10xdevs.citadels.interaction.behaviors.*;
 
 import java.util.List;
 
@@ -25,7 +22,8 @@ public class Main {
                     new RandomBehavior(),
                     new TryharderBehavior(),
                     new ExpensiveBuilderBehavior(),
-                    new FastBuilderBehavior()
+                    new FastBuilderBehavior(),
+                    new RichardBehavior()
             ));
 
             firstBulkRunner.run();

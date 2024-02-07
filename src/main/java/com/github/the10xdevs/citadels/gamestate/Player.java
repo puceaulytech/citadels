@@ -96,7 +96,7 @@ public class Player {
         if (!this.getHand().contains(district))
             throw new IllegalActionException("Cannot build a district that is not in hand");
         if (this.getGold() < district.getCost())
-            throw new IllegalActionException("Cannot build district without enough gold");
+            throw new IllegalActionException(String.format("Cannot build district without enough gold, has %d needs %d", this.getGold(), district.getCost()));
 
         this.incrementGold(-district.getCost());
         this.getHand().remove(district);
@@ -162,6 +162,4 @@ public class Player {
     public String getName() {
         return this.behavior.getName();
     }
-
-
 }
