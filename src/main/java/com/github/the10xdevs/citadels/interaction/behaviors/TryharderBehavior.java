@@ -36,6 +36,8 @@ public class TryharderBehavior implements Behavior {
     private static final int GOLD_THRESHOLD = 5;
     private static final int SCORE_THRESHOLD = 4;
 
+    private int turnsWithoutBuilding = 0;
+
     /**
      * This method returns the most important role from a set of available roles.
      * The importance of a role is determined by its position in the list of wanted roles.
@@ -132,7 +134,8 @@ public class TryharderBehavior implements Behavior {
 
     @Override
     public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
-        int currentScoreThreshold = self.getCity().getDistricts().size() >= 4 ? TryharderBehavior.SCORE_THRESHOLD : TryharderBehavior.SCORE_THRESHOLD / 2;
+        int firstScoreCalculation = self.getCity().getDistricts().size() >= 4 ? TryharderBehavior.SCORE_THRESHOLD : TryharderBehavior.SCORE_THRESHOLD / 2;
+        int currentScoreThreshold = turnsWithoutBuilding > TryharderBehavior.TURN_THRESHOLD ? 0 : firstScoreCalculation;
 
         if (self.getGold() < TryharderBehavior.GOLD_THRESHOLD) {
             action.takeGold();
@@ -151,6 +154,9 @@ public class TryharderBehavior implements Behavior {
 
         if (toBuild.isPresent() && toBuild.get().getCost() <= self.getGold()) {
             action.buildDistrict(toBuild.get());
+            this.turnsWithoutBuilding = 0;
+        } else {
+            this.turnsWithoutBuilding++;
         }
 
         if (action.getBasicAction() != RegularTurnAction.BasicAction.GOLD && action.canDraw()) {
