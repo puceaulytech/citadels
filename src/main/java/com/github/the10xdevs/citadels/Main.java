@@ -19,11 +19,11 @@ public class Main {
 
         if (arguments.twoThousand) {
             BulkRunner firstBulkRunner = new BulkRunner(1000, List.of(
+                    new RichardBehavior(),
                     new RandomBehavior(),
-                    new TryharderBehavior(),
                     new ExpensiveBuilderBehavior(),
                     new FastBuilderBehavior(),
-                    new RichardBehavior()
+                    new TryharderBehavior()
             ));
 
             firstBulkRunner.run();
@@ -32,10 +32,10 @@ public class Main {
             System.out.println();
 
             BulkRunner secondBulkRunner = new BulkRunner(1000, List.of(
-                    new FastBuilderBehavior(),
-                    new FastBuilderBehavior(),
-                    new FastBuilderBehavior(),
-                    new FastBuilderBehavior()
+                    new TryharderBehavior(),
+                    new TryharderBehavior(),
+                    new TryharderBehavior(),
+                    new TryharderBehavior()
             ));
 
             secondBulkRunner.run();
@@ -47,7 +47,8 @@ public class Main {
                     new RandomBehavior(),
                     new TryharderBehavior(),
                     new ExpensiveBuilderBehavior(),
-                    new FastBuilderBehavior()
+                    new FastBuilderBehavior(),
+                    new RichardBehavior()
             ));
 
             bulkRunner.run();
@@ -65,6 +66,7 @@ public class Main {
                     .addBehavior(new TryharderBehavior())
                     .addBehavior(new ExpensiveBuilderBehavior())
                     .addBehavior(new FastBuilderBehavior())
+                    .addBehavior(new RichardBehavior())
                     .build();
 
             game.start();
