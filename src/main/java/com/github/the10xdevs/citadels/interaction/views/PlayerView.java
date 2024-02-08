@@ -3,8 +3,6 @@ package com.github.the10xdevs.citadels.interaction.views;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.models.Role;
 
-import java.util.Objects;
-
 /**
  * An immutable view of a Player
  *

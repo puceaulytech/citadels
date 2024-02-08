@@ -87,33 +87,7 @@ public class ExpensiveBuilderBehavior implements Behavior {
                 action.takeGold();
             }
         } else {
-            Optional<District> bestDistrictInHand = self.getHand()
-                    .stream()
-                    .filter(district -> district.getScore() >= GOOD_DISTRICT_THRESHOLD)
-                    .filter(district -> !self.getCity().getDistricts().contains(district))
-                    .max(Comparator.comparingInt(District::getScore));
-
-            // Get the best good district in our hand
-            if (bestDistrictInHand.isPresent()) {
-                // Mark this district and try to build it the next turn
-                this.markedDistrict = bestDistrictInHand.get();
-                action.takeGold();
-            } else if (action.canDraw()) {
-                // Draw cards and choose the best district
-                Pair<District, Optional<District>> cards = action.drawCards();
-                District bestDistrict;
-
-                District firstCard = cards.first();
-                Optional<District> secondCard = cards.second();
-
-                if (secondCard.isEmpty() || firstCard.getScore() > secondCard.get().getScore()) {
-                    bestDistrict = cards.first();
-                } else {
-                    bestDistrict = secondCard.get();
-                }
-
-                action.chooseCard(bestDistrict);
-            }
+            this.findNextDistrictToBuild(action, self);
         }
 
         Optional<Role> killedRole = game.getKilledRole();
@@ -122,6 +96,36 @@ public class ExpensiveBuilderBehavior implements Behavior {
         if (self.getCurrentRole() == Role.VOLEUR && (killedRole.isEmpty() || killedRole.get() != Role.ROI)) {
             VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
             ability.stealFrom(Role.ROI);
+        }
+    }
+
+    private void findNextDistrictToBuild(RegularTurnAction action, SelfPlayerView self) throws IllegalActionException {
+        Optional<District> bestDistrictInHand = self.getHand()
+                .stream()
+                .filter(district -> district.getScore() >= GOOD_DISTRICT_THRESHOLD)
+                .filter(district -> !self.getCity().getDistricts().contains(district))
+                .max(Comparator.comparingInt(District::getScore));
+
+        // Get the best good district in our hand
+        if (bestDistrictInHand.isPresent()) {
+            // Mark this district and try to build it the next turn
+            this.markedDistrict = bestDistrictInHand.get();
+            action.takeGold();
+        } else if (action.canDraw()) {
+            // Draw cards and choose the best district
+            Pair<District, Optional<District>> cards = action.drawCards();
+            District bestDistrict;
+
+            District firstCard = cards.first();
+            Optional<District> secondCard = cards.second();
+
+            if (secondCard.isEmpty() || firstCard.getScore() > secondCard.get().getScore()) {
+                bestDistrict = cards.first();
+            } else {
+                bestDistrict = secondCard.get();
+            }
+
+            action.chooseCard(bestDistrict);
         }
     }
 }

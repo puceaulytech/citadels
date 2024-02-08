@@ -7,7 +7,6 @@ import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbil
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
-import com.github.the10xdevs.citadels.models.District;
 import com.github.the10xdevs.citadels.models.Role;
 
 import java.util.Comparator;

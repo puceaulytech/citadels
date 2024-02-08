@@ -127,6 +127,42 @@ public class TryharderBehavior implements Behavior {
         }
     }
 
+    private static void useRoleAbility(RegularTurnAction action, SelfPlayerView self, GameView gameState, int currentScoreThreshold) throws IllegalActionException {
+        switch (self.getCurrentRole()) {
+            case ASSASSIN: {
+                // Always kill Merchant if it's not in the cards facing up, and if it is, kill Magician
+                AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
+                if (!gameState.getRolesFacingUp().contains(Role.MARCHAND))
+                    ability.kill(Role.MARCHAND);
+                else
+                    ability.kill(Role.MAGICIEN);
+                break;
+            }
+            case VOLEUR: {
+                // Steal from the first role possible in the allRoles list
+                VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
+                Optional<Role> roleToSteal = TryharderBehavior.allRoles.stream()
+                        .filter(role -> role != Role.ASSASSIN)
+                        .filter(role -> gameState.getKilledRole().isEmpty() || role != gameState.getKilledRole().get())
+                        .filter(role -> role != self.getCurrentRole())
+                        .filter(role -> !gameState.getRolesFacingUp().contains(role))
+                        .findFirst();
+                if (roleToSteal.isPresent())
+                    ability.stealFrom(roleToSteal.get());
+                break;
+            }
+            case MAGICIEN: {
+                TryharderBehavior.handleMagicianFengShui(action, self, gameState, currentScoreThreshold);
+                break;
+            }
+            case ARCHITECTE: {
+                // TODO
+                break;
+            }
+            default:
+        }
+    }
+
     /**
      * This method defines how the player picks a role during their role turn.
      *
@@ -239,38 +275,6 @@ public class TryharderBehavior implements Behavior {
         if (action.getBasicAction() == null)
             action.takeGold();
 
-        switch (self.getCurrentRole()) {
-            case ASSASSIN: {
-                // Always kill Merchant if it's not in the cards facing up, and if it is, kill Magician
-                AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
-                if (!gameState.getRolesFacingUp().contains(Role.MARCHAND))
-                    ability.kill(Role.MARCHAND);
-                else
-                    ability.kill(Role.MAGICIEN);
-                break;
-            }
-            case VOLEUR: {
-                // Steal from the first role possible in the allRoles list
-                VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
-                Optional<Role> roleToSteal = TryharderBehavior.allRoles.stream()
-                        .filter(role -> role != Role.ASSASSIN)
-                        .filter(role -> gameState.getKilledRole().isEmpty() || role != gameState.getKilledRole().get())
-                        .filter(role -> role != self.getCurrentRole())
-                        .filter(role -> !gameState.getRolesFacingUp().contains(role))
-                        .findFirst();
-                if (roleToSteal.isPresent())
-                    ability.stealFrom(roleToSteal.get());
-                break;
-            }
-            case MAGICIEN: {
-                TryharderBehavior.handleMagicianFengShui(action, self, gameState, currentScoreThreshold);
-                break;
-            }
-            case ARCHITECTE: {
-                // TODO
-                break;
-            }
-            default:
-        }
+        TryharderBehavior.useRoleAbility(action, self, gameState, currentScoreThreshold);
     }
 }

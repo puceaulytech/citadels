@@ -25,7 +25,7 @@ class RandomUtilsTest {
         assertTrue(integers.contains(element));
     }
     @Test
-    public void testChooseFromThrowsException() {
+    void testChooseFromThrowsException() {
         Random faultyRandomGenerator = new Random() {
             @Override
             public int nextInt(int bound) {
@@ -39,6 +39,4 @@ class RandomUtilsTest {
             RandomUtils.chooseFrom(faultyRandomGenerator, list);
         });
     }
-
-
 }

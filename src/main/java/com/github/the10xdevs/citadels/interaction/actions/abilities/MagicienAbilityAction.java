@@ -6,7 +6,6 @@ import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.views.PlayerView;
 import com.github.the10xdevs.citadels.models.District;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -58,49 +58,13 @@ public class RandomBehavior implements Behavior {
         if (this.randomGenerator.nextBoolean()) {
             // kill a random role other than himself
             if (self.getCurrentRole() == Role.ASSASSIN) {
-                AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
-
-                List<Role> rolesToKill = Arrays.stream(Role.values())
-                        .filter(role -> role != Role.ASSASSIN)
-                        .toList();
-
-                ability.kill(RandomUtils.chooseFrom(this.randomGenerator, rolesToKill));
+                this.handleAssassinAbility(action);
             }
             // steal from a random role other than himself and the assassin
             else if (self.getCurrentRole() == Role.VOLEUR) {
-                VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
-
-                List<Role> rolesToSteal = Arrays.stream(Role.values())
-                        .filter(role -> role != Role.VOLEUR)
-                        .filter(role -> role != Role.ASSASSIN)
-                        .filter(role -> gameState.getKilledRole().isEmpty() || gameState.getKilledRole().get() != role)
-                        .toList();
-
-                ability.stealFrom(RandomUtils.chooseFrom(this.randomGenerator, rolesToSteal));
+                this.handleVoleurAbility(action, gameState);
             } else if (self.getCurrentRole() == Role.CONDOTTIERE) {
-                CondottiereAbilityAction ability = (CondottiereAbilityAction) action.getAbilityAction();
-
-                List<PlayerView> targetPlayers = gameState.getPlayers()
-                        .stream()
-                        .filter(player -> player.getCurrentRole() != Role.EVEQUE)
-                        .filter(player -> player.getCity().getDistricts().size() != 8)
-                        .toList();
-
-                PlayerView targetPlayer = RandomUtils.chooseFrom(this.randomGenerator, targetPlayers);
-
-                if (targetPlayer != null) {
-                    List<District> targetDistricts = targetPlayer.getCity().getDistricts()
-                            .stream()
-                            .filter(district -> !district.getName().equals("Donjon"))
-                            .filter(district -> district.getCost() - 1 <= self.getGold())
-                            .toList();
-
-                    if (!targetDistricts.isEmpty()) {
-                        District targetDistrict = RandomUtils.chooseFrom(this.randomGenerator, targetDistricts);
-
-                        ability.destroy(targetPlayer, targetDistrict);
-                    }
-                }
+                this.handleCondottiereAbility(action, self, gameState);
             }
         }
 
@@ -128,5 +92,53 @@ public class RandomBehavior implements Behavior {
                 action.buildDistrict(districtToBuild);
             }
         }
+    }
+
+    private void handleCondottiereAbility(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+        CondottiereAbilityAction ability = (CondottiereAbilityAction) action.getAbilityAction();
+
+        List<PlayerView> targetPlayers = gameState.getPlayers()
+                .stream()
+                .filter(player -> player.getCurrentRole() != Role.EVEQUE)
+                .filter(player -> player.getCity().getDistricts().size() != 8)
+                .toList();
+
+        PlayerView targetPlayer = RandomUtils.chooseFrom(this.randomGenerator, targetPlayers);
+
+        if (targetPlayer != null) {
+            List<District> targetDistricts = targetPlayer.getCity().getDistricts()
+                    .stream()
+                    .filter(district -> !district.getName().equals("Donjon"))
+                    .filter(district -> district.getCost() - 1 <= self.getGold())
+                    .toList();
+
+            if (!targetDistricts.isEmpty()) {
+                District targetDistrict = RandomUtils.chooseFrom(this.randomGenerator, targetDistricts);
+
+                ability.destroy(targetPlayer, targetDistrict);
+            }
+        }
+    }
+
+    private void handleVoleurAbility(RegularTurnAction action, GameView gameState) throws IllegalActionException {
+        VoleurAbilityAction ability = (VoleurAbilityAction) action.getAbilityAction();
+
+        List<Role> rolesToSteal = Arrays.stream(Role.values())
+                .filter(role -> role != Role.VOLEUR)
+                .filter(role -> role != Role.ASSASSIN)
+                .filter(role -> gameState.getKilledRole().isEmpty() || gameState.getKilledRole().get() != role)
+                .toList();
+
+        ability.stealFrom(RandomUtils.chooseFrom(this.randomGenerator, rolesToSteal));
+    }
+
+    private void handleAssassinAbility(RegularTurnAction action) throws IllegalActionException {
+        AssassinAbilityAction ability = (AssassinAbilityAction) action.getAbilityAction();
+
+        List<Role> rolesToKill = Arrays.stream(Role.values())
+                .filter(role -> role != Role.ASSASSIN)
+                .toList();
+
+        ability.kill(RandomUtils.chooseFrom(this.randomGenerator, rolesToKill));
     }
 }
