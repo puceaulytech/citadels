@@ -197,10 +197,12 @@ class TryharderBehaviorTest {
 
     @Test
     void chooseArchitectWhenRichAndLateGame() throws IllegalActionException {
-        // When it is pretty late in the game and the player has a lot of gold
+        // When it is pretty late in the game and the player has a lot of gold and some cards
         // It should pick the architect role
         when(state.getTurn()).thenReturn(20);
         testPlayer.setGold(10);
+        for (int i = 0; i < 5; i++)
+            testPlayer.getHand().add(new District("Minecraft diamond house", Category.MERVEILLE, i));
 
         RoleTurnAction roleTurnAction = new RoleTurnAction(EnumSet.allOf(Role.class));
         behavior.pickRole(roleTurnAction, selfTestPlayer, state);
