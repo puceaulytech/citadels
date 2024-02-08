@@ -50,7 +50,8 @@ class ArchitecteAbilityActionTest {
 
         //then
         int newHandSize = currentPlayer.getHand().size();
-        assertEquals(initialHandSize + 3, newHandSize);
+        assertEquals(initialHandSize + 2, newHandSize);
+        assertEquals(2, architecteAction.getDrawnCards().size());
     }
 
     @Test
@@ -82,6 +83,7 @@ class ArchitecteAbilityActionTest {
         assertTrue(currentPlayer.getCity().getDistricts().contains(district3));
 
         assertEquals(0, architecteAction.getRemainingMaxDistricts());
+        assertEquals(3, architecteAction.getBuiltDistricts().size());
 
         assertEquals(0, currentPlayer.getHand().size());
     }

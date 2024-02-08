@@ -5,6 +5,8 @@ import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.models.District;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ArchitecteAbilityAction extends AbilityAction {
@@ -13,6 +15,9 @@ public class ArchitecteAbilityAction extends AbilityAction {
      * A flag indicating whether the Architect has already drawn additional cards during the turn.
      */
     private boolean hasDrawnCards = false;
+
+    private final List<District> builtDistricts = new ArrayList<>();
+    private final List<District> drawnCards = new ArrayList<>();
 
     /**
      * Constructs an ArchitecteAbilityAction instance for the given current player and game.
@@ -35,8 +40,10 @@ public class ArchitecteAbilityAction extends AbilityAction {
         if (hasDrawnCards)
             throw new IllegalActionException("Architect can only draw additional cards once");
 
-        for (int i = 0; i <= 2; i++) {
-            this.currentPlayer.getHand().add(this.game.getDeck().drawCard());
+        for (int i = 0; i < 2; i++) {
+            District card = this.game.getDeck().drawCard();
+            this.currentPlayer.getHand().add(card);
+            this.drawnCards.add(card);
         }
 
         this.hasDrawnCards = true;
@@ -57,6 +64,7 @@ public class ArchitecteAbilityAction extends AbilityAction {
 
         for (District district : districts) {
             this.currentPlayer.buildDistrict(district);
+            this.builtDistricts.add(district);
         }
 
         this.maxDistricts -= districts.size();
@@ -69,5 +77,13 @@ public class ArchitecteAbilityAction extends AbilityAction {
      */
     public int getRemainingMaxDistricts() {
         return this.maxDistricts;
+    }
+
+    public List<District> getBuiltDistricts() {
+        return Collections.unmodifiableList(this.builtDistricts);
+    }
+
+    public List<District> getDrawnCards() {
+        return Collections.unmodifiableList(this.drawnCards);
     }
 }

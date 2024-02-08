@@ -88,6 +88,23 @@ public class ConsoleLogger implements Logger {
                 writer.print(" chez ");
                 writer.println(condottiereAction.getTargetPlayer().getName());
             }
+        } else if (player.getCurrentRole() == Role.ARCHITECTE) {
+            ArchitecteAbilityAction architecteAction = (ArchitecteAbilityAction) action;
+            if (!architecteAction.getBuiltDistricts().isEmpty()) {
+                for (District builtDistrict : architecteAction.getBuiltDistricts()) {
+                    writer.print("Construit ");
+                    this.printColorized(builtDistrict);
+                    writer.println();
+                }
+            }
+
+            if (!architecteAction.getDrawnCards().isEmpty()) {
+                for (District drawnDistrict : architecteAction.getBuiltDistricts()) {
+                    writer.print("Pioche ");
+                    this.printColorized(drawnDistrict);
+                    writer.println();
+                }
+            }
         }
     }
 
