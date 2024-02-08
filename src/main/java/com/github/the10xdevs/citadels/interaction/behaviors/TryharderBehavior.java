@@ -277,21 +277,23 @@ public class TryharderBehavior implements Behavior {
                     .sorted(Comparator.comparingInt(District::getScore))
                     .toList();
             List<District> districtsToBuild = TryharderBehavior.bestSubList(sortedDistricts, self.getGold());
-            if (districtsToBuild.size() > 1)
+            if (districtsToBuild.size() > 1) {
                 ability.buildDistricts(districtsToBuild);
-        }
-
-        // Try to build a district to have one of each category and with a relatively high score
-        Optional<District> toBuild = self.getHand().stream()
-                .filter(district -> district.getScore() >= currentScoreThreshold)
-                .filter(district -> !self.getCity().getDistricts().contains(district))
-                .max((d1, d2) -> TryharderBehavior.compareCard(d1, d2, self, gameState.getTurn()));
-
-        if (toBuild.isPresent() && toBuild.get().getCost() <= self.getGold()) {
-            action.buildDistrict(toBuild.get());
-            this.turnsWithoutBuilding = 0;
+                this.turnsWithoutBuilding = 0;
+            }
         } else {
-            this.turnsWithoutBuilding++;
+            // Try to build a district to have one of each category and with a relatively high score
+            Optional<District> toBuild = self.getHand().stream()
+                    .filter(district -> district.getScore() >= currentScoreThreshold)
+                    .filter(district -> !self.getCity().getDistricts().contains(district))
+                    .max((d1, d2) -> TryharderBehavior.compareCard(d1, d2, self, gameState.getTurn()));
+
+            if (toBuild.isPresent() && toBuild.get().getCost() <= self.getGold()) {
+                action.buildDistrict(toBuild.get());
+                this.turnsWithoutBuilding = 0;
+            } else {
+                this.turnsWithoutBuilding++;
+            }
         }
 
         // If it has enough gold and the deck is not empty
