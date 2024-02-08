@@ -8,6 +8,7 @@ import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.ArchitecteAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
@@ -253,5 +254,34 @@ class TryharderBehaviorTest {
         assertFalse(testPlayer.getHand().contains(glasses));
         assertTrue(testPlayer.getHand().contains(plane));
         assertTrue(testPlayer.getHand().contains(house));
+    }
+
+    @Test
+    void buildMultipleDistrictsWithArchitect() {
+        testPlayer.setCurrentRole(Role.ARCHITECTE);
+        // It should pick gold to have 13 because there are no cards in deck
+        testPlayer.setGold(11);
+        // Add lots of cards and some duplicates
+        testPlayer.getHand().add(house);
+        testPlayer.getHand().add(plane);
+        testPlayer.getHand().add(house);
+        testPlayer.getHand().add(car);
+        testPlayer.getHand().add(shirt);
+        testPlayer.getHand().add(yacht);
+        testPlayer.getHand().add(shirt);
+        testPlayer.getHand().add(glasses);
+
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), testPlayer);
+        // Playing the turn should not throw errors
+        assertDoesNotThrow(() -> behavior.playTurn(action, selfTestPlayer, state));
+
+        assertEquals(RegularTurnAction.BasicAction.GOLD, action.getBasicAction());
+
+        // It should build 3 districts
+        assertEquals(3, testPlayer.getCity().getSize());
+        // Which is the best combination of districts possible with 13 golds
+        assertTrue(testPlayer.getCity().getDistricts().contains(house));
+        assertTrue(testPlayer.getCity().getDistricts().contains(yacht));
+        assertTrue(testPlayer.getCity().getDistricts().contains(car));
     }
 }

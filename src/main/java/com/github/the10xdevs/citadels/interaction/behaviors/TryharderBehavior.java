@@ -269,6 +269,28 @@ public class TryharderBehavior implements Behavior {
             action.takeGold();
         }
 
+        // If it has enough gold and the deck is not empty
+        if (action.getBasicAction() != RegularTurnAction.BasicAction.GOLD && action.canDraw()) {
+            Pair<District, Optional<District>> cards = action.drawCards();
+
+            // Choose the best card according to score and category (see method compareCard)
+            Optional<District> second = cards.second();
+            if (second.isPresent())
+                action.chooseCard(
+                        TryharderBehavior.compareCard(cards.first(), second.get(), self, gameState.getTurn()) > 0
+                                ? cards.first()
+                                : second.get()
+                );
+            else
+                action.chooseCard(cards.first());
+        }
+
+        // If nothing has been done so far, then take gold
+        if (action.getBasicAction() == null)
+            action.takeGold();
+
+        TryharderBehavior.useRoleAbility(action, self, gameState, currentScoreThreshold);
+
         if (self.getCurrentRole() == Role.ARCHITECTE) {
             ArchitecteAbilityAction ability = (ArchitecteAbilityAction) action.getAbilityAction();
             List<District> sortedDistricts = self.getHand().stream()
@@ -295,27 +317,5 @@ public class TryharderBehavior implements Behavior {
                 this.turnsWithoutBuilding++;
             }
         }
-
-        // If it has enough gold and the deck is not empty
-        if (action.getBasicAction() != RegularTurnAction.BasicAction.GOLD && action.canDraw()) {
-            Pair<District, Optional<District>> cards = action.drawCards();
-
-            // Choose the best card according to score and category (see method compareCard)
-            Optional<District> second = cards.second();
-            if (second.isPresent())
-                action.chooseCard(
-                        TryharderBehavior.compareCard(cards.first(), second.get(), self, gameState.getTurn()) > 0
-                                ? cards.first()
-                                : second.get()
-                );
-            else
-                action.chooseCard(cards.first());
-        }
-
-        // If nothing has been done so far, then take gold
-        if (action.getBasicAction() == null)
-            action.takeGold();
-
-        TryharderBehavior.useRoleAbility(action, self, gameState, currentScoreThreshold);
     }
 }
