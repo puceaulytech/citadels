@@ -85,7 +85,7 @@ public class BulkRunner {
             data[i][1] = String.valueOf(bulkResult.getWins());
             data[i][2] = String.valueOf(bulkResult.getLoses());
             data[i][3] = String.valueOf(bulkResult.getWinPercentage(this.iterations));
-            data[i][4] = String.format("%.2f", bulkResult.getAverageScore());
+            data[i][4] = String.valueOf(bulkResult.getAverageScore());
             i++;
         }
         return data;
