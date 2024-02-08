@@ -3,6 +3,7 @@ package com.github.the10xdevs.citadels.interaction.behaviors;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.interaction.actions.RegularTurnAction;
 import com.github.the10xdevs.citadels.interaction.actions.RoleTurnAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.ArchitecteAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AssassinAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.MagicienAbilityAction;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.VoleurAbilityAction;
@@ -91,6 +92,42 @@ public class TryharderBehavior implements Behavior {
     }
 
     /**
+     * This method returns the best sublist of Districts, maximizing score and size of sublist
+     *
+     * @param districts     The districts available for construction, sorted by score in ascending order and all distinct
+     * @param goldAvailable The amount of gold the player currently has
+     * @return The best sublist of Districts
+     */
+    private static List<District> bestSubList(List<District> districts, int goldAvailable) {
+        // Max between the maximum authorized by architect and the number of districts available
+        int maxSize = Math.min(3, districts.size());
+        int startOfSubList;
+        // Try to find the best sublist of maximum size
+        for (startOfSubList = 0; startOfSubList < districts.size() - maxSize; startOfSubList++) {
+            int sum = districts.subList(startOfSubList, startOfSubList + maxSize).stream()
+                    .mapToInt(District::getCost).sum();
+            if (sum > goldAvailable)
+                break;
+        }
+
+        // If we cannot build the first sublist of size 2 then we cannot build
+        if (startOfSubList - 1 < 0 && --maxSize < 2)
+            return List.of();
+
+        // Try to find the best sublist smaller by one
+        for (startOfSubList = 0; startOfSubList < districts.size() - maxSize; startOfSubList++) {
+            int sum = districts.subList(startOfSubList, startOfSubList + maxSize).stream()
+                    .mapToInt(District::getCost).sum();
+            if (sum > goldAvailable)
+                break;
+        }
+
+        if (--startOfSubList < 0)
+            return List.of();
+        return districts.subList(startOfSubList, startOfSubList + maxSize);
+    }
+
+    /**
      * Handles how the player plays the Magician role
      *
      * @param action                The action
@@ -155,10 +192,6 @@ public class TryharderBehavior implements Behavior {
                 TryharderBehavior.handleMagicianFengShui(action, self, gameState, currentScoreThreshold);
                 break;
             }
-            case ARCHITECTE: {
-                // TODO
-                break;
-            }
             default:
         }
     }
@@ -185,7 +218,7 @@ public class TryharderBehavior implements Behavior {
                 roles.remove(role.get());
             }
             // If the architect is available and the player is rich then choose architect
-        } else if (self.getGold() >= TryharderBehavior.GOLD_THRESHOLD && roles.contains(Role.ARCHITECTE)) {
+        } else if (self.getGold() >= TryharderBehavior.GOLD_THRESHOLD * 2 && roles.contains(Role.ARCHITECTE) && self.getHandSize() >= 3) {
             action.pick(Role.ARCHITECTE);
             roles.remove(Role.ARCHITECTE);
         }
@@ -236,17 +269,23 @@ public class TryharderBehavior implements Behavior {
             action.takeGold();
         }
 
+        if (self.getCurrentRole() == Role.ARCHITECTE) {
+            ArchitecteAbilityAction ability = (ArchitecteAbilityAction) action.getAbilityAction();
+            List<District> sortedDistricts = self.getHand().stream()
+                    .filter(district -> !self.getCity().getDistricts().contains(district))
+                    .distinct()
+                    .sorted(Comparator.comparingInt(District::getScore))
+                    .toList();
+            List<District> districtsToBuild = TryharderBehavior.bestSubList(sortedDistricts, self.getGold());
+            if (districtsToBuild.size() > 1)
+                ability.buildDistricts(districtsToBuild);
+        }
+
         // Try to build a district to have one of each category and with a relatively high score
         Optional<District> toBuild = self.getHand().stream()
                 .filter(district -> district.getScore() >= currentScoreThreshold)
                 .filter(district -> !self.getCity().getDistricts().contains(district))
-                .max((d1, d2) -> {
-                    if (TryharderBehavior.getNumberOfBuiltDistrictByCategory(d1.getCategory(), self) == 0)
-                        return 1;
-                    if (TryharderBehavior.getNumberOfBuiltDistrictByCategory(d2.getCategory(), self) == 0)
-                        return -1;
-                    return 0;
-                });
+                .max((d1, d2) -> TryharderBehavior.compareCard(d1, d2, self, gameState.getTurn()));
 
         if (toBuild.isPresent() && toBuild.get().getCost() <= self.getGold()) {
             action.buildDistrict(toBuild.get());

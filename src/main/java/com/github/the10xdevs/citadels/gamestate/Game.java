@@ -72,7 +72,7 @@ public class Game {
 
         Player firstPlayerToFinish = this.players.stream()
                 .sorted(Comparator.comparingInt(player -> player.getCurrentRole().getTurnOrder()))
-                .filter(player -> player.getCity().getSize() == 8)
+                .filter(player -> player.getCity().getSize() >= 8)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Game is finished but no player has eight built districts"));
 
