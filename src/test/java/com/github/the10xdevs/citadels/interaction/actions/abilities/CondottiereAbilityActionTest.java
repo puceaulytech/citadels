@@ -173,4 +173,35 @@ class CondottiereAbilityActionTest {
 
         assertThrows(IllegalActionException.class, () -> badBehavior.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
     }
+
+    @Test
+    void destroyDungeon() throws DuplicatedDistrictException {
+        District dungeon = new District("Donjon", Category.MERVEILLE, 3);
+
+        Behavior dungeonDestroyer = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView gameState) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                CondottiereAbilityAction abilityAction = (CondottiereAbilityAction) action.getAbilityAction();
+                abilityAction.destroy(gameState.getPlayers().get(1), dungeon);
+            }
+        };
+
+        // Setup player
+        Player currentPlayer = game.getPlayers().get(0);
+        currentPlayer.setGold(10);
+        currentPlayer.setCurrentRole(Role.CONDOTTIERE);
+
+        // Setup opponent
+        Player opponent = game.getPlayers().get(1);
+        opponent.setCurrentRole(Role.ROI);
+        opponent.getCity().addDistrict(dungeon);
+
+        RegularTurnAction regularTurnAction = new RegularTurnAction(game, currentPlayer);
+
+        assertThrows(IllegalActionException.class, () -> dungeonDestroyer.playTurn(regularTurnAction, new SelfPlayerView(currentPlayer), new GameView(game)));
+    }
 }
