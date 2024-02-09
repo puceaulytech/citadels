@@ -42,7 +42,7 @@ class ExpensiveBuilderBehaviorTest {
         testPlayer = new Player(behavior);
         selfTestPlayer = new SelfPlayerView(testPlayer);
         testView = new PlayerView(testPlayer);
-        testPlayer.setCurrentRole(Role.ARCHITECTE);
+        testPlayer.setCurrentRole(Role.ASSASSIN);
 
         gameBuilder = GameBuilder.create();
 

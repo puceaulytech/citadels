@@ -94,7 +94,7 @@ class FastBuilderBehaviorTest {
 
     @Test
     void playTurnTest_BuildAffordableDistrict() {
-        player.setCurrentRole(Role.ARCHITECTE);
+        player.setCurrentRole(Role.ASSASSIN);
         player.setGold(8);
         District district = new District("Kool district", Category.MERVEILLE, 8);
         player.getHand().add(district);
