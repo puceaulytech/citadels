@@ -14,8 +14,7 @@ import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
 import com.github.the10xdevs.citadels.models.Role;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class VoleurAbilityActionTest {
 
@@ -79,6 +78,7 @@ class VoleurAbilityActionTest {
         VoleurAbilityAction action = new VoleurAbilityAction(game);
         action.stealFrom(Role.EVEQUE);
         assertEquals(Role.EVEQUE, action.getStolenRole());
+        assertTrue(game.getStolenRole().isPresent());
         assertEquals(Role.EVEQUE, game.getStolenRole().get());
     }
 

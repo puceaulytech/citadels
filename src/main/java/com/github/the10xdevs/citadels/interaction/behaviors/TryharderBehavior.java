@@ -291,6 +291,7 @@ public class TryharderBehavior implements Behavior {
 
         TryharderBehavior.useRoleAbility(action, self, gameState, currentScoreThreshold);
 
+        boolean usedArchitectAbility = false;
         if (self.getCurrentRole() == Role.ARCHITECTE) {
             ArchitecteAbilityAction ability = (ArchitecteAbilityAction) action.getAbilityAction();
             List<District> sortedDistricts = self.getHand().stream()
@@ -301,9 +302,12 @@ public class TryharderBehavior implements Behavior {
             List<District> districtsToBuild = TryharderBehavior.bestSubList(sortedDistricts, self.getGold());
             if (districtsToBuild.size() > 1) {
                 ability.buildDistricts(districtsToBuild);
+                usedArchitectAbility = true;
                 this.turnsWithoutBuilding = 0;
             }
-        } else {
+        }
+
+        if (self.getCurrentRole() != Role.ARCHITECTE || !usedArchitectAbility) {
             // Try to build a district to have one of each category and with a relatively high score
             Optional<District> toBuild = self.getHand().stream()
                     .filter(district -> district.getScore() >= currentScoreThreshold)

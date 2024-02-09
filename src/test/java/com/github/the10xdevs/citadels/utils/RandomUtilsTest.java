@@ -20,10 +20,11 @@ class RandomUtilsTest {
     void chooseFrom() {
         List<Integer> integers = List.of(1, 2, 4, 5);
 
-        int element = RandomUtils.chooseFrom(new Random(), integers);
+        Integer element = RandomUtils.chooseFrom(new Random(), integers);
 
         assertTrue(integers.contains(element));
     }
+
     @Test
     void testChooseFromThrowsException() {
         Random faultyRandomGenerator = new Random() {
@@ -35,8 +36,6 @@ class RandomUtilsTest {
 
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
 
-        assertThrows(IllegalStateException.class, () -> {
-            RandomUtils.chooseFrom(faultyRandomGenerator, list);
-        });
+        assertThrows(IllegalStateException.class, () -> RandomUtils.chooseFrom(faultyRandomGenerator, list));
     }
 }

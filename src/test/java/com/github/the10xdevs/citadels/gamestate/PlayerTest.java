@@ -100,18 +100,14 @@ class PlayerTest {
     @Test
     void buildDistrictThrowsExceptionWhenDistrictIsNull() {
         Player player = new Player(null);
-        assertThrows(IllegalActionException.class, () -> {
-            player.buildDistrict(null);
-        });
+        assertThrows(IllegalActionException.class, () -> player.buildDistrict(null));
     }
 
     @Test
     void buildDistrictThrowsExceptionWhenDistrictIsNotInHand() {
         Player player = new Player(null);
         District district = new District("Baraque 1", Category.MERVEILLE, 1);
-        assertThrows(IllegalActionException.class, () -> {
-            player.buildDistrict(district);
-        });
+        assertThrows(IllegalActionException.class, () -> player.buildDistrict(district));
     }
 
     @Test
@@ -119,9 +115,7 @@ class PlayerTest {
         Player player = new Player(null);
         District district = new District("Baraque 1", Category.MERVEILLE, 5);
         player.getHand().add(district);
-        assertThrows(IllegalActionException.class, () -> {
-            player.buildDistrict(district);
-        });
+        assertThrows(IllegalActionException.class, () -> player.buildDistrict(district));
     }
 
     @Test

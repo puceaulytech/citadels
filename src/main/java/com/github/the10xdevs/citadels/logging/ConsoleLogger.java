@@ -209,7 +209,7 @@ public class ConsoleLogger implements Logger {
 
         writer.print(district.getCategory().getANSIColorCode());
 
-        writer.print(district.getCategory().toString());
+        writer.print(district.getCategory());
 
         writer.print(ANSI_RESET);
 

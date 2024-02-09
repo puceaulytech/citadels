@@ -10,14 +10,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class ArchitecteAbilityAction extends AbilityAction {
+    private final List<District> builtDistricts = new ArrayList<>();
+    private final List<District> drawnCards = new ArrayList<>();
     private int maxDistricts = 3;
     /**
      * A flag indicating whether the Architect has already drawn additional cards during the turn.
      */
     private boolean hasDrawnCards = false;
-
-    private final List<District> builtDistricts = new ArrayList<>();
-    private final List<District> drawnCards = new ArrayList<>();
 
     /**
      * Constructs an ArchitecteAbilityAction instance for the given current player and game.
@@ -40,7 +39,7 @@ public class ArchitecteAbilityAction extends AbilityAction {
         if (hasDrawnCards)
             throw new IllegalActionException("Architect can only draw additional cards once");
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2 && !this.game.getDeck().isEmpty(); i++) {
             District card = this.game.getDeck().drawCard();
             this.currentPlayer.getHand().add(card);
             this.drawnCards.add(card);
