@@ -40,7 +40,7 @@ public class ArchitecteAbilityAction extends AbilityAction {
         if (hasDrawnCards)
             throw new IllegalActionException("Architect can only draw additional cards once");
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2 && !this.game.getDeck().isEmpty(); i++) {
             District card = this.game.getDeck().drawCard();
             this.currentPlayer.getHand().add(card);
             this.drawnCards.add(card);
