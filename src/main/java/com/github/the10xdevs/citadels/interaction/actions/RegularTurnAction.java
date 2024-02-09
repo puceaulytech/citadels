@@ -5,9 +5,12 @@ import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.Game;
 import com.github.the10xdevs.citadels.gamestate.Player;
 import com.github.the10xdevs.citadels.interaction.actions.abilities.AbilityAction;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.ArchitecteAbilityAction;
 import com.github.the10xdevs.citadels.models.District;
+import com.github.the10xdevs.citadels.models.Role;
 import com.github.the10xdevs.citadels.utils.Pair;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -106,8 +109,14 @@ public class RegularTurnAction {
         if (this.builtDistrict != null)
             throw new IllegalActionException("Cannot build multiple districts in one turn");
 
-        this.currentPlayer.buildDistrict(district);
-        this.builtDistrict = district;
+        // If the current player has Architect Role, redirect handling of building to the architect ability action
+        // This is done so that the player cannot use both normal building way and architect building way
+        if (this.currentPlayer.getCurrentRole() == Role.ARCHITECTE) {
+            ((ArchitecteAbilityAction) this.abilityAction).buildDistricts(List.of(district));
+        } else {
+            this.currentPlayer.buildDistrict(district);
+            this.builtDistrict = district;
+        }
     }
 
     /**

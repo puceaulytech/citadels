@@ -5,6 +5,7 @@ import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
 import com.github.the10xdevs.citadels.gamestate.Player;
+import com.github.the10xdevs.citadels.interaction.actions.abilities.ArchitecteAbilityAction;
 import com.github.the10xdevs.citadels.interaction.behaviors.Behavior;
 import com.github.the10xdevs.citadels.interaction.views.GameView;
 import com.github.the10xdevs.citadels.interaction.views.SelfPlayerView;
@@ -18,8 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RegularTurnActionTest {
     District a = new District("Testing", Category.MARCHAND, 1);
@@ -46,7 +46,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void takeGold() throws IllegalActionException, DuplicatedDistrictException {
+    void takeGold() throws IllegalActionException {
         Behavior goldPickerBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
@@ -220,6 +220,36 @@ class RegularTurnActionTest {
         RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
         districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null);
         assertEquals(a, action.getBuiltDistrict());
+    }
+
+    @Test
+    void buildDistrictAsArchitect() {
+        District c = new District("Another other testing", Category.MERVEILLE, 1);
+        Behavior districtBuilderBehavior = new Behavior() {
+            @Override
+            public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {
+            }
+
+            @Override
+            public void playTurn(RegularTurnAction action, SelfPlayerView self, GameView gameState) throws IllegalActionException {
+                action.buildDistrict(a);
+                action.buildDistrict(b);
+                action.buildDistrict(c);
+            }
+        };
+
+        Player districtBuilder = createRichPlayer(districtBuilderBehavior);
+        districtBuilder.setCurrentRole(Role.ARCHITECTE);
+        districtBuilder.getHand().add(c);
+        RegularTurnAction action = new RegularTurnAction(gameBuilder.withDeck(new Deck<>()).build(), districtBuilder);
+
+        assertDoesNotThrow(() -> districtBuilderBehavior.playTurn(action, new SelfPlayerView(districtBuilder), null));
+
+        assertTrue(districtBuilder.getCity().getDistricts().contains(a));
+        assertTrue(districtBuilder.getCity().getDistricts().contains(b));
+        assertTrue(districtBuilder.getCity().getDistricts().contains(c));
+
+        assertEquals(0, ((ArchitecteAbilityAction) action.getAbilityAction()).getRemainingMaxDistricts());
     }
 
     @Test
