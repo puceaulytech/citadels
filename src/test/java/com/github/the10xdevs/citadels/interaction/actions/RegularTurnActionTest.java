@@ -1,6 +1,5 @@
 package com.github.the10xdevs.citadels.interaction.actions;
 
-import com.github.the10xdevs.citadels.exceptions.DuplicatedDistrictException;
 import com.github.the10xdevs.citadels.exceptions.IllegalActionException;
 import com.github.the10xdevs.citadels.gamestate.Deck;
 import com.github.the10xdevs.citadels.gamestate.GameBuilder;
@@ -87,7 +86,7 @@ class RegularTurnActionTest {
     }
 
     @Test
-    void drawCards() throws IllegalActionException, DuplicatedDistrictException {
+    void drawCards() throws IllegalActionException {
         Behavior cardDrawerBehavior = new Behavior() {
             @Override
             public void pickRole(RoleTurnAction action, SelfPlayerView self, GameView game) {

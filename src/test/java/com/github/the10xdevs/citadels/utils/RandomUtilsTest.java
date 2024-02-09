@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RandomUtilsTest {
 
@@ -20,7 +19,7 @@ class RandomUtilsTest {
     void chooseFrom() {
         List<Integer> integers = List.of(1, 2, 4, 5);
 
-        int element = RandomUtils.chooseFrom(new Random(), integers);
+        Integer element = RandomUtils.chooseFrom(new Random(), integers);
 
         assertTrue(integers.contains(element));
     }
@@ -35,8 +34,6 @@ class RandomUtilsTest {
 
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
 
-        assertThrows(IllegalStateException.class, () -> {
-            RandomUtils.chooseFrom(faultyRandomGenerator, list);
-        });
+        assertThrows(IllegalStateException.class, () -> RandomUtils.chooseFrom(faultyRandomGenerator, list));
     }
 }

@@ -60,7 +60,7 @@ class ArchitecteAbilityActionTest {
     }
 
     @Test
-    void testDrawAdditionalCardsInEmptyDeck() throws IllegalActionException {
+    void testDrawAdditionalCardsInEmptyDeck() {
         ArchitecteAbilityAction abilityAction = new ArchitecteAbilityAction(
                 currentPlayer,
                 GameBuilder.create().withDeck(new Deck<>()).build()
@@ -78,7 +78,7 @@ class ArchitecteAbilityActionTest {
     }
 
     @Test
-    void testBuildDistricts() throws IllegalActionException {
+    void testBuildDistricts() {
         // Set up player's initial hand
         currentPlayer.setGold(12);
         currentPlayer.getHand().add(district1);
