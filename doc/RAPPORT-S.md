@@ -28,6 +28,8 @@ Nous utilisons la librairie OpenCSV pour lire et écrire les fichiers CSV.
 
 ### Richard
 
+Nous avons implémenté une partie de la stratégie de Richard, notamment le fait d'empêcher un joueur bientôt gagnant de prendre l'architecte, ou essayer de tuer l'architecte en prenant l'assassin.
+
 ## 2. Architecture et qualité
 
 ### Architecture
