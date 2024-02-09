@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RandomUtilsTest {
 
@@ -23,6 +24,7 @@ class RandomUtilsTest {
 
         assertTrue(integers.contains(element));
     }
+
     @Test
     void testChooseFromThrowsException() {
         Random faultyRandomGenerator = new Random() {

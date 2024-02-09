@@ -10,14 +10,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class ArchitecteAbilityAction extends AbilityAction {
+    private final List<District> builtDistricts = new ArrayList<>();
+    private final List<District> drawnCards = new ArrayList<>();
     private int maxDistricts = 3;
     /**
      * A flag indicating whether the Architect has already drawn additional cards during the turn.
      */
     private boolean hasDrawnCards = false;
-
-    private final List<District> builtDistricts = new ArrayList<>();
-    private final List<District> drawnCards = new ArrayList<>();
 
     /**
      * Constructs an ArchitecteAbilityAction instance for the given current player and game.

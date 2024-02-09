@@ -21,13 +21,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArchitecteAbilityActionTest {
-    private Player currentPlayer;
-    private ArchitecteAbilityAction architecteAction;
-
     District district1 = new District("District1", Category.RELIGIEUX, 3);
     District district2 = new District("District2", Category.MARCHAND, 4);
     District district3 = new District("District3", Category.NOBLE, 5);
     District district4 = new District("District4", Category.MILITAIRE, 5);
+    private Player currentPlayer;
+    private ArchitecteAbilityAction architecteAction;
 
     @BeforeEach
     void setUp() {
