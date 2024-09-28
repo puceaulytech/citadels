@@ -12,7 +12,7 @@ Il y a 5 bots utilisables:
 - __ExpensiveBuilder__, qui va viser des quartiers avec un gros score,
 - __Random__, qui va faire des actions complétement aléatoires,
 - __Tryharder__, qui va maximiser ses points en fin de partie grâce à diverses méthodes, va habilement utiliser les pouvoirs de ses personnages pour augmenter son score et va choisir son rôle notamment en prenant en compte les catégories de ses quartiers construits pour maximiser l'or gagné.
-- __Richard__, qui suit la stratégie de Richard,
+- __Richard__, qui suit la stratégie de Ricard,
 
 ### Logging
 
